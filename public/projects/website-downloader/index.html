@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><title>websiteDownloader &ndash; Sarang Vehale</title>
+<meta name="description" content="Software Developer and Tinkerer">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8"/>
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css" integrity="sha512-IW0nhlW5MgNydsXJO40En2EoCkTTjZhI3yuODrZIc8cQ4h1XcF53PsqDHa09NqnkXuIe0Oiyyj171BqZFwISBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<link rel="stylesheet" href="http://localhost:1313/css/palettes/base16-dark.css">
+<link rel="stylesheet" href="http://localhost:1313/css/risotto.css">
+<link rel="stylesheet" href="http://localhost:1313/css/custom.css">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta property="og:title" content="websiteDownloader &ndash; Sarang Vehale" />
+<meta property="og:url" content="http://localhost:1313/projects/website-downloader/" />
+
+  
+    <meta property="og:description" content="Software Developer and Tinkerer"/> 
+  
+
+<meta property="og:locale" content="en" />
+<meta property="og:image" content="" /></head>
+
+    <body>
+        <div class="page">
+
+            <header class="page__header"><nav class="page__nav main-nav">
+    <ul>
+      <li class="nomarker"><h1 class="page__logo"><a href="http://localhost:1313/" class="page__logo-inner">Sarang Vehale</a></h1></li>
+    
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="http://localhost:1313/" title="">Home</a></li>
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="http://localhost:1313/about/" title="">About</a></li>
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="http://localhost:1313/projects/" title="">Projects</a></li>
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="http://localhost:1313/contact/" title="">Contact</a></li>
+    
+    </ul>
+</nav>
+
+</header>
+
+            <section class="page__body">
+    <header class="content__header">
+        <h1>websiteDownloader</h1>
+    </header>
+    <div class="content__body">
+        <p>A Python-based command-line tool for downloading complete websites — HTML, CSS, JS, and images — and packaging them into neatly organized ZIP files. Built for developers who need offline copies of sites or want to inspect structure and assets.</p>
+<!-- **(Recommended: Add a GIF or screenshot of the CLI in action here!)** -->
+<!---->
+<!-- ``` -->
+<!-- [---------- Screenshot Placeholder ----------] -->
+<!-- |                                            | -->
+<!-- |  === Website Downloader ===                | -->
+<!-- |  Level 2 | Score: 40                       | -->
+<!-- |  1. Download Website                      | -->
+<!-- |  2. List Downloaded Websites              | -->
+<!-- |  3. Help                                  | -->
+<!-- |  4. Exit                                  | -->
+<!-- |                                            | -->
+<!-- [--------------------------------------------] -->
+<!-- ``` -->
+<!---->
+<h2 id="about-the-project">About The Project</h2>
+<p><code>website-downloader</code> fetches and organizes all core assets from a website URL — HTML, CSS, JS, and images — into a structured folder and ZIP archive. It includes a gamified interface and a CLI menu system, making it both practical and fun to use.</p>
+<h3 id="core-features">Core Features</h3>
+<ul>
+<li><strong>Full Site Downloader:</strong> Fetches web pages and their static assets.</li>
+<li><strong>Organized Output:</strong> Resources saved in structured folders (<code>html/</code>, <code>css/</code>, <code>js/</code>, <code>images/</code>) and compressed as <code>website_1.zip</code>, <code>website_2.zip</code>, etc.</li>
+<li><strong>Gamified Experience:</strong> Tracks progress with levels and scores.</li>
+<li><strong>Progress Feedback:</strong> Uses a terminal progress bar for download status.</li>
+<li><strong>CLI Menu Interface:</strong> Options to download, list saved sites, view help, or exit.</li>
+<li><strong>Resilient:</strong> Includes retry logic with exponential backoff on failed downloads.</li>
+</ul>
+<h3 id="tech-stack">Tech Stack</h3>
+<ul>
+<li><strong>Language:</strong> Python 3.x</li>
+<li><strong>Libraries:</strong>
+<ul>
+<li><code>requests</code> – HTTP requests</li>
+<li><code>beautifulsoup4</code> – HTML parsing</li>
+<li><code>tqdm</code> – Progress bars</li>
+<li><code>pyfiglet</code> – ASCII art headers</li>
+<li><code>colorama</code> – Colorful terminal output</li>
+</ul>
+</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/SarangVehale/website-downloader.git
+</span></span><span style="display:flex;"><span>cd website-downloader/main6
+</span></span><span style="display:flex;"><span>pip install -r requirements.txt
+</span></span><span style="display:flex;"><span>python main6.py
+</span></span></code></pre></div><h2 id="example-file-structure">Example File Structure</h2>
+<pre tabindex="0"><code>website_1.zip
+├── html/
+│   └── index.html
+├── css/
+│   └── style.css
+├── js/
+│   └── script.js
+└── images/
+    └── logo.png
+</code></pre><h2 id="roadmap">Roadmap</h2>
+<ul>
+<li>Add multi-threaded downloads</li>
+<li>Support login-protected sites</li>
+<li>Optional image compression</li>
+<li>Interactive ZIP browser</li>
+</ul>
+<hr>
+<p>MIT License © 2025</p>
+<blockquote>
+<p><em>“Take the web offline — one ZIP at a time.”</em></p></blockquote>
+<hr>
+
+    </div>
+    <footer class="content__footer"></footer>
+
+            </section>
+
+            <section class="page__aside">
+                <div class="aside__about">
+<div class="aside__about">
+   
+  <h1 class="about__title">Sarang Vehale</h1>
+  
+  <p class="about__description">Software Developer and Tinkerer</p>
+   
+  <p class="about__extra">Just a funny little penguin</p>
+  
+</div>
+
+
+<ul class="aside__social-links">
+  
+  <li>
+    <a
+      href="https://github.com/SarangVehale"
+      rel="me"
+      aria-label="GitHub"
+      title="GitHub"
+      ><i class="fa-brands fa-github" aria-hidden="true"></i></a
+    >&nbsp;
+  </li>
+  
+  <li>
+    <a
+      href="mailto:sarangvehale2@gmail.com"
+      rel="me"
+      aria-label="Email"
+      title="Email"
+      ><i class="fa-solid fa-envelope" aria-hidden="true"></i></a
+    >&nbsp;
+  </li>
+  
+  <li>
+    <a
+      href="https://www.linkedin.com/in/sarang-vehale-a76210247/"
+      rel="me"
+      aria-label="LinkedIn"
+      title="LinkedIn"
+      ><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a
+    >&nbsp;
+  </li>
+  
+  <li>
+    <a
+      href="https://discord.gg/T3qwk5qE"
+      rel="me"
+      aria-label="Discord"
+      title="Discord"
+      ><i class="fa-brands fa-discord" aria-hidden="true"></i></a
+    >&nbsp;
+  </li>
+  
+</ul>
+</div>
+                <hr>
+                <div class="aside__content">
+    
+    
+
+    
+
+                </div>
+            </section>
+
+            <footer class="page__footer">
+<footer>
+  <hr />
+  <div class="footer-text">
+    <p>© Sarang Vehale</p>
+    <p>
+      Powered by <a href="https://gohugo.io/">Hugo</a> and the
+      <a href="https://github.com/joeroe/risotto">Risotto</a>
+      theme.
+    </p>
+  </div>
+</footer>
+</footer>
+
+        </div>
+    </body>
+
+</html>

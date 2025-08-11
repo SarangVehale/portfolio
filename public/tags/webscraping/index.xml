@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>WebScraping on Sarang Vehale</title>
+    <link>http://localhost:1313/tags/webscraping/</link>
+    <description>Recent content in WebScraping on Sarang Vehale</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <copyright>© Sarang Vehale</copyright>
+    <atom:link href="http://localhost:1313/tags/webscraping/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>websiteDownloader</title>
+      <link>http://localhost:1313/projects/website-downloader/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/projects/website-downloader/</guid>
+      <description>&lt;p&gt;A Python-based command-line tool for downloading complete websites — HTML, CSS, JS, and images — and packaging them into neatly organized ZIP files. Built for developers who need offline copies of sites or want to inspect structure and assets.&lt;/p&gt;&#xA;&lt;!-- **(Recommended: Add a GIF or screenshot of the CLI in action here!)** --&gt;&#xA;&lt;!----&gt;&#xA;&lt;!-- ``` --&gt;&#xA;&lt;!-- [---------- Screenshot Placeholder ----------] --&gt;&#xA;&lt;!-- |                                            | --&gt;&#xA;&lt;!-- |  === Website Downloader ===                | --&gt;&#xA;&lt;!-- |  Level 2 | Score: 40                       | --&gt;&#xA;&lt;!-- |  1. Download Website                      | --&gt;&#xA;&lt;!-- |  2. List Downloaded Websites              | --&gt;&#xA;&lt;!-- |  3. Help                                  | --&gt;&#xA;&lt;!-- |  4. Exit                                  | --&gt;&#xA;&lt;!-- |                                            | --&gt;&#xA;&lt;!-- [--------------------------------------------] --&gt;&#xA;&lt;!-- ``` --&gt;&#xA;&lt;!----&gt;&#xA;&lt;h2 id=&#34;about-the-project&#34;&gt;About The Project&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;website-downloader&lt;/code&gt; fetches and organizes all core assets from a website URL — HTML, CSS, JS, and images — into a structured folder and ZIP archive. It includes a gamified interface and a CLI menu system, making it both practical and fun to use.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

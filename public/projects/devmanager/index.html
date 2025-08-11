@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><title>devmanager &ndash; Sarang Vehale</title>
+<meta name="description" content="Software Developer and Tinkerer">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8"/>
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css" integrity="sha512-IW0nhlW5MgNydsXJO40En2EoCkTTjZhI3yuODrZIc8cQ4h1XcF53PsqDHa09NqnkXuIe0Oiyyj171BqZFwISBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<link rel="stylesheet" href="http://localhost:1313/css/palettes/base16-dark.css">
+<link rel="stylesheet" href="http://localhost:1313/css/risotto.css">
+<link rel="stylesheet" href="http://localhost:1313/css/custom.css">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta property="og:title" content="devmanager &ndash; Sarang Vehale" />
+<meta property="og:url" content="http://localhost:1313/projects/devmanager/" />
+
+  
+    <meta property="og:description" content="Software Developer and Tinkerer"/> 
+  
+
+<meta property="og:locale" content="en" />
+<meta property="og:image" content="" /></head>
+
+    <body>
+        <div class="page">
+
+            <header class="page__header"><nav class="page__nav main-nav">
+    <ul>
+      <li class="nomarker"><h1 class="page__logo"><a href="http://localhost:1313/" class="page__logo-inner">Sarang Vehale</a></h1></li>
+    
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="http://localhost:1313/" title="">Home</a></li>
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="http://localhost:1313/about/" title="">About</a></li>
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="http://localhost:1313/projects/" title="">Projects</a></li>
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="http://localhost:1313/contact/" title="">Contact</a></li>
+    
+    </ul>
+</nav>
+
+</header>
+
+            <section class="page__body">
+    <header class="content__header">
+        <h1>devmanager</h1>
+    </header>
+    <div class="content__body">
+        <p>An interactive terminal-based tool for bootstrapping and managing full-stack development environments with ease. Built for developers tired of Googling install commands, juggling SDK versions, or manually configuring their setup.</p>
+<!-- ``` -->
+<!-- [------------- Screenshot Placeholder -------------] -->
+<!-- |                                                | -->
+<!-- |  Dev Environment Manager                       | -->
+<!-- |  --------------------------------------------  | -->
+<!-- |  1) Install pyenv                              | -->
+<!-- |  2) Install Python 3.11.9                      | -->
+<!-- |  3) Setup Qiskit Environment                   | -->
+<!-- |  4) Install Rust, Node.js, Go, Docker, etc.    | -->
+<!-- |  20) Exit                                      | -->
+<!-- |                                                | -->
+<!-- [--------------------------------------------------] -->
+<!-- ``` -->
+<!---->
+<h2 id="about-the-project">About The Project</h2>
+<p><code>dev-manager</code> provides a unified, menu-driven terminal interface to install and configure popular development tools and languages — from Python and Qiskit to Docker, Node.js, Rust, Java, and cloud SDKs — across Linux and macOS.</p>
+<p>It simplifies environment setup for polyglot developers and teams working across stacks and platforms.</p>
+<h3 id="core-features">Core Features</h3>
+<ul>
+<li><strong>Interactive TUI Menu:</strong> Pick and install tools via a clean terminal UI (powered by <code>dialog</code>).</li>
+<li><strong>Cross-platform Support:</strong> Works on Arch, Ubuntu, Fedora, and macOS.</li>
+<li><strong>Python + Qiskit Setup:</strong> Automates creation of quantum-ready virtual environments.</li>
+<li><strong>Multi-language Installer:</strong> Rust, Go, Node.js, Java, .NET, Flutter, and more.</li>
+<li><strong>DevOps Tools:</strong> Install Docker, kubectl, helm, terraform, ansible, and more.</li>
+<li><strong>Smart Dependency Checks:</strong> Detects missing packages and provides install prompts.</li>
+<li><strong>Shell Integration:</strong> Automatically updates shell configuration files as needed.</li>
+</ul>
+<h3 id="tech-stack">Tech Stack</h3>
+<ul>
+<li><strong>Shell Script:</strong> Bash-based implementation with <code>dialog</code> for UI</li>
+<li><strong>OS Detection &amp; Package Managers:</strong> Supports <code>apt</code>, <code>dnf</code>, <code>pacman</code>, and <code>brew</code></li>
+<li><strong>Tooling:</strong> Integrates with pyenv, nvm, rustup, conda, Docker, etc.</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/SarangVehale/dev-manager.git
+</span></span><span style="display:flex;"><span>cd dev-manager
+</span></span><span style="display:flex;"><span>chmod +x dev_env_manager.sh
+</span></span><span style="display:flex;"><span>./dev_env_manager.sh
+</span></span></code></pre></div><p>Follow the interactive prompts to set up your tools.</p>
+<h2 id="roadmap">Roadmap</h2>
+<ul>
+<li>Add support for Windows (via WSL or PowerShell)</li>
+<li>Customizable tool profiles and presets</li>
+<li>Parallel install mode</li>
+<li>Plugin system for community scripts</li>
+</ul>
+<hr>
+<p>MIT License © 2025</p>
+<blockquote>
+<p><em>“Let your tools work for you — not the other way around.”</em></p></blockquote>
+<hr>
+
+    </div>
+    <footer class="content__footer"></footer>
+
+            </section>
+
+            <section class="page__aside">
+                <div class="aside__about">
+<div class="aside__about">
+   
+  <h1 class="about__title">Sarang Vehale</h1>
+  
+  <p class="about__description">Software Developer and Tinkerer</p>
+   
+  <p class="about__extra">Just a funny little penguin</p>
+  
+</div>
+
+
+<ul class="aside__social-links">
+  
+  <li>
+    <a
+      href="https://github.com/SarangVehale"
+      rel="me"
+      aria-label="GitHub"
+      title="GitHub"
+      ><i class="fa-brands fa-github" aria-hidden="true"></i></a
+    >&nbsp;
+  </li>
+  
+  <li>
+    <a
+      href="mailto:sarangvehale2@gmail.com"
+      rel="me"
+      aria-label="Email"
+      title="Email"
+      ><i class="fa-solid fa-envelope" aria-hidden="true"></i></a
+    >&nbsp;
+  </li>
+  
+  <li>
+    <a
+      href="https://www.linkedin.com/in/sarang-vehale-a76210247/"
+      rel="me"
+      aria-label="LinkedIn"
+      title="LinkedIn"
+      ><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a
+    >&nbsp;
+  </li>
+  
+  <li>
+    <a
+      href="https://discord.gg/T3qwk5qE"
+      rel="me"
+      aria-label="Discord"
+      title="Discord"
+      ><i class="fa-brands fa-discord" aria-hidden="true"></i></a
+    >&nbsp;
+  </li>
+  
+</ul>
+</div>
+                <hr>
+                <div class="aside__content">
+    
+    
+
+    
+
+                </div>
+            </section>
+
+            <footer class="page__footer">
+<footer>
+  <hr />
+  <div class="footer-text">
+    <p>© Sarang Vehale</p>
+    <p>
+      Powered by <a href="https://gohugo.io/">Hugo</a> and the
+      <a href="https://github.com/joeroe/risotto">Risotto</a>
+      theme.
+    </p>
+  </div>
+</footer>
+</footer>
+
+        </div>
+    </body>
+
+</html>

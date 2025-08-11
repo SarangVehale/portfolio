@@ -1,0 +1,15 @@
+<!--
+  This custom footer file overrides the theme's default footer.
+  This is the guaranteed way to remove the '$ echo $LANG' text.
+-->
+<footer>
+  <hr />
+  <div class="footer-text">
+    <p>{{ .Site.Copyright | markdownify | default "© Sarang Vehale" }}</p>
+    <p>
+      Powered by <a href="https://gohugo.io/">Hugo</a> and the
+      <a href="https://github.com/joeroe/risotto">Risotto</a>
+      theme.
+    </p>
+  </div>
+</footer>

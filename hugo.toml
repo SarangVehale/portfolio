@@ -1,0 +1,89 @@
+# hugo.toml (Corrected with the new theme structure)
+
+baseURL = "https://sarangvehale.github.io/"
+theme = "risotto"
+title = "Sarang Vehale"
+copyright = "© Sarang Vehale" # This replaces the "$ echo $LANG" prompt
+languageCode = "en"
+DefaultContentLanguage = "en"
+enableInlineShortcodes = true
+ignoreErrors = ["error-remote-getjson"] # Good practice to keep this
+
+[pagination]
+  pagerSize = 5
+
+# --- Sidebar Configuration ---
+[params]
+  noindex = false # Allow search engines to index the site
+  prompt = " " # Explicitly overriding the footer text
+  terminal = false
+
+  # [params.theme]
+  #   palette = "dracula" # Change this to any Risotto palette
+
+  # This section populates the sidebar
+  [params.about]
+    title = "Sarang Vehale"
+    description = "Software Developer and Tinkerer"
+    extra = "Just a funny little penguin"
+
+# --- Social Links in Sidebar ---
+[[params.socialLinks]]
+  icon = "fa-brands fa-github"
+  title = "GitHub"
+  url = "https://github.com/SarangVehale"
+
+[[params.socialLinks]]
+  icon = "fa-solid fa-envelope"
+  title = "Email"
+  url = "mailto:sarangvehale2@gmail.com"
+
+[[params.socialLinks]]
+  icon = "fa-brands fa-linkedin" # LinkedIn icon
+  title = "LinkedIn"
+  url = "https://www.linkedin.com/in/sarang-vehale-a76210247/"
+
+[[params.socialLinks]]
+  icon = "fa-brands fa-discord" 
+  title = "Discord"
+  url = "https://discord.gg/T3qwk5qE"
+
+# --- Top Navigation Menu ---
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 10
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 20
+  [[menu.main]]
+    identifier = "projects"
+    name = "Projects"
+    url = "/projects/"
+    weight = 30
+  [[menu.main]]
+    identifier = "contact"
+    name = "Contact"
+    url = "/contact/"
+    weight = 40
+
+# --- Advanced Settings ---
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  series = "series"
+
+[markup.goldmark.renderer]
+  # Allows you to use HTML in your markdown files.
+  unsafe = true
+
+[markup.tableOfContents]
+  startLevel = 2
+  endLevel = 3
+  ordered = true
+
+

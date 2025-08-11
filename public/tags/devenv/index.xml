@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DevEnv on Sarang Vehale</title>
+    <link>http://localhost:1313/tags/devenv/</link>
+    <description>Recent content in DevEnv on Sarang Vehale</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <copyright>© Sarang Vehale</copyright>
+    <atom:link href="http://localhost:1313/tags/devenv/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>devmanager</title>
+      <link>http://localhost:1313/projects/devmanager/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/projects/devmanager/</guid>
+      <description>&lt;p&gt;An interactive terminal-based tool for bootstrapping and managing full-stack development environments with ease. Built for developers tired of Googling install commands, juggling SDK versions, or manually configuring their setup.&lt;/p&gt;&#xA;&lt;!-- ``` --&gt;&#xA;&lt;!-- [------------- Screenshot Placeholder -------------] --&gt;&#xA;&lt;!-- |                                                | --&gt;&#xA;&lt;!-- |  Dev Environment Manager                       | --&gt;&#xA;&lt;!-- |  --------------------------------------------  | --&gt;&#xA;&lt;!-- |  1) Install pyenv                              | --&gt;&#xA;&lt;!-- |  2) Install Python 3.11.9                      | --&gt;&#xA;&lt;!-- |  3) Setup Qiskit Environment                   | --&gt;&#xA;&lt;!-- |  4) Install Rust, Node.js, Go, Docker, etc.    | --&gt;&#xA;&lt;!-- |  20) Exit                                      | --&gt;&#xA;&lt;!-- |                                                | --&gt;&#xA;&lt;!-- [--------------------------------------------------] --&gt;&#xA;&lt;!-- ``` --&gt;&#xA;&lt;!----&gt;&#xA;&lt;h2 id=&#34;about-the-project&#34;&gt;About The Project&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;dev-manager&lt;/code&gt; provides a unified, menu-driven terminal interface to install and configure popular development tools and languages — from Python and Qiskit to Docker, Node.js, Rust, Java, and cloud SDKs — across Linux and macOS.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

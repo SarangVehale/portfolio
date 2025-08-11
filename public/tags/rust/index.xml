@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rust on Sarang Vehale</title>
+    <link>http://localhost:1313/tags/rust/</link>
+    <description>Recent content in Rust on Sarang Vehale</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <copyright>© Sarang Vehale</copyright>
+    <atom:link href="http://localhost:1313/tags/rust/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>dotatui</title>
+      <link>http://localhost:1313/projects/dotatui/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/projects/dotatui/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;https://img.shields.io/badge/License-MIT-blue.svg&#34; alt=&#34;alt text&#34;&gt;&#xA;&lt;img src=&#34;https://img.shields.io/badge/rust-1.75%2B-orange.svg&#34; alt=&#34;alt text&#34;&gt;&#xA;&lt;img src=&#34;https://img.shields.io/badge/build-passing-brightgreen&#34; alt=&#34;alt text&#34;&gt;&#xA;A terminal-based Git interface written in Rust, designed for streamlined dotfile management. Inspired by the speed and keyboard-centric nature of tools like &lt;code&gt;lazygit&lt;/code&gt; and &lt;code&gt;lazyvim&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;!-- Future : Adding a GIF of the application here.--&gt;&#xA;&lt;h2 id=&#34;about-the-project&#34;&gt;About The Project&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;dotatui&lt;/code&gt; was built to solve a common problem: managing version-controled configuration files (dotfiles) across multiple systems without leaving the terminal. The goal was to create a fast, and intuitive TUI application that provides the most common Git operations at your fingertips.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Rdd</title>
+      <link>http://localhost:1313/projects/rdd/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/projects/rdd/</guid>
+      <description>&lt;h1 id=&#34;rdd---a-modern-safe-and-fast-replacement-for-gnu-dd&#34;&gt;&lt;code&gt;rdd&lt;/code&gt; - A Modern, Safe, and Fast Replacement for GNU &lt;code&gt;dd&lt;/code&gt;&lt;/h1&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://github.com/sarang-kernel/rdd/actions&#34;&gt;&lt;img src=&#34;https://github.com/sarang-kernel/rdd/actions/workflows/rust.yml/badge.svg&#34; alt=&#34;Build Status&#34;&gt;&lt;/a&gt;&#xA;&lt;a href=&#34;https://crates.io/crates/rdd&#34;&gt;&lt;img src=&#34;https://img.shields.io/crates/v/rdd.svg&#34; alt=&#34;Crates.io&#34;&gt;&lt;/a&gt;&#xA;&lt;a href=&#34;https://github.com/sarang-kernel/rdd/blob/main/LICENSE&#34;&gt;&lt;img src=&#34;https://img.shields.io/crates/l/rdd.svg&#34; alt=&#34;License&#34;&gt;&lt;/a&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;about-the-project&#34;&gt;About The Project&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;rdd&lt;/code&gt; is a complete rewrite of the venerable GNU &lt;code&gt;dd&lt;/code&gt; utility in Rust, designed with three core principles in mind: &lt;strong&gt;Safety, Performance, and User Experience&lt;/strong&gt;.&lt;/p&gt;&#xA;&lt;p&gt;While &lt;code&gt;dd&lt;/code&gt; is powerful, its cryptic syntax (&lt;code&gt;if&lt;/code&gt;, &lt;code&gt;of&lt;/code&gt;, &lt;code&gt;bs&lt;/code&gt;) is notoriously unforgiving, and its lack of feedback can be nerve-wracking during critical operations. &lt;code&gt;rdd&lt;/code&gt; aims to solve these problems by providing a modern command-line experience without sacrificing the power that &lt;code&gt;dd&lt;/code&gt; is known for.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

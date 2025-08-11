@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><title>dotatui &ndash; Sarang Vehale</title>
+<meta name="description" content="Software Developer and Tinkerer">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8"/>
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css" integrity="sha512-IW0nhlW5MgNydsXJO40En2EoCkTTjZhI3yuODrZIc8cQ4h1XcF53PsqDHa09NqnkXuIe0Oiyyj171BqZFwISBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<link rel="stylesheet" href="http://localhost:1313/css/palettes/base16-dark.css">
+<link rel="stylesheet" href="http://localhost:1313/css/risotto.css">
+<link rel="stylesheet" href="http://localhost:1313/css/custom.css">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta property="og:title" content="dotatui &ndash; Sarang Vehale" />
+<meta property="og:url" content="http://localhost:1313/projects/dotatui/" />
+
+  
+    <meta property="og:description" content="Software Developer and Tinkerer"/> 
+  
+
+<meta property="og:locale" content="en" />
+<meta property="og:image" content="" /></head>
+
+    <body>
+        <div class="page">
+
+            <header class="page__header"><nav class="page__nav main-nav">
+    <ul>
+      <li class="nomarker"><h1 class="page__logo"><a href="http://localhost:1313/" class="page__logo-inner">Sarang Vehale</a></h1></li>
+    
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="http://localhost:1313/" title="">Home</a></li>
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="http://localhost:1313/about/" title="">About</a></li>
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="http://localhost:1313/projects/" title="">Projects</a></li>
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="http://localhost:1313/contact/" title="">Contact</a></li>
+    
+    </ul>
+</nav>
+
+</header>
+
+            <section class="page__body">
+    <header class="content__header">
+        <h1>dotatui</h1>
+    </header>
+    <div class="content__body">
+        <p><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="alt text">
+<img src="https://img.shields.io/badge/rust-1.75%2B-orange.svg" alt="alt text">
+<img src="https://img.shields.io/badge/build-passing-brightgreen" alt="alt text">
+A terminal-based Git interface written in Rust, designed for streamlined dotfile management. Inspired by the speed and keyboard-centric nature of tools like <code>lazygit</code> and <code>lazyvim</code>.</p>
+<!-- Future : Adding a GIF of the application here.-->
+<h2 id="about-the-project">About The Project</h2>
+<p><code>dotatui</code> was built to solve a common problem: managing version-controled configuration files (dotfiles) across multiple systems without leaving the terminal. The goal was to create a fast, and intuitive TUI application that provides the most common Git operations at your fingertips.</p>
+<h3 id="core-features">Core features</h3>
+<ul>
+<li><strong>Dual-Panel Layout:</strong> View staged/unstaged files and the diff for the selected file simultaneously.</li>
+<li><strong>Full Staging Control:</strong> Stage and unstage entire files, including additions, modifications, and deletions.</li>
+<li><strong>Git Workflow:</strong> Browse the commit log to see a history of changes.</li>
+<li><strong>Intuitive Navigation:</strong>
+<ul>
+<li><strong>Vim Keybindings:</strong> Navigate lists (<code>j</code>/<code>k</code>) and switch between panels (<code>h</code>/<code>k</code>)</li>
+<li><strong>Mouse Support:</strong> Click to select files/panels and scroll lists with the mouse wheel.</li>
+</ul>
+</li>
+<li><strong>Responsive, Asynchronous UI:</strong> Built on async event loop to handle slow network operations (like <code>git push</code>) without freezing the interface.</li>
+</ul>
+<h3 id="tech-stack">Tech Stack</h3>
+<p>This project is entirely built using Rust:</p>
+<ul>
+<li><strong>Core Language:</strong> <a href="https://www.rust-lang.org/"><strong>Rust</strong></a></li>
+<li><strong>TUI Framework:</strong> <a href="https://ratatui.rs/"><strong>Ratatui</strong></a> for robust widget-based terminal rendering.</li>
+<li><strong>Terminal Backend:</strong> <a href="https://github.com/crossterm-rs/crossterm"><strong>Crossterm</strong></a> for cross-platform terminal manipulation.</li>
+<li><strong>Git Backend:</strong> <a href="https://github.com/rust-lang/git2-rs"><strong>git2-rs</strong></a>, the official Rust bindings for <code>libgit2</code>, providing a safe and fast alternative to shelling out to the <code>git</code> command.</li>
+<li><strong>Asynchronous Runtime:</strong> <a href="https://tokio.rs/"><strong>Tokio</strong></a> for handling slow network operations (like <code>git push</code>) without freezing the UI.</li>
+<li><strong>Error Handling:</strong> <a href="https://github.com/dtolnay/thiserror"><strong>thiserror</strong></a> for idiomatic, boilerplate-free error types.</li>
+<li><strong>Logging:</strong> <a href="https://github.com/drakulix/simplelog.rs"><strong>simplelog</strong></a> for file-based debugging that doesn&rsquo;t corrupt the TUI.</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<p>To get a local copy up and running, follow these simple steps.</p>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>Rust toolchain (via <code>rustup</code>)</li>
+<li><code>libgit2</code> and its dependencies (often handled automatically by the <code>git2-rs</code> build script)</li>
+</ul>
+<h3 id="installation">Installation</h3>
+<ol>
+<li>Clone the repository:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git clone https://github.com/sarang-kernel/dotatui.git
+</span></span></code></pre></div></li>
+<li>Navigate into the project directory:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cd dotatui
+</span></span></code></pre></div></li>
+<li>Build and run the application:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cargo run
+</span></span></code></pre></div>The application must be run from withing a Git repository</li>
+</ol>
+<h2 id="keybindings">Keybindings</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Key</th>
+          <th style="text-align: left">Action</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>q</code></td>
+          <td style="text-align: left">Quit Application / Exit Hunk Mode</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>s</code> / <code>l</code></td>
+          <td style="text-align: left">Switch to Status / Log View</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>j</code> / <code>k</code></td>
+          <td style="text-align: left">Navigate Up / Down in lists</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>h</code> / <code>l</code></td>
+          <td style="text-align: left">Switch focus between Left / Right panels</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>space</code></td>
+          <td style="text-align: left">Stage selected file</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>u</code></td>
+          <td style="text-align: left">Unstage selected file</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>c</code></td>
+          <td style="text-align: left">Open Commit message editor</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>Shift</code>+<code>P</code></td>
+          <td style="text-align: left">Push to remote (<code>origin</code>)</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>enter</code></td>
+          <td style="text-align: left">Enter Hunk Selection Mode</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>?</code></td>
+          <td style="text-align: left">Show Help Popup</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>esc</code></td>
+          <td style="text-align: left">Close Popup</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="project-roadmap">Project Roadmap</h2>
+<p><code>dotatui</code> is under active development. Future enhancements include:</p>
+<ul>
+<li><strong>Interactive Hunk Staging:</strong> Stage/unstage individual lines or blocks of code.</li>
+<li><strong>Branch Management:</strong> A UI for viewing, creating, and switching branches.</li>
+<li><strong>Interactive Log:</strong> View commit diffs and checkout commits directly from the log.</li>
+</ul>
+
+    </div>
+    <footer class="content__footer"></footer>
+
+            </section>
+
+            <section class="page__aside">
+                <div class="aside__about">
+<div class="aside__about">
+   
+  <h1 class="about__title">Sarang Vehale</h1>
+  
+  <p class="about__description">Software Developer and Tinkerer</p>
+   
+  <p class="about__extra">Just a funny little penguin</p>
+  
+</div>
+
+
+<ul class="aside__social-links">
+  
+  <li>
+    <a
+      href="https://github.com/SarangVehale"
+      rel="me"
+      aria-label="GitHub"
+      title="GitHub"
+      ><i class="fa-brands fa-github" aria-hidden="true"></i></a
+    >&nbsp;
+  </li>
+  
+  <li>
+    <a
+      href="mailto:sarangvehale2@gmail.com"
+      rel="me"
+      aria-label="Email"
+      title="Email"
+      ><i class="fa-solid fa-envelope" aria-hidden="true"></i></a
+    >&nbsp;
+  </li>
+  
+  <li>
+    <a
+      href="https://www.linkedin.com/in/sarang-vehale-a76210247/"
+      rel="me"
+      aria-label="LinkedIn"
+      title="LinkedIn"
+      ><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a
+    >&nbsp;
+  </li>
+  
+  <li>
+    <a
+      href="https://discord.gg/T3qwk5qE"
+      rel="me"
+      aria-label="Discord"
+      title="Discord"
+      ><i class="fa-brands fa-discord" aria-hidden="true"></i></a
+    >&nbsp;
+  </li>
+  
+</ul>
+</div>
+                <hr>
+                <div class="aside__content">
+    
+    
+
+    
+
+                </div>
+            </section>
+
+            <footer class="page__footer">
+<footer>
+  <hr />
+  <div class="footer-text">
+    <p>© Sarang Vehale</p>
+    <p>
+      Powered by <a href="https://gohugo.io/">Hugo</a> and the
+      <a href="https://github.com/joeroe/risotto">Risotto</a>
+      theme.
+    </p>
+  </div>
+</footer>
+</footer>
+
+        </div>
+    </body>
+
+</html>
