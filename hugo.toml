@@ -25,7 +25,7 @@ ignoreErrors = ["error-remote-getjson"] # Good practice to keep this
   [params.about]
     title = "Sarang Vehale"
     description = "Software Developer and Tinkerer"
-    extra = "Just a funny little penguin"
+    tagline = "Just a funny little penguin"
 
 # --- Social Links in Sidebar ---
 [[params.socialLinks]]

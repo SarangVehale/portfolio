@@ -1,0 +1,13 @@
+<!--
+  This file provides the template for the social media icons.
+  It is called by our custom about.html file.
+-->
+{{ with .Site.Params.socialLinks }}
+<div class="social-icons">
+  {{ range . }}
+  <a href="{{ .url }}" title="{{ .title }}" target="_blank" rel="me noopener">
+    <i class="{{ .icon }}"></i>
+  </a>
+  {{ end }}
+</div>
+{{ end }}

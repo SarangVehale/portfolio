@@ -1,30 +1,39 @@
+<!--
+  This custom file overrides the theme's default sidebar (about.html).
+  This version uses '$' to pass the correct global context to the social partial.
+-->
+
 {{ with .Site.Params.about }}
-<div class="aside__about">
-  {{ with .logo }}<span class="about__logo" role="img">{{ . }}</span>&nbsp;{{
-  end }} {{ with .logo_image }}<img
-    class="about__logo"
-    src="{{ . | absURL }}"
-    alt="Logo"
-  />{{ end }}
-  <h1 class="about__title">{{ .title }}</h1>
-  {{ with .description }}
-  <p class="about__description">{{ . | markdownify }}</p>
-  {{ end }} {{ with .extra }}
-  <p class="about__extra">{{ . | markdownify }}</p>
+<div class="about">
+  {{ with .logo }}
+  <div class="logo-container">
+    <a href="{{ $.Site.Home.Permalink }}">
+      <img src="{{ . | relURL }}" alt="logo" />
+    </a>
+  </div>
   {{ end }}
+
+  <h1>{{ .title | default $.Site.Title }}</h1>
+
+  {{ with .description }}
+  <p>{{ . | markdownify }}</p>
+  {{ end }}
+
+  <!--
+      THE FIX:
+      We must use '$' here instead of '.' to pass the global page context
+      to the social.html partial, otherwise it can't find the social links.
+    -->
+  {{ partial "social.html" $ }}
 </div>
 {{ end }}
 
-<ul class="aside__social-links">
-  {{ range $item := .Site.Params.socialLinks }}
-  <li>
-    <a
-      href="{{ $item.url }}"
-      rel="me"
-      aria-label="{{ $item.title }}"
-      title="{{ $item.title }}"
-      ><i class="{{ $item.icon }}" aria-hidden="true"></i></a
-    >&nbsp;
-  </li>
+<!-- The horizontal rule correctly separates the sections -->
+<hr />
+
+<!-- This container now only contains the tagline -->
+<div class="after-hr">
+  {{ with .Site.Params.about.tagline }}
+  <p><em>{{ . | markdownify }}</em></p>
   {{ end }}
-</ul>
+</div>
