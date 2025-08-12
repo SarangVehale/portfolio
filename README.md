@@ -1,6 +1,6 @@
 # My Portfolio
 
-`https://sarangvehale.github.io/portfolio/`
+[https://sarangvehale.github.io/portfolio/](https://sarangvehale.github.io/portfolio/)
 
 A minimal, terminal-insprired personal site built with Hugo. Because GUIs are bloat and most of the web is a fleeting nightmare of JavaScript frameworks and I absolutely despise it.
 
