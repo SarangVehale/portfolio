@@ -88,6 +88,7 @@ Check the `Actions` tab in you Github repo to see the magic happen.
 ### Contributing
 
 It's a personal portfolio. Fork it if you want, but... why?
+
 If you find a typo, I might accept a PR. No promise.
 
 ---
