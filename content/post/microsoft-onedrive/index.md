@@ -1,7 +1,7 @@
 ---
-date = '2025-08-29T22:30:51+05:30'
-draft = false
-title = 'How to Stop Microsoft OneDrive from Bugging You'
+date: "2025-08-29T22:30:51+05:30"
+draft: false
+title: "How to Stop Microsoft OneDrive from Bugging You"
 tags: ["Microsoft", "OneDrive", "Windows", "Pain"]
 ---
 

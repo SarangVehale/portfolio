@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>OneDrive on Sarang Vehale</title>
+    <link>http://localhost:1313/tags/onedrive/</link>
+    <description>Recent content in OneDrive on Sarang Vehale</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <copyright>© Sarang Vehale</copyright>
+    <lastBuildDate>Fri, 29 Aug 2025 22:30:51 +0530</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/onedrive/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to Stop Microsoft OneDrive from Bugging You</title>
+      <link>http://localhost:1313/post/microsoft-onedrive/</link>
+      <pubDate>Fri, 29 Aug 2025 22:30:51 +0530</pubDate>
+      <guid>http://localhost:1313/post/microsoft-onedrive/</guid>
+      <description>&lt;h1 id=&#34;how-to-stop-microsoft-onedrive-to-stop-bugging-up-your-system&#34;&gt;How to stop Microsoft OneDrive to stop bugging up your system&lt;/h1&gt;&#xA;&lt;p&gt;So.. Today by encounter whilst I was trying to get a little bit work done on windows, OneDrive backup kicked and fucked up all my files.&lt;/p&gt;&#xA;&lt;p&gt;I found a workaround for it which is actually quite great&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Uninstall OneDrive (duh&amp;hellip;)&lt;/li&gt;&#xA;&lt;li&gt;Another option that you can do is&#xA;Go to :&#xA;&lt;code&gt;bash Settings -&amp;gt; Apps -&amp;gt; Resume -&amp;gt; Toggle OneDrive On/Off  &lt;/code&gt;&#xA;This worked decently good enough and is decently hidden.&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;Go ahead stroke yourself to find this !! Cheers&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
