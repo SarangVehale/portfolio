@@ -7,8 +7,15 @@
     <generator>Hugo</generator>
     <language>en</language>
     <copyright>© Sarang Vehale</copyright>
-    <lastBuildDate>Fri, 29 Aug 2025 22:30:51 +0530</lastBuildDate>
+    <lastBuildDate>Fri, 29 Aug 2025 23:09:13 +0530</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>What is a Qubit</title>
+      <link>http://localhost:1313/post/qubit/</link>
+      <pubDate>Fri, 29 Aug 2025 23:09:13 +0530</pubDate>
+      <guid>http://localhost:1313/post/qubit/</guid>
+      <description>&lt;p&gt;So what are qubits for say??!&lt;/p&gt;&#xA;&lt;p&gt;Usually we know what are bits. Bits are entities that reside between the values of 0 and 1, whereas everyone says that a qubit is in superposition of 0 and 1. But what the freak does it really mean!!!&lt;/p&gt;&#xA;&lt;p&gt;If you wonder the same&amp;hellip; follow along&lt;/p&gt;</description>
+    </item>
     <item>
       <title>How to Stop Microsoft OneDrive from Bugging You</title>
       <link>http://localhost:1313/post/microsoft-onedrive/</link>

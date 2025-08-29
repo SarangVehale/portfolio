@@ -1,0 +1,33 @@
+{{/* This is a custom list template. It will be used for /post/, /projects/, and
+any other section that lists pages. */}} {{ define "main" }}
+<div class="list">
+  <header>
+    <!-- This shows the title from your _index.md file (e.g., "Blog") -->
+    <h1>{{ .Title }}</h1>
+    <!-- This shows the content from your _index.md file (e.g., "Welcome to my blog...") -->
+    <div class="page-content">{{ .Content }}</div>
+  </header>
+
+  <main>
+    <!-- This is the loop that creates an entry for each blog post -->
+    {{ range .Pages }}
+    <article class="list-item">
+      <!-- This is the bold link to your blog post -->
+      <h2 class="list-item-title">
+        <a href="{{ .Permalink }}">{{ .Title }}</a>
+      </h2>
+
+      <!-- This shows the post's date -->
+      <div class="list-item-meta">
+        <span>{{ .Date.Format "02 January 2006" }}</span>
+      </div>
+
+      <!-- This shows the description/summary -->
+      <div class="list-item-summary">
+        <p>{{ .Summary }}</p>
+      </div>
+    </article>
+    {{ end }}
+  </main>
+</div>
+{{ end }}
