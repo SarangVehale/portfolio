@@ -70,6 +70,13 @@ ignoreErrors = ["error-remote-getjson"] # Good practice to keep this
     name = "Contact"
     url = "/contact/"
     weight = 40
+  [[menu.main]]
+    identifier = "blogs"
+    name = "Blogs"
+    url = "/blogs/"
+    weight = 50
+
+
 
 # --- Advanced Settings ---
 [taxonomies]
