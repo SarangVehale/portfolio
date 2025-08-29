@@ -1,6 +1,6 @@
 +++
 date = '2025-08-29T22:30:51+05:30'
-draft = true
+draft = false
 title = 'Microsoft_onedrive'
 tags: ["Microsoft", "OneDrive", "Pain"]
 +++
@@ -15,8 +15,8 @@ I found a workaround for it which is actually quite great
 2. Another option that you can do is
    Go to :
    `bash
- Settings -> Apps -> Resume -> Toggle OneDrive On/Off 
- `
+Settings -> Apps -> Resume -> Toggle OneDrive On/Off 
+`
    This worked decently good enough and is decently hidden.
 
 Go ahead stroke yourself to find this !! Cheers
