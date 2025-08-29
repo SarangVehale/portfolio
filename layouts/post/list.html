@@ -1,0 +1,28 @@
+{{/* This is the specific list template for the 'post' section. It overrides the
+theme's template and only shows title links and descriptions. */}} {{ define
+"main" }}
+<div class="list">
+  <header>
+    <!-- The title of the section (from content/post/_default.md) -->
+    <h1>{{ .Title }}</h1>
+
+    <!-- The intro text for the section -->
+    <div class="page-content">{{ .Content }}</div>
+  </header>
+
+  <main class="list-main">
+    <!-- Loop that creates a simple entry for each post -->
+    {{ range .Pages }}
+    <article style="margin-bottom: 2rem">
+      <!-- The bold link to the full article -->
+      <h2 style="font-size: 1.2em; margin-bottom: 0.25rem">
+        <a href="{{ .Permalink }}">{{ .Title }}</a>
+      </h2>
+
+      <!-- The description from the front matter -->
+      <p style="margin-top: 0">{{ .Params.description | default .Summary }}</p>
+    </article>
+    {{ end }}
+  </main>
+</div>
+{{ end }}
