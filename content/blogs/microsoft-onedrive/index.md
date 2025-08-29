@@ -1,9 +1,9 @@
-+++
+---
 date = '2025-08-29T22:30:51+05:30'
 draft = false
-title = 'Microsoft_onedrive'
-tags: ["Microsoft", "OneDrive", "Pain"]
-+++
+title = 'How to Stop Microsoft OneDrive from Bugging You'
+tags: ["Microsoft", "OneDrive", "Windows", "Pain"]
+---
 
 # How to stop Microsoft OneDrive to stop bugging up your system
 
