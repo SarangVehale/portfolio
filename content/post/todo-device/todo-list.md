@@ -1,9 +1,9 @@
 ---
-date: "2025-08-29T22:30:51+05:30"
+date: "2026-03-26"
 draft: false
-title: "How to Stop Microsoft OneDrive from Bugging You"
-tags: ["Microsoft", "OneDrive", "Windows", "Pain"]
-description: "A quick guide on how to prevent the OneDrive backup from taking over your files on Windows, with simple workarounds"
+title: "Todo list device"
+tags: ["Hardware", "Todolist", "Productivity"]
+description: "An idea for todolist hardware device"
 ---
 
 # Todo List Device

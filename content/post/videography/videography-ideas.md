@@ -1,3 +1,11 @@
+---
+date: "2026-03-26"
+draft: false
+title: "Videography ideas"
+tags: ["Videography", "Film", "ColorScience"]
+description: "An idea for videography/filmatography"
+---
+
 # Videography ideas
 
 Shoot in split mode which contrast each other.
