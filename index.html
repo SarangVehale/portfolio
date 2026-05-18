@@ -829,12 +829,115 @@
 
   .empty { color: var(--ink-faint); font-style: italic; padding: 2rem 0; }
 
+  /* ─── RESPONSIVE BREAKPOINTS ─────────────────────────────────────────
+     Three tiers, mobile-first:
+       ≤ 480px  — small phones (iPhone SE, narrow Androids)
+       ≤ 640px  — large phones, small tablets in portrait
+       ≤ 900px  — landscape phones, portrait tablets
+     Anything larger uses the default desktop layout above.
+     ────────────────────────────────────────────────────────────────── */
+
+  /* Tablet & landscape phone */
+  @media (max-width: 900px) {
+    .page { padding: 4rem 1.5rem 5rem; }
+    .home { padding: 3rem 1.5rem; }
+  }
+
+  /* Phone (portrait) */
   @media (max-width: 640px) {
-    .home .name { font-size: 2.6rem; }
-    .home nav { font-size: 0.95rem; }
+    body { font-size: 18px; }
+    .page { padding: 3rem 1.25rem 4rem; max-width: none; }
+    .home { padding: 2.5rem 1.25rem; min-height: auto; }
+    .home .name { font-size: 2.4rem; margin-bottom: 1rem; }
+    .home .tagline { font-size: 1rem; margin: 0 0 1.5rem; }
+    .home .hero { width: min(420px, 100%); margin: 0.5rem 0 1.8rem; }
+    .home .time { font-size: 0.85rem; margin: 0 0 1.5rem; }
+    .home .time .clock { font-size: 0.8rem; }
+    .home nav { font-size: 0.95rem; line-height: 1.9; margin: 0 0 2rem; }
+    .home nav .slash { margin: 0 .25em; }
+    .home .now { font-size: 0.9rem; }
+    .home .footer { margin-top: 2rem; font-size: 9px; }
+
+    /* Sub-pages */
+    .page .crumb { margin-bottom: 2rem; font-size: 10px; }
+    .page h1 { font-size: 1.7rem !important; }
+    .page .page-lead { font-size: 0.98rem; }
+
+    /* Experience: ease the indent so nested items don't squeeze */
+    .exp-org-name { font-size: 1.15rem; }
+    .exp-role-item { padding-left: 0.9rem; }
+    .exp-group.multi .exp-role-item::before { left: -3px; width: 5px; height: 5px; }
+    .exp-role { font-size: 1rem; }
+
+    /* Certificates: stack title and the date/link side */
     .cert-item { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
     .cert-side { margin-top: 0.2rem; }
     .cert-side a { margin-left: 0; }
+
+    /* Notes / FAQ — tighter vertical rhythm */
+    .diary-entry, .faq-item { padding: 2rem 0; }
+    .diary-title, .faq-q { font-size: 1.15rem; }
+
+    /* Lists (projects, posts) — single-column, hide hover arrow */
+    .list-item { margin: 0; padding: 1rem 0; }
+    .list-row { gap: 0.5rem; }
+    .list-arrow { display: none; }
+
+    /* Page footer — stack vertically, full-width tap targets */
+    .page-foot {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .page-foot button, .page-foot a { padding: 4px 0; }
+
+    /* Subdir nav — tighter wrap */
+    .page-subdirs { font-size: 12px; gap: 0.3rem 0.9rem; margin-top: 2.5rem; }
+
+    /* Cmd+K modal — full-width, tighter top */
+    .cmdk { padding-top: 6vh; padding-left: 12px; padding-right: 12px; }
+    .cmdk-modal { width: 100%; max-height: 80vh; }
+    .cmdk-input { font-size: 1rem; padding: 0.85rem 1rem; }
+    .cmdk-kind { min-width: 52px; font-size: 8.5px; }
+    .cmdk-sub { padding-left: 60px; font-size: 0.8rem; }
+
+    /* Reader prose: lower margins */
+    .prose h2 { margin: 2rem 0 0.6rem; font-size: 1.25rem; }
+    .prose h3 { margin: 1.5rem 0 0.4rem; }
+    .reader-title { font-size: 1.7rem !important; }
+    .reader-summary { font-size: 1.05rem; }
+  }
+
+  /* Small phones (≤ 480px) — last polish for very narrow screens */
+  @media (max-width: 480px) {
+    .page { padding: 2.5rem 1rem 3rem; }
+    .home { padding: 2rem 1rem; }
+    .home .name { font-size: 2.1rem; letter-spacing: -0.01em; }
+    .home .hero { width: 100%; }
+
+    /* Stack the meta on note headers cleanly */
+    .diary-meta-row { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
+
+    /* Experience meta: wrap with comfortable line-height */
+    .exp-meta { line-height: 1.7; }
+    .exp-group-meta { line-height: 1.7; }
+
+    /* Contact dl: collapse to single column */
+    .contact-grid { grid-template-columns: 1fr; gap: 0.2rem 0; }
+    .contact-grid dt { padding-top: 0.8rem; padding-bottom: 0.1rem; }
+    .contact-grid dt:first-child { padding-top: 0; }
+
+    /* Cmd+K — full width edge to edge */
+    .cmdk { padding-left: 8px; padding-right: 8px; padding-top: 4vh; }
+  }
+
+  /* Prefers-reduced-motion — respect the OS setting */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001s !important;
+      transition-duration: 0.001s !important;
+    }
+    .home .hero img { transition: opacity 0s !important; }
   }
 </style>
 </head>
