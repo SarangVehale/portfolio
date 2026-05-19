@@ -35,8 +35,9 @@ summary: current edc, gear and setup.
 - wallet- custom made leather wallet
 - headphones- [oneplus buds3](https://amzn.in/d/0gWHnraR)
 
-\*I'm probably forgetting some stuff
-\*I do have a bunch of like harddrives. ssd's, samsung T7 drives for storage and a raspberry pi 4b (random hosting server).
+I'm probably forgetting some stuff
+
+I do have a bunch of like harddrives. ssd's, samsung T7 drives for storage and a raspberry pi 4b (random hosting server).
 
 ---
 
