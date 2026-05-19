@@ -1,4 +1,33 @@
 kind: post
+title: youtube
+date: 2026-29-05
+tags: youtube, channel
+summary: I created a random youtube channel
+
+## I created a youtube channel - @smallcatz
+
+So this was quite random and at a whim that I did, I made a youtube channel I had initially intended to post
+study youtube videos - study with me, no pomodoro - type videos, which now I mostly use as a diary of life
+if I find something interesting say my grandma's cat, Mr Dog, or some other random thing.
+
+I do intend to get back to filming good videos with actual value and hopefully also get back to studying longer
+hours although right now I will be focusing on job applications and my phd application. I intend to get a good
+scholarship maybe in a good university in japan or the europe. Initially when the though of phd came over me
+I wanted to attend UC berkley although the US market and all the scenario is kinda bad there. So we're pivoting to
+japan and europe.
+
+What I was able to narrow down for Europe was mainly ETH Zurich as they have theoretical quantum research compared to
+other universities in UK, or other places where they focus on hardware side of quantum research.
+
+That was quite a detour, getting back to the main topic, I started a youtube channel.
+
+Soo...
+
+I started a youtube channel
+
+---
+
+kind: post
 title: current gear
 date: 2026-19-05
 tags: gear, edc
