@@ -1,35 +1,42 @@
 # content/faq.md
+
 #
+
 # Each `---` block is one Q&A. The `title:` line is the question, the
+
 # body is the answer. Use `order: N` to control the order on the page
+
 # (lower numbers first). Without `order:`, entries fall to the bottom.
+
 #
+
 # To add a question:
-#   1. Scroll to the bottom of this file.
-#   2. Type --- on its own line.
-#   3. Write `title: <the question>` and a blank line.
-#   4. Write the answer in Markdown.
-#   5. Save. Refresh. Done.
+
+# 1. Scroll to the bottom of this file.
+
+# 2. Type --- on its own line.
+
+# 3. Write `title: <the question>` and a blank line.
+
+# 4. Write the answer in Markdown.
+
+# 5. Save. Refresh. Done.
 
 ---
 
 kind: faq
 parent: about
-order: 1
-title: What do you actually do?
+order: 2
+title: Personal Details
 
-I'm a researcher and engineer working at the intersection of
-**cybersecurity** and **quantum computing**. Day-to-day that means:
-
-- Writing benchmarking and verification tools for quantum systems
-  (most recently *CERTIFY-ED*, now on arXiv).
-- Building OSINT and threat-intelligence systems for Indian law
-  enforcement (through I4C / MHA).
-- Researching post-quantum cryptography and the lattice-based
-  side of integer factorization.
-
-When I'm not doing that I write systems software in Rust, maintain
-a Proxmox homelab, and occasionally design my own keyboards.
+Age : 22
+Birthday: 27/02/2003
+Where are you from? Pune, Maharashtra, India
+What's your height? 168 cm
+Major: Cyber Security/Quantum Computing
+Orientation: Straight
+Whats your mbti?
+What gear is that? https://sarangvehale.github.io/portfolio/blogs/gear.md
 
 ---
 
