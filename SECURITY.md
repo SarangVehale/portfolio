@@ -20,10 +20,28 @@ phone home. The only network requests it makes are:
 
 1. Fetching its own `.md` files from the same origin.
 2. Loading Google Fonts (CSS and font files) over HTTPS.
+3. Listing files in directories declared with `dir:` in `content.md`
+   by calling the public GitHub Contents API (no auth required).
 
 ## Defences in place
 
-### 1. Content-Security-Policy
+### Connect-src — `https://api.github.com`
+
+The site lists files in `content/blog/`, `content/blog/notes/`, and any
+other `dir:` directives by calling the public GitHub Contents API. This
+is a same-origin-of-data call (your own repo, public, no auth) and the
+results are cached in `localStorage` for 5 minutes to stay well under
+the unauthenticated rate limit (60 requests / hour / IP).
+
+Trust boundaries: the API only returns metadata about files (name,
+type, size). The site fetches the actual file bodies from its own
+origin afterwards. A compromised GitHub Contents API response could at
+worst cause some files to be skipped or list extra paths the site then
+tries to fetch from itself — the same-origin `fetch()` calls are
+bounded by `connect-src 'self'`, so it can't be redirected anywhere
+malicious.
+
+
 
 `index.html` ships with a strict CSP via `<meta http-equiv>`:
 

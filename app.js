@@ -18,23 +18,30 @@
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-  /* ─────────── theme (light/dark toggle persisted to localStorage) ── */
+  /* ─────────── theme (3-mode cycle, persisted to localStorage) ────
+     States: '' (warm, default) → 'white' → 'dark' → ''
+     The footer toggle shows what comes next. */
+  const THEME_CYCLE = ["", "white", "dark"];
+  const THEME_LABEL = { "": "warm", "white": "white", "dark": "dark" };
   const savedTheme = localStorage.getItem("theme");
-  if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+  if (savedTheme !== null) document.documentElement.dataset.theme = savedTheme;
   function toggleTheme(e) {
     if (e) e.preventDefault();
-    const next = document.documentElement.dataset.theme === "dark" ? "" : "dark";
+    const cur = document.documentElement.dataset.theme || "";
+    const idx = THEME_CYCLE.indexOf(cur);
+    const next = THEME_CYCLE[(idx + 1) % THEME_CYCLE.length];
     if (next) document.documentElement.dataset.theme = next;
     else delete document.documentElement.dataset.theme;
     localStorage.setItem("theme", next);
     refreshThemeLink();
   }
   function refreshThemeLink() {
-    const isDark = document.documentElement.dataset.theme === "dark";
-    $$(".theme-text").forEach(el => el.textContent = isDark ? "[light]" : "[dark]");
+    const cur = document.documentElement.dataset.theme || "";
+    const idx = THEME_CYCLE.indexOf(cur);
+    const nextLabel = THEME_LABEL[THEME_CYCLE[(idx + 1) % THEME_CYCLE.length]];
     const a = $("#theme-toggle"), b = $("#theme-toggle-2");
-    if (a) a.textContent = isDark ? "[light]" : "[dark]";
-    if (b) b.textContent = isDark ? "[toggle light]" : "[toggle dark]";
+    if (a) a.textContent = `[${nextLabel}]`;
+    if (b) b.textContent = `[switch to ${nextLabel}]`;
   }
 
   /* ─────────── content.md parser ────────────────────────────────── */
@@ -74,10 +81,9 @@
                .filter(e => !isDraft(e));
   }
 
-  /* Per-file default kind — lets entries omit `kind:` when they live in
-     a section file whose role is obvious from its name. Files inside a
-     subdirectory inherit from the parent directory name too, so
-     content/notes/foo.md gets `kind: note`. */
+  /* Per-file/folder default kind. Files inside a subdirectory inherit from
+     the folder name. More-specific (longer) folder paths win over shorter
+     ones — e.g. content/blog/notes wins over content/blog. */
   const KIND_BY_BASENAME = {
     "about.md":        "about",
     "faq.md":          "faq",
@@ -85,23 +91,35 @@
     "contact.md":      "contact",
     "experience.md":   "experience",
     "projects.md":     "project",
-    "writing.md":      "post",
-    "notes.md":        "note",
     "certificates.md": "certificate",
   };
-  const KIND_BY_DIR = {
-    "experience":   "experience",
-    "projects":     "project",
-    "writing":      "post",
-    "notes":        "note",
-    "certificates": "certificate",
+  const KIND_BY_DIR_PATH = {
+    "content/experience":   "experience",
+    "content/projects":     "project",
+    "content/writing":      "post",
+    "content/blog":         "post",
+    "content/blog/notes":   "note",
+    "content/notes":        "note",
+    "content/certificates": "certificate",
+    "content/faq":          "faq",
+  };
+  /* Implicit parents — kinds that always appear as subdirs of another
+     page. Entries can still set `parent:` explicitly to override. */
+  const KIND_PARENTS = {
+    note: "post",   // notes appear as a subdir of blog
+    faq:  "about",  // FAQ appears as a subdir of about
   };
   function defaultKindForPath(path) {
     if (!path) return null;
     const segs = path.split("/");
     const file = segs.pop();
-    const dir = segs[segs.length - 1] || "";
-    return KIND_BY_BASENAME[file] || KIND_BY_DIR[dir] || null;
+    if (KIND_BY_BASENAME[file]) return KIND_BY_BASENAME[file];
+    // Walk dir segments from deepest to shallowest — longest match wins.
+    for (let i = segs.length; i > 0; i--) {
+      const probe = segs.slice(0, i).join("/");
+      if (KIND_BY_DIR_PATH[probe]) return KIND_BY_DIR_PATH[probe];
+    }
+    return null;
   }
   function filenameToTitle(path) {
     if (!path) return "";
@@ -109,6 +127,63 @@
       .replace(/\.md$/i, "")
       .replace(/[-_]+/g, " ")
       .replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  /* ─────────── GitHub directory listing ─────────────────────────────
+     For each `dir:` directive in content.md, list the .md files in that
+     folder using the GitHub Contents API. CORS-open, no auth required
+     for public repos. Cached in localStorage for 5 minutes so refreshes
+     don't burn through the 60/hr rate limit.
+
+     Files starting with `_` are skipped (reserved for future manifests).
+     ─────────────────────────────────────────────────────────────── */
+  async function listDirFromGitHub(dirPath) {
+    if (!SITE || !SITE.repo) {
+      console.warn(`Cannot auto-discover ${dirPath}: no repo: set in content.md`);
+      return [];
+    }
+    const m = SITE.repo.match(/github\.com\/([^/]+)\/([^/]+?)(?:\.git)?\/?$/);
+    if (!m) {
+      console.warn(`Cannot parse repo URL: ${SITE.repo}`);
+      return [];
+    }
+    const owner = m[1];
+    const repo  = m[2];
+    const branch = (SITE.branch || "main").trim();
+    const cleanPath = dirPath.replace(/\/$/, "");
+    const cacheKey = `dir:${owner}/${repo}@${branch}/${cleanPath}`;
+
+    // localStorage cache (5min TTL)
+    try {
+      const raw = localStorage.getItem(cacheKey);
+      if (raw) {
+        const { ts, files } = JSON.parse(raw);
+        if (Date.now() - ts < 5 * 60 * 1000) return files;
+      }
+    } catch (_) { /* ignore corrupt cache */ }
+
+    try {
+      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURI(cleanPath)}?ref=${encodeURIComponent(branch)}`;
+      const res = await fetch(url, { headers: { Accept: "application/vnd.github+json" } });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const list = await res.json();
+      if (!Array.isArray(list)) throw new Error("Unexpected response");
+      const files = list
+        .filter(f => f.type === "file" && /\.md$/i.test(f.name) && !f.name.startsWith("_"))
+        .map(f => `${cleanPath}/${f.name}`);
+      try {
+        localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), files }));
+      } catch (_) { /* localStorage full / disabled */ }
+      return files;
+    } catch (err) {
+      console.warn(`Could not list ${dirPath}:`, err.message);
+      // Best-effort fallback: return last cached value even if stale.
+      try {
+        const raw = localStorage.getItem(cacheKey);
+        if (raw) return JSON.parse(raw).files || [];
+      } catch (_) {}
+      return [];
+    }
   }
 
   /* Fill in sensible defaults for fields the user omitted. */
@@ -119,6 +194,7 @@
     if (!e.title && e.body)                  e.title = deriveTitle(e.body);
     if (!e.title && path)                    e.title = filenameToTitle(path);
     if (path)                                e._path = path;
+    if (!e.parent && KIND_PARENTS[e.kind])   e.parent = KIND_PARENTS[e.kind];
     return e;
   }
 
@@ -232,6 +308,11 @@
       fm.files = fileValues.map(s => s.trim()).filter(Boolean);
       delete fm.file;
 
+      // Directories manifest (auto-discovered via GitHub API)
+      const dirValues = fm.dir == null ? [] : (Array.isArray(fm.dir) ? fm.dir : [fm.dir]);
+      fm.dirs = dirValues.map(s => s.trim().replace(/\/+$/, "")).filter(Boolean);
+      delete fm.dir;
+
       // Photo manifest (hero shuffle on homepage). Each line is
       // `path | focal-position`, where focal-position is any valid CSS
       // `object-position` value (e.g. `center top`, `50% 30%`). Defaults to
@@ -325,6 +406,8 @@
     $$("[data-bind='footer-name']").forEach(el => el.textContent = SITE.name);
     $$("[data-bind='footer-name-2']").forEach(el => el.textContent = SITE.name);
     $("#year").textContent = new Date().getFullYear();
+    const metaYear = $("#home-meta-year");
+    if (metaYear) metaYear.textContent = new Date().getFullYear();
     $("#year2").textContent = new Date().getFullYear();
 
     if (SITE.now) {
@@ -334,14 +417,13 @@
 
     // Build nav based on which sections have entries
     const sections = [
-      { id: "about",        label: "about",       always: !!entries.find(e => e.kind === "about") },
-      { id: "experience",   label: "experience",  always: entries.some(e => e.kind === "experience") },
-      { id: "projects",     label: "projects",    always: entries.some(e => e.kind === "project") },
-      { id: "writing",      label: "blog",        always: entries.some(e => e.kind === "post") },
-      { id: "notes",        label: "notes",       always: entries.some(e => e.kind === "note") },
-      { id: "certificates", label: "certificates",always: entries.some(e => e.kind === "certificate") },
-      { id: "skills",       label: "skills",      always: !!entries.find(e => e.kind === "skills") },
-      { id: "contact",      label: "contact",     always: true },
+      { id: "about",        label: "about",        always: true },
+      { id: "experience",   label: "experience",   always: true },
+      { id: "projects",     label: "projects",     always: true },
+      { id: "writing",      label: "blog",         always: true },
+      { id: "certificates", label: "certificates", always: true },
+      { id: "skills",       label: "skills",       always: true },
+      { id: "contact",      label: "contact",      always: true },
     ];
     const visible = sections.filter(s => s.always);
     $("#home-nav").innerHTML = visible.map((s, i) =>
@@ -929,8 +1011,19 @@
     const parsed = parseManifest(text);
     SITE = parsed.header;
 
+    // Resolve `dir:` directives → concrete file paths via GitHub API.
+    const dirFiles = (await Promise.all((SITE.dirs || []).map(listDirFromGitHub))).flat();
+
+    // Combine explicit file: lines + auto-discovered dir contents, dedupe.
+    const seenPaths = new Set();
+    const allFiles = [...(SITE.files || []), ...dirFiles].filter(p => {
+      if (seenPaths.has(p)) return false;
+      seenPaths.add(p);
+      return true;
+    });
+
     // Fetch every file in the manifest (in parallel) and parse entries.
-    const fileResults = await Promise.all((SITE.files || []).map(async (path) => {
+    const fileResults = await Promise.all(allFiles.map(async (path) => {
       try {
         const r = await fetch(path + "?v=" + Date.now(), { cache: "no-store" });
         if (!r.ok) throw new Error("HTTP " + r.status);

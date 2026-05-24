@@ -120,14 +120,57 @@ fields besides `kind:` — leave fields out if you don't have them.
 | Add a homepage photo                 | Drop file in `photos/`, add a `photo:` line in `content.md`                                    |
 | Add a brand-new section              | Create `content/<name>.md`, add `file: content/<name>.md` to `content.md`                      |
 
+## Two ways to organise content
+
+The site supports two patterns. Pick per-section based on what's
+ergonomic for that kind of content.
+
+### Single multi-entry file (structured)
+
+For sections with a fixed schema, keep everything in one file. Each
+entry is separated by `---`. Used for `about`, `skills`, `contact`,
+`faq`, `experience`, `projects`, `certificates`.
+
+```
+content/projects.md   →   all your projects, ---separated
+content/experience.md →   all your roles, ---separated
+```
+
+To add an entry, scroll to the bottom of the file, type `---`, write.
+
+### Auto-discovered folder (Obsidian-style)
+
+For free-form content where you just want to "drop a file and have it
+appear" — used for `blog` and `blog/notes`. The site discovers every
+`.md` in the folder via the GitHub Contents API (cached 5 min):
+
+```
+content/blog/foo.md         →   blog post titled "Foo"
+content/blog/notes/bar.md   →   note titled "Bar" under blog
+```
+
+Folder = section. Subfolders become subdirs on the site. No manifest
+to maintain — push the file, refresh the page.
+
+To declare a folder as auto-discovered, add a `dir:` line in
+`content.md`:
+
+```
+dir: content/blog
+dir: content/blog/notes
+```
+
+The site needs `repo:` set in `content.md` (already done) so it knows
+which GitHub repo to query. Public repos only.
+
 ## Friction-free defaults
 
 Every entry in `content/*.md` can omit fields when they're obvious:
 
 - **`kind:`** is inferred from the filename or the folder. Anything in
-  `content/notes.md` or `content/notes/<anything>.md` is automatically
-  `kind: note`. Same for `projects`, `writing`, `experience`,
-  `certificates`.
+  `content/blog/` is automatically `kind: post`. Anything in
+  `content/blog/notes/` is `kind: note`. Same for the other section
+  files (`about.md` → `about`, etc.).
 - **`date:`** defaults to **today**. You can also write `date: today` or
   `date: yesterday` literally. For multiple entries on the same day, use
   a full ISO datetime (`2026-05-15T14:30`) to nail down the order.
@@ -137,15 +180,14 @@ Every entry in `content/*.md` can omit fields when they're obvious:
 - **`draft: true`** hides an entry from the site. Useful for committing
   work-in-progress without it showing up publicly.
 
-The bare minimum entry is just `---` followed by Markdown:
+The bare minimum blog note is a one-line file:
 
 ```
----
-
+content/blog/notes/random-thought.md:
 Just had a thought about X.
 ```
 
-No title, no date, no kind. The site fills it all in.
+No title, no date, no kind, no frontmatter. The site fills it all in.
 
 ## Editing this site
 
