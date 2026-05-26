@@ -313,6 +313,14 @@
       fm.dirs = dirValues.map(s => s.trim().replace(/\/+$/, "")).filter(Boolean);
       delete fm.dir;
 
+      // Photo directories — every image inside auto-becomes a hero photo.
+      // Add `photodir: photos` to your manifest, drop any .jpg/.png/.webp
+      // into photos/, and it shows up. `photo:` lines still work as
+      // per-file overrides (focal position, etc.).
+      const photodirValues = fm.photodir == null ? [] : (Array.isArray(fm.photodir) ? fm.photodir : [fm.photodir]);
+      fm.photodirs = photodirValues.map(s => s.trim().replace(/\/+$/, "")).filter(Boolean);
+      delete fm.photodir;
+
       // Photo manifest (hero shuffle on homepage). Each line is
       // `path | focal-position`, where focal-position is any valid CSS
       // `object-position` value (e.g. `center top`, `50% 30%`). Defaults to
@@ -449,6 +457,59 @@
     }
 
     setupHero(SITE.photos || []);
+  }
+
+  /* List image files in a `photodir:` via the GitHub Contents API.
+     Same caching / fallback behaviour as listDirFromGitHub but filters
+     for image extensions. */
+  async function listPhotosFromGitHub(dirPath) {
+    if (!SITE || !SITE.repo) {
+      console.warn(`Cannot auto-discover photos in ${dirPath}: no repo: set in content.md`);
+      return [];
+    }
+    const m = SITE.repo.match(/github\.com\/([^/]+)\/([^/]+?)(?:\.git)?\/?$/);
+    if (!m) return [];
+    const owner  = m[1];
+    const repo   = m[2];
+    const branch = (SITE.branch || "main").trim();
+    const cleanPath = dirPath.replace(/\/$/, "");
+    const cacheKey  = `photodir:${owner}/${repo}@${branch}/${cleanPath}`;
+
+    try {
+      const raw = localStorage.getItem(cacheKey);
+      if (raw) {
+        const { ts, files } = JSON.parse(raw);
+        if (Date.now() - ts < 5 * 60 * 1000) return files;
+      }
+    } catch (_) {}
+
+    try {
+      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURI(cleanPath)}?ref=${encodeURIComponent(branch)}`;
+      const res = await fetch(url, { headers: { Accept: "application/vnd.github+json" } });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const list = await res.json();
+      if (!Array.isArray(list)) throw new Error("Unexpected response");
+      const files = list
+        .filter(f =>
+          f.type === "file" &&
+          /\.(jpe?g|png|webp|gif|avif)$/i.test(f.name) &&
+          !f.name.startsWith("_") &&
+          !f.name.startsWith(".")
+        )
+        .map(f => `${cleanPath}/${f.name}`)
+        .sort();
+      try {
+        localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), files }));
+      } catch (_) {}
+      return files;
+    } catch (err) {
+      console.warn(`Could not list photos in ${dirPath}:`, err.message);
+      try {
+        const raw = localStorage.getItem(cacheKey);
+        if (raw) return JSON.parse(raw).files || [];
+      } catch (_) {}
+      return [];
+    }
   }
 
   /* ─────────── hero photo shuffle ──────────────────────────────── */
@@ -1010,6 +1071,18 @@
 
     const parsed = parseManifest(text);
     SITE = parsed.header;
+
+    // Auto-discover photos in any `photodir:` directories. Explicit
+    // `photo:` entries always win on focal position; auto-discovered
+    // files default to `center` and are appended at the end.
+    if ((SITE.photodirs || []).length) {
+      const explicitPaths = new Set((SITE.photos || []).map(p => p.src));
+      const discovered = (await Promise.all(SITE.photodirs.map(listPhotosFromGitHub))).flat();
+      const autoPhotos = discovered
+        .filter(src => !explicitPaths.has(src))
+        .map(src => ({ src, focal: "center" }));
+      SITE.photos = [...(SITE.photos || []), ...autoPhotos];
+    }
 
     // Resolve `dir:` directives → concrete file paths via GitHub API.
     const dirFiles = (await Promise.all((SITE.dirs || []).map(listDirFromGitHub))).flat();

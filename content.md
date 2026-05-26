@@ -72,7 +72,18 @@ repo:   https://github.com/SarangVehale/portfolio
 branch: main
 
 # ── Homepage hero photos ─────────────────────────────────────────────────
-# Format: photo: path | focal-position
+# Just drop image files into the photos/ folder. The `photodir:` line below
+# auto-discovers every .jpg/.png/.webp inside (via the GitHub API). New
+# files appear on the homepage with no edit here. No manifest to maintain.
+#
+# To customise the crop for a specific photo, add a `photo:` line below.
+# These act as PER-FILE OVERRIDES on top of auto-discovery:
+#   Format:   photo: <path> | <focal-position>
+# Any CSS `object-position` works: `center 30%`, `right top`, `50% 20%`...
+photodir: photos
+
+# Focal-position overrides for specific images (optional — without these,
+# they'd auto-load with `center` focal).
 photo: photos/01-shepherd-golden-hour.jpeg | center 35%
 photo: photos/02-arch-courtyard.jpeg       | center 40%
 photo: photos/03-jaipur-stained-glass.jpeg | center 55%
