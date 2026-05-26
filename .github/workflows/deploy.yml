@@ -1,0 +1,56 @@
+# Deploy the static site to GitHub Pages.
+#
+# This replaces the "build from branch" mode in Settings → Pages.
+# Why this exists
+#   GitHub's classic Pages serving is slow to update (sometimes minutes)
+#   and has a separate cache layer. The Actions deploy is direct, ~30s
+#   end-to-end, and you get a clean run log per deploy.
+#
+# One-time setup on GitHub
+#   Settings → Pages → Build and deployment → Source = "GitHub Actions".
+#   (NOT "Deploy from a branch".)
+
+name: deploy to pages
+
+on:
+  # Run whenever main changes…
+  push:
+    branches: [main]
+  # …and let us trigger it by hand from the Actions tab.
+  workflow_dispatch: {}
+
+# GitHub Pages requires these specific permissions.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Don't queue concurrent deploys; if a new one arrives while one is in
+# flight, cancel the old. The site is fully static, so newest wins.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The site is a static folder; nothing to build. We just upload it
+      # as-is. .git/, .github/, and node_modules/ are excluded by default
+      # by the upload-pages-artifact action.
+      - name: package site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

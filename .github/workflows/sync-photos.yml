@@ -1,0 +1,64 @@
+# Auto-sync content.md when photos are added or removed.
+#
+# What this does
+#   On every push that touches photos/, this runs scripts/sync-photos.py
+#   which rewrites the `photo:` block in content.md to match the actual
+#   files in photos/. New images get appended with `center 50%` focal;
+#   removed images get cleaned up; existing focals are preserved.
+#
+# It then commits the updated content.md back to the same branch.
+#
+# Why this doesn't loop forever
+#   - github-actions[bot] is excluded from triggering the same workflow.
+#   - The commit message contains [skip ci] which most CI tools honour.
+#
+# What you need to enable
+#   Settings → Actions → General → Workflow permissions →
+#     "Read and write permissions" must be checked.
+#   That's it. The default GITHUB_TOKEN handles the push.
+
+name: sync photos
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'photos/**'
+      - 'scripts/sync-photos.py'
+      - '.github/workflows/sync-photos.yml'
+  workflow_dispatch: {}
+
+# Don't run alongside the deploy workflow's concurrency group; this
+# workflow's commits trigger deploy.yml, not itself.
+concurrency:
+  group: sync-photos
+  cancel-in-progress: false   # allow manual run from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    # Skip if this commit was made by the bot itself.
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: rewrite content.md from photos/
+        run: python3 scripts/sync-photos.py
+
+      - name: commit if changed
+        run: |
+          if [[ -n "$(git status --porcelain content.md)" ]]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add content.md
+            git commit -m "chore(photos): sync content.md [skip ci]"
+            git push
+          else
+            echo "content.md already in sync; nothing to commit"
+          fi
