@@ -120,7 +120,7 @@ now: CERTIFY-ED is on arXiv and being pushed to SciPost. Maintaining a Proxmox h
 link: email | mailto:sarangvehale2@gmail.com
 link: github | https://github.com/SarangVehale
 link: linkedin | https://linkedin.com/in/sarangvehale
-link: resume | https://drive.google.com/file/d/1OQgpE-AlvB_3s7JoQlM0Di_u2pbo81lN/view?usp=sharing
+link: resume | [Google Drive](https://drive.google.com/file/d/1OQgpE-AlvB_3s7JoQlM0Di_u2pbo81lN/view?usp=sharing)
 
 # ── Repo (required for the auto-folder discovery via GitHub API) ─────────
 
