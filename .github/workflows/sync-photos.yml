@@ -58,8 +58,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add content.md
             git commit -m "chore(photos): sync content.md [skip ci]"
-            git push
-            git push --force-with-lease
+            git push --force-with-lease 
           else
             echo "content.md already in sync; nothing to commit"
           fi
