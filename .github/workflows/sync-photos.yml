@@ -23,16 +23,16 @@ on:
   push:
     branches: [main]
     paths:
-      - 'photos/**'
-      - 'scripts/sync-photos.py'
-      - '.github/workflows/sync-photos.yml'
+      - "photos/**"
+      - "scripts/sync-photos.py"
+      - ".github/workflows/sync-photos.yml"
   workflow_dispatch: {}
 
 # Don't run alongside the deploy workflow's concurrency group; this
 # workflow's commits trigger deploy.yml, not itself.
 concurrency:
   group: sync-photos
-  cancel-in-progress: false   # allow manual run from the Actions tab
+  cancel-in-progress: false # allow manual run from the Actions tab
 
 permissions:
   contents: write
@@ -59,6 +59,7 @@ jobs:
             git add content.md
             git commit -m "chore(photos): sync content.md [skip ci]"
             git push
+            git push --force-with-lease
           else
             echo "content.md already in sync; nothing to commit"
           fi
