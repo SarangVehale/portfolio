@@ -122,6 +122,8 @@ link: github | https://github.com/SarangVehale
 link: linkedin | https://linkedin.com/in/sarangvehale
 link: resume | https://ggl.link/4FbABLZ
 
+<!-- unnecessary line -->
+
 # ── Repo (required for the auto-folder discovery via GitHub API) ─────────
 
 repo: https://github.com/SarangVehale/portfolio
