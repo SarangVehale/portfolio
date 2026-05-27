@@ -98,7 +98,7 @@ def rewrite_content(content: str, existing: dict[str, str], current: list[str]) 
     if photo_idxs:
         # Replace the existing run of photo: lines in place.
         first, last = photo_idxs[0], photo_idxs[-1]
-        new_lines = lines[:first] + new_block + lines[last + 1:]
+        new_lines = lines[:first] + new_block + lines[last + 1 :]
     else:
         # No existing block — append at end with a separator.
         new_lines = lines + ["", "# Auto-managed by scripts/sync-photos.py"] + new_block
@@ -109,7 +109,9 @@ def rewrite_content(content: str, existing: dict[str, str], current: list[str]) 
     return out
 
 
-def diff_summary(old: dict[str, str], new_paths: list[str]) -> tuple[list[str], list[str]]:
+def diff_summary(
+    old: dict[str, str], new_paths: list[str]
+) -> tuple[list[str], list[str]]:
     old_set = set(old.keys())
     new_set = set(new_paths)
     return sorted(new_set - old_set), sorted(old_set - new_set)
@@ -122,7 +124,12 @@ def main() -> int:
         print("content.md not found", file=sys.stderr)
         return 2
 
-    content = CONTENT_MD.read_text(encoding="utf-8")
+    try:
+        content = CONTENT_MD.read_text(encoding="utf-8")
+    except IOError as e:
+        print(f"Error reading content.md: {e}", file=sys.stderr)
+        return 2
+
     existing = parse_existing(content)
     current = list_photos()
     new_content = rewrite_content(content, existing, current)
@@ -141,10 +148,48 @@ def main() -> int:
         print(f"\n[dry-run] would update content.md ({len(current)} entries)")
         return 1
 
-    CONTENT_MD.write_text(new_content, encoding="utf-8")
-    print(f"\nupdated content.md ({len(current)} photo entries)")
-    return 1
+    try:
+        CONTENT_MD.write_text(new_content, encoding="utf-8")
+        print(f"\nupdated content.md ({len(current)} photo entries)")
+        return 0  # ✅ Fixed: was return 1
+    except IOError as e:
+        print(f"Error writing content.md: {e}", file=sys.stderr)
+        return 2
+    except Exception as e:
+        print(f"Unexpected error: {e}", file=sys.stderr)
+        return 2
 
+
+# def main() -> int:
+#     dry = "--dry-run" in sys.argv
+#
+#     if not CONTENT_MD.exists():
+#         print("content.md not found", file=sys.stderr)
+#         return 2
+#
+#     content = CONTENT_MD.read_text(encoding="utf-8")
+#     existing = parse_existing(content)
+#     current = list_photos()
+#     new_content = rewrite_content(content, existing, current)
+#
+#     if new_content == content:
+#         print(f"no changes ({len(current)} photo entries already in sync)")
+#         return 0
+#
+#     added, removed = diff_summary(existing, current)
+#     for p in added:
+#         print(f"  + {p}")
+#     for p in removed:
+#         print(f"  - {p}")
+#
+#     if dry:
+#         print(f"\n[dry-run] would update content.md ({len(current)} entries)")
+#         return 1
+#
+#     CONTENT_MD.write_text(new_content, encoding="utf-8")
+#     print(f"\nupdated content.md ({len(current)} photo entries)")
+#     return 0
+#
 
 if __name__ == "__main__":
     sys.exit(main())

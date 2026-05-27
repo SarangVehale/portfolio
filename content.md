@@ -153,21 +153,22 @@ photodir: photos
 
 # they'd auto-load with `center` focal).
 
-photo: photos/01-shepherd-golden-hour.jpeg | center 35%
-photo: photos/02-arch-courtyard.jpeg | center 40%
-photo: photos/03-jaipur-stained-glass.jpeg | center 55%
-photo: photos/04-sunbird.jpeg | center 45%
-photo: photos/05-cats-falling.jpeg | center top
-photo: photos/06-panda-nap.jpeg | center 60%
-photo: photos/07-cat-flowers.jpeg | center 55%
-photo: photos/08-cat-cherry.jpeg | center 40%
-photo: photos/09-cat-wall-autumn.jpeg | center 35%
-photo: photos/10-cat-wall-sunset.jpeg | center 45%
-photo: photos/11-cat-grass.jpeg | center 60%
-photo: photos/12-cat-window.jpeg | center 50%
-photo: photos/13-river.jpeg | center 60%
-photo: photos/14-puppy.jpeg | center 70%
-photo: photos/15-ipod-book.jpeg | center 60%
+photo: photos/01-shepherd-golden-hour.jpeg        | center 35%
+photo: photos/02-arch-courtyard.jpeg              | center 40%
+photo: photos/03-jaipur-stained-glass.jpeg        | center 55%
+photo: photos/04-sunbird.jpeg                     | center 45%
+photo: photos/05-cats-falling.jpeg                | center top
+photo: photos/06-panda-nap.jpeg                   | center 60%
+photo: photos/07-cat-flowers.jpeg                 | center 55%
+photo: photos/08-cat-cherry.jpeg                  | center 40%
+photo: photos/09-cat-wall-autumn.jpeg             | center 35%
+photo: photos/10-cat-wall-sunset.jpeg             | center 45%
+photo: photos/11-cat-grass.jpeg                   | center 60%
+photo: photos/12-cat-window.jpeg                  | center 50%
+photo: photos/13-river.jpeg                       | center 60%
+photo: photos/14-puppy.jpeg                       | center 70%
+photo: photos/15-ipod-book.jpeg                   | center 60%
+photo: photos/16-a_bicycle_parked_on_a_street.jpg | center 50%
 
 # ── Structured single-entry files (one source of truth per page) ─────────
 
