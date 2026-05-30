@@ -2,7 +2,7 @@
 title: current gear
 date: 2025-05-30
 tags: [gear, edc, setup]
-summary: Current gear and everyday carry setup that I currently have on my person
+summary: Current gear and everyday carry setup that I own/have on my person
 ---
 
 ## desk setup 1
