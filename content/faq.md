@@ -28,11 +28,17 @@ order: 1
 title: personal details
 
 age: 23
+
 birthday: 27/02/2003
+
 where are you from?: pune, maharashtra, india
+
 what's your height?: 168 cm
+
 major: computer science w/ cyber security
+
 what's your mbti: infj-t
+
 orientation: straight
 
 ---
@@ -44,10 +50,8 @@ title: Are you available for work?
 
 Yes, selectively. I'm interested in:
 
-- Research collaborations on quantum benchmarking, quantum information,
-  post-quantum cryptography, or hybrid classical–quantum algorithms.
-- Short consulting engagements on OSINT tooling, threat intel
-  pipelines, quantum informatics or LEA-facing systems.
+- Research collaborations on quantum benchmarking, quantum information, post-quantum cryptography, or hybrid classical–quantum algorithms.
+- Short consulting engagements on OSINT tooling, threat intel pipelines, quantum informatics or LEA-facing systems.
 - Speaking / teaching opportunities
 
 Email is the fastest way to start a conversation:
