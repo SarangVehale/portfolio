@@ -47,7 +47,9 @@ summary: Current gear and everyday carry setup that I own/have on my person
 
 ---
 
-## updated may 30, 2026
+updated may 30, 2026
+
+---
 
 ^# some links if you want to buy - not affiliate
 
