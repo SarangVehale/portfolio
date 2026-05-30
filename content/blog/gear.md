@@ -45,7 +45,10 @@ summary: Current gear and everyday carry setup that I own/have on my person
 - watch 05: maxima sports watch (my first watch)
   ^# some more random watches. I love vintage watches.
 
-updated may 30, 2026
+---
+
+## updated may 30, 2026
 
 ^# some links if you want to buy - not affiliate
+
 ^# I'm probably forgetting some stuff
