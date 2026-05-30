@@ -89,6 +89,7 @@ sources. There's no newsletter or RSS feed yet — if either would be
 useful to you, let me know and I'll add it.
 
 For papers: my [Google Scholar](https://scholar.google.com/citations?user=x-3dXnMAAAAJ&hl=en) profile is the most up-to-date list.
+
 For code: GitHub (for [research-related](https://github.com/sarang-kernel); [general-software](https://github.com/SarangVehale)).
 
 ---

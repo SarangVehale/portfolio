@@ -113,7 +113,7 @@ role: Cybersecurity & Quantum Researcher
 location: Pune, India
 tz: Asia/Kolkata
 tagline: Working at the intersection of cybersecurity, quantum computing, and systems engineering.
-now: CERTIFY-ED is on arXiv and being pushed to SciPost. Maintaining a Proxmox homelab. Learning Japanese.
+now: CERTIFY-ED is on arXiv and being pushed to SciPost. Maintaining a homelab. Learning Japanese.
 
 # ── Header links ─────────────────────────────────────────────────────────
 
