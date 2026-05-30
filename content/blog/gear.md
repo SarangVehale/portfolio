@@ -12,6 +12,7 @@ summary: Current gear and everyday carry setup that I own/have on my person
 - mouse2: [Logitech MX Master 2S](https://amzn.in/d/05zGDDvI)
 - headphones: Moondrop Chu2 &/ dsp
 - tablet: Ipad 9th gen w/ [amazon basics pencil](https://amzn.in/d/05zGDDvI)
+- speaker: google home mini (got it off of a friend)
 - music player: Ipod classic 6th gen w/ [apple earpods](https://www.apple.com/shop/product/mwu53am/a/earpods-35mm-headphone-plug?fnode=1eb7ead777635f655615e9f9e35d1b4aff69d19c6b4d37f4a646b4ddb07c9cc19b2c52dbdbd29e00e1d80b42a8b3070551e9f0aa540f56aa9285858063e61ec646c96386e18f437f0f4ed24329c184436fbee5c1a3ce43477102293907d889a8)
 - scratch pad: [Luxor Converge](https://scooboo.in/products/luxor-converge-single-line-pocket-diary)
 - mechanical pencil: [Uni kurutoga 0.7mm](https://amzn.in/d/0bfExes3)
@@ -21,7 +22,6 @@ summary: Current gear and everyday carry setup that I own/have on my person
 - chair: random office chair
 - clock: HMT pilot para shock 17 jewels
 - bookstand: a gift by friend from uzbekistan
-- speaker: google home mini (got it off of a friend)
 
 ## computers
 
