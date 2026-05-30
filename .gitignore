@@ -1,0 +1,11 @@
+# Generated at deploy time by scripts/build-manifest.py.
+# Don't commit — deploy.yml builds a fresh one from the actual filesystem
+# on every push. Local dev rebuilds it via ./scripts/sync-photos.sh.
+manifest.json
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*~
+.idea/
+.vscode/

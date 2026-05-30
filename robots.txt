@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://sarangvehale.github.io/portfolio/sitemap.xml
+
+# Be a good neighbour: don't hammer the API listings
+Crawl-delay: 1

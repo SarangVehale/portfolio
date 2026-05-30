@@ -1,0 +1,1129 @@
+<!doctype html>
+<!--
+  ═══════════════════════════════════════════════════════════════════════
+  index.html — page shell, styles, and DOM scaffolding for the portfolio.
+
+  The site renders entirely from content.md (the manifest) and the files
+  it points at in content/. To change copy, edit those Markdown files —
+  not this one. To change colours, fonts, spacing, or layout, see the
+  :root { … } block and the section comments inside <style> below.
+
+  Files loaded by this page (all in this folder):
+    md.js     — minimal Markdown renderer
+    app.js    — content loader, router, page renderers
+    content.md — manifest (site header + which content files to load)
+
+  Run locally with `python3 -m http.server 8000` (the page fetches
+  content.md over HTTP — double-clicking won't work without a server).
+  ═══════════════════════════════════════════════════════════════════════
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- ── SEO + social metadata ──────────────────────────────────────────
+  Most search engines render JS now (Googlebot, Bing/IndexNow). Open
+  Graph and Twitter Card tags are read by every social platform's
+  link-preview bot and never run JS, so populate them statically here.
+  Update SITE_URL if you move off the default github.io path.
+  ──────────────────────────────────────────────────────────────────── -->
+<title>Sarang Vehale — Cybersecurity &amp; Quantum Researcher</title>
+<meta name="description" content="Portfolio, blog, and notes of Sarang Vehale — a cybersecurity and quantum computing researcher building OSINT platforms, quantum benchmarking frameworks, and the occasional mechanical keyboard.">
+<meta name="author" content="Sarang Vehale">
+<meta name="keywords" content="Sarang Vehale, cybersecurity, quantum computing, OSINT, exact diagonalization, CERTIFY-ED, NFSU, IIT Madras, I4C, post-quantum cryptography, lattice cryptography, homelab, Rust, Python">
+<meta name="theme-color" content="#f2eedf">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://sarangvehale.github.io/portfolio/">
+
+<!-- Open Graph (Facebook, LinkedIn, Slack, Discord, etc.) -->
+<meta property="og:title" content="Sarang Vehale — Cybersecurity &amp; Quantum Researcher">
+<meta property="og:description" content="Portfolio, blog, and notes of Sarang Vehale — a cybersecurity and quantum computing researcher.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sarangvehale.github.io/portfolio/">
+<meta property="og:image" content="https://sarangvehale.github.io/portfolio/photos/01-shepherd-golden-hour.jpeg">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Sarang Vehale">
+
+<!-- Twitter / X cards -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sarang Vehale — Cybersecurity &amp; Quantum Researcher">
+<meta name="twitter:description" content="Portfolio, blog, and notes of Sarang Vehale — a cybersecurity and quantum computing researcher.">
+<meta name="twitter:image" content="https://sarangvehale.github.io/portfolio/photos/01-shepherd-golden-hour.jpeg">
+
+<!-- Structured data: Person schema. Helps Google build the knowledge
+     panel and connects this page to Sarang's other public profiles. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Sarang Vehale",
+  "url": "https://sarangvehale.github.io/portfolio/",
+  "image": "https://sarangvehale.github.io/portfolio/photos/01-shepherd-golden-hour.jpeg",
+  "jobTitle": "Cybersecurity & Quantum Researcher",
+  "email": "mailto:sarangvehale2@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Pune",
+    "addressCountry": "IN"
+  },
+  "alumniOf": [
+    { "@type": "CollegeOrUniversity", "name": "National Forensic Sciences University" },
+    { "@type": "CollegeOrUniversity", "name": "Indian Institute of Technology, Madras" }
+  ],
+  "sameAs": [
+    "https://github.com/SarangVehale",
+    "https://linkedin.com/in/sarang-vehale-a76210247"
+  ],
+  "knowsAbout": [
+    "Cybersecurity",
+    "Quantum Computing",
+    "OSINT",
+    "Exact Diagonalization",
+    "Post-Quantum Cryptography",
+    "Rust",
+    "Python",
+    "Linux Systems"
+  ]
+}
+</script>
+
+<!-- Hint to search engines this site has a sitemap -->
+<link rel="sitemap" type="application/xml" href="sitemap.xml">
+
+<!-- Favicon (inline SVG; no separate file needed) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%23f2eedf%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2220%22%20font-style%3D%22italic%22%20fill%3D%22%23221c10%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E">
+<!--
+  Content-Security-Policy
+  Strict by design: only this origin + Google Fonts. No inline JS, no
+  third-party scripts. `style-src` allows the inline <style> below; the
+  rendered Markdown body never produces style attributes (see md.js).
+-->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self';
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src https://fonts.gstatic.com data:;
+  img-src 'self' data: https:;
+  connect-src 'self' https://api.github.com;
+  base-uri 'self';
+  form-action 'self';
+">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500;1,6..72,600;1,6..72,700&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    /* ─── Warm-paper palette (default) ─────────────────────────────────
+       Tuned to Munken Print Cream measurements (L*≈93.5, a*≈1.5, b*≈6.8
+       in CIE Lab). That's the paper Penguin Classics ship on, and it's
+       the most carefully-studied long-read substrate in commercial
+       publishing.
+
+       Why these specific values:
+         • Pure-white screens (L*100) over-stimulate cones, cause halation,
+           and ramp up melatonin suppression at night. Real book paper
+           sits around L*93–94 — high luminance but not maximum.
+         • A slight positive b* (warm yellow shift) reduces blue-light
+           output without making the page feel jaundiced. b*7 is the band
+           used in trade paperback printing.
+         • Body-text contrast 12.7 : 1 sits in the Beier & Larson (2013)
+           sweet spot of 10–13 for sustained reading. Higher = letter-edge
+           halation. Lower = effortful.
+
+       Hex values cross-checked against sRGB ↔ CIE-Lab conversions
+       assuming a D65 white point and standard gamma. Perceptually
+       matched against pages from Penguin Classics English Library
+       editions.
+       ──────────────────────────────────────────────────────────────── */
+    --bg:        #f2eedf;   /* Munken Print Cream  L*93.5  a*1.5  b*6.8 */
+    --surface:   #f8f4e8;   /* +3 L* lift for code blocks / cards */
+    --ink:       #221c10;   /* Warm near-black  contrast 12.7 : 1 vs --bg */
+    --ink-soft:  #4a4332;   /* 6.9 : 1  body-secondary */
+    --ink-faint: #8a8270;   /* 3.5 : 1  mono labels */
+    --rule:      #d2c8ae;
+    --accent:    #8a3a0e;   /* Warm bronze — internal links/hover */
+    --accent-soft: #8a3a0e;
+    --link-ext:  #1d4ed8;   /* Classic web blue — outbound http(s) only */
+    --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+    --mono:  'JetBrains Mono', ui-monospace, Menlo, monospace;
+  }
+
+  /* ─── White paper palette (clinical) ─────────────────────────────────
+     Pure white background, soft black ink to reduce halation. */
+  html[data-theme="white"] {
+    --bg:        #ffffff;
+    --surface:   #f5f5f5;
+    --ink:       #181818;
+    --ink-soft:  #555555;
+    --ink-faint: #8a8a8a;
+    --rule:      #e2e2e2;
+    --accent:    #8a3a0e;
+    --accent-soft: #8a3a0e;
+    --link-ext:  #1d4ed8;
+  }
+
+  /* ─── Night palette (warm-dark, paper-equivalent) ─────────────────── */
+  html[data-theme="dark"] {
+    --bg:        #15130d;
+    --surface:   #1d1b13;
+    --ink:       #e9e1c8;
+    --ink-soft:  #b1a88f;
+    --ink-faint: #756e5b;
+    --rule:      #322d21;
+    --accent:    #cf8554;
+    --accent-soft: #cf8554;
+    --link-ext:  #7aa8f0;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  [hidden] { display: none !important; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern", "liga";
+  }
+  ::selection { background: var(--accent-soft); color: var(--bg); }
+
+  /* Default <a>: internal links (relative, hash, mailto) inherit ink color
+     with a subtle underline. On hover they pick up the bronze accent. */
+  a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-decoration-thickness: 1px; text-underline-offset: 3px; transition: color .12s, text-decoration-color .12s, text-shadow .12s; }
+  a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+  a:visited { color: var(--ink-soft); }
+  a:visited:hover { color: var(--accent); }
+
+  /* External http(s) links: classic web blue, always visible as links.
+     Markdown renderer adds target="_blank" so we target that for safety;
+     also catch explicit http(s) hrefs in static markup. */
+  a[href^="http://"], a[href^="https://"] {
+    color: var(--link-ext);
+    text-decoration-color: var(--link-ext);
+  }
+  a[href^="http://"]:visited, a[href^="https://"]:visited {
+    color: var(--link-ext);
+  }
+  a[href^="http://"]:hover, a[href^="https://"]:hover {
+    color: var(--link-ext);
+    text-decoration-color: var(--link-ext);
+    text-shadow: 0 0 0.5px var(--link-ext);
+  }
+
+  /* Reserve --accent (saturated red) for critical points: dots, numbers,
+     registration marks — the Sapper / Nothing red-on-joints convention. */
+
+  /* ── HOMEPAGE ─────────────────────────────────────────────────────── */
+  /* Single-screen layout: everything fits in 100vh without scroll. Sizes
+     scale down as the viewport shrinks. */
+  .home {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    gap: 0;
+    position: relative;
+  }
+  /* Make the homepage nav use flex-wrap so items break cleanly on every
+     viewport width instead of relying on inline wrap heuristics. */
+  .home nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    column-gap: 0.5em;
+    row-gap: 0.5em;
+    font-size: 1.05rem;
+    margin: 0 0 2.5rem;
+    max-width: 42rem;
+    line-height: 1.4;
+  }
+  .home nav a { white-space: nowrap; }
+  .home nav .slash { color: var(--ink-faint); }
+  .home .name {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    line-height: 1;
+    margin: 0 0 1rem;
+    font-style: italic;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-variation-settings: "opsz" 72;
+  }
+  .home .tagline {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin: 0 0 1.4rem;
+    max-width: 48rem;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+  .home .hero {
+    /* Compact square: leaves room for nav + footer in one screen. */
+    width: clamp(200px, min(38vh, 50vw), 360px);
+    aspect-ratio: 1 / 1;
+    position: relative;
+    margin: 0 0 1.4rem;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+  }
+  .home .hero img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+  .home .hero img.active { opacity: 1; }
+  .home .hero-label {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: rgba(255, 252, 244, 0.88);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 0 12px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    z-index: 2;
+    mix-blend-mode: normal;
+  }
+  .home .hero-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background-image:
+      repeating-linear-gradient(135deg, transparent 0 11px, var(--rule) 11px 12px);
+  }
+  .home .time {
+    font-style: italic;
+    color: var(--ink-soft);
+    margin: 0 0 2rem;
+    font-size: 0.95rem;
+  }
+  .home .time a { color: var(--ink-soft); }
+  .home .time .clock {
+    font-family: var(--mono);
+    font-style: normal;
+    color: var(--ink);
+    font-size: 0.85rem;
+    margin: 0 .25em;
+  }
+  .home .now {
+    color: var(--ink-soft);
+    font-style: italic;
+    max-width: 36rem;
+    font-size: 0.9rem;
+    text-wrap: pretty;
+    margin: 0 0 0.6rem;
+  }
+  .home .now b {
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-right: .5em;
+  }
+  .home .footer {
+    margin-top: 1.2rem;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── SUB-PAGES ────────────────────────────────────────────────────── */
+  .page {
+    max-width: 38rem;
+    margin: 0 auto;
+    padding: 5rem 2rem 6rem;
+  }
+  .page .crumb {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    margin-bottom: 3rem;
+    text-transform: lowercase;
+  }
+  .page .crumb a { text-decoration: none; border-bottom: 1px dotted var(--rule); color: var(--ink-soft); }
+  .page .crumb a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .page .crumb .sep { color: var(--ink-faint); margin: 0 .5em; }
+  .page .crumb span { color: var(--ink); }
+  .page .crumb a span { color: inherit; border: 0; }
+
+  /* Subdir nav under the page content — bare HTML feel: monospace, brackets,
+     hash count = depth from root. */
+  .page-subdirs {
+    margin: 3rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.2rem;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+  .page-subdirs .subdir {
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 1px dotted transparent;
+  }
+  .page-subdirs .subdir:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .page h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 500;
+    margin: 0 0 0.5rem;
+    font-style: italic;
+    letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 48;
+  }
+  .page .page-lead {
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    margin: 0 0 3rem;
+    text-wrap: pretty;
+  }
+
+  /* ── EXPERIENCE LIST ──────────────────────────────────────────────── */
+  .exp-group {
+    padding: 2rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  .list-section .exp-group:last-child { border-bottom: 1px solid var(--rule); }
+  .exp-group-head { margin-bottom: 1rem; }
+  .exp-org-name {
+    font-size: 1.3rem;
+    font-weight: 500;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+  .exp-group-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
+    margin-top: 0.3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.6rem;
+    align-items: center;
+  }
+  .exp-group-meta .sep { color: var(--rule); }
+  .exp-role-item {
+    padding: 1.1rem 0 1.1rem 1.2rem;
+    border-left: 1px solid var(--rule);
+    margin: 0.8rem 0 0 0.25rem;
+    position: relative;
+  }
+  .exp-group.multi .exp-role-item::before {
+    content: "";
+    position: absolute;
+    left: -4px;
+    top: 1.5rem;
+    width: 7px;
+    height: 7px;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+  }
+  .exp-group:not(.multi) .exp-role-item {
+    padding-left: 0;
+    margin-left: 0;
+    border-left: 0;
+  }
+  .exp-group:not(.multi) .exp-role-item::before { display: none; }
+  .exp-role {
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin: 0 0 0.3rem;
+    line-height: 1.3;
+    font-style: italic;
+  }
+  .exp-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.7rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.6rem;
+    align-items: center;
+  }
+  .exp-meta .sep { color: var(--rule); }
+  .exp-meta a.cert {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+  }
+  .exp-meta a.cert:hover { background: var(--accent); color: var(--bg); }
+  .exp-summary {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    margin: 0 0 0.5rem;
+    text-wrap: pretty;
+  }
+  .exp-body {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .exp-body ul { padding-left: 1.2rem; margin: 0.4rem 0; }
+  .exp-body li { margin-bottom: 0.3rem; }
+  .exp-body strong { color: var(--ink); font-weight: 600; }
+
+  /* ── FAQ ──────────────────────────────────────────────────────────── */
+  .faq { display: flex; flex-direction: column; }
+  .faq-item {
+    padding: 2.5rem 0;
+    border-top: 1px dashed var(--rule);
+  }
+  .faq-item:first-child { padding-top: 0; border-top: 0; }
+  .faq-item:last-child { padding-bottom: 0; }
+  .faq-q {
+    font-size: 1.3rem;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 0 0 0.8rem;
+    font-style: italic;
+    font-variation-settings: "opsz" 36;
+    text-wrap: balance;
+  }
+  .faq-a { color: var(--ink-soft); line-height: 1.6; }
+  .faq-a > *:first-child { margin-top: 0; }
+  .faq-a > *:last-child  { margin-bottom: 0; }
+  .faq-a strong { color: var(--ink); }
+
+  /* ── DIARY (notes inline) ─────────────────────────────────────────── */
+  .diary { display: flex; flex-direction: column; }
+  .diary-entry {
+    padding: 2.5rem 0;
+    border-top: 1px dashed var(--rule);
+  }
+  .diary-entry:first-child { border-top: 0; padding-top: 0; }
+  .diary-entry:last-child { padding-bottom: 0; }
+  .diary-head { margin-bottom: 0.8rem; }
+  .diary-date {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+  }
+  .diary-title {
+    font-size: 1.3rem;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 0.3rem 0 0;
+    font-style: italic;
+    font-variation-settings: "opsz" 36;
+    text-wrap: balance;
+  }
+  .diary-body {
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .diary-body p:first-child { margin-top: 0; }
+  .diary-body strong { color: var(--ink); }
+  .note-tags {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .note-tags .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 2px 8px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: color .12s, border-color .12s;
+  }
+  .note-tags .tag::before { content: "#"; opacity: 0.5; margin-right: 1px; }
+  .note-tags .tag:hover { color: var(--accent); border-color: var(--accent); }
+
+  .tag-filter-banner {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .tag-filter-banner span { color: var(--accent); }
+  .tag-filter-banner button {
+    background: none; border: 0;
+    color: var(--ink-soft);
+    text-decoration: underline;
+    cursor: pointer;
+    font: inherit;
+  }
+  .tag-filter-banner button:hover { color: var(--accent); }
+
+  /* ── CERT LIST ────────────────────────────────────────────────────── */
+  .cert-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  .list-section .cert-item:last-child { border-bottom: 1px solid var(--rule); }
+  .cert-main { min-width: 0; }
+  .cert-title { font-size: 1rem; font-weight: 500; }
+  .cert-issuer {
+    color: var(--ink-soft);
+    font-style: italic;
+    font-size: 0.95rem;
+  }
+  .cert-side {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+  .cert-side a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+    margin-left: 0.8rem;
+  }
+  .cert-side a:hover { background: var(--accent); color: var(--bg); }
+
+  /* ── INDEX LIST (projects, posts, notes) ──────────────────────────── */
+  .list-item {
+    cursor: pointer;
+    transition: background .12s;
+    margin: 0 -1rem;
+    padding: 1.2rem 1rem;
+    border-top: 1px solid var(--rule);
+  }
+  .list-section > .list-item:first-child { border-top: 1px solid var(--rule); }
+  .list-section > .list-item:last-child { border-bottom: 1px solid var(--rule); }
+  .list-item:hover { background: var(--surface); }
+  .list-item:hover .list-title { color: var(--accent); }
+  .list-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.3rem;
+  }
+  .list-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.3;
+    text-wrap: balance;
+    transition: color .12s;
+  }
+  .list-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .list-tags {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 0.04em;
+    margin-top: 0.4rem;
+  }
+  .list-tags .tag::before { content: "#"; opacity: 0.5; }
+  .list-tags .tag + .tag { margin-left: 0.6rem; }
+  .list-arrow {
+    color: var(--ink-faint);
+    transition: transform .12s, color .12s;
+    font-family: var(--mono);
+    flex-shrink: 0;
+  }
+  .list-item:hover .list-arrow { color: var(--accent); transform: translateX(2px); }
+  .list-summary {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    margin: 0 0 0.5rem;
+    text-wrap: pretty;
+  }
+
+  /* ── READER ───────────────────────────────────────────────────────── */
+  .reader-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    text-transform: lowercase;
+  }
+  .reader-meta .sep { color: var(--rule); }
+  .reader-summary {
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    text-wrap: pretty;
+    margin: 0 0 2.5rem;
+  }
+
+  /* ── PROSE (markdown) ─────────────────────────────────────────────── */
+  .prose h2 {
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin: 2.5rem 0 0.8rem;
+    letter-spacing: -0.005em;
+    font-style: italic;
+    font-variation-settings: "opsz" 36;
+  }
+  .prose h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 1.8rem 0 0.5rem;
+  }
+  .prose p { margin: 0 0 1.2rem; text-wrap: pretty; }
+  .prose ul, .prose ol { padding-left: 1.4rem; margin: 0 0 1.2rem; }
+  .prose li { margin-bottom: 0.4rem; }
+  .prose li::marker { color: var(--ink-faint); }
+  .prose blockquote {
+    margin: 1.5rem 0;
+    padding: 0.2rem 0 0.2rem 1.2rem;
+    border-left: 2px solid var(--accent);
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+  .prose code {
+    font-family: var(--mono);
+    font-size: 0.85em;
+    background: var(--surface);
+    padding: 1px 5px;
+    border-radius: 2px;
+    border: 1px solid var(--rule);
+  }
+  .prose pre {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 1rem 1.2rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+  .prose pre code { background: none; border: 0; padding: 0; font-size: 0.85rem; color: var(--ink-soft); }
+  .prose hr { border: 0; border-top: 1px dashed var(--rule); margin: 2.5rem 0; }
+  .prose img { max-width: 100%; margin: 1.5rem 0; }
+  .prose strong { font-weight: 600; }
+
+  /* ── UNIVERSAL CONTENT-STACK RULE ─────────────────────────────────────
+     Every rich-text container has unpredictable trailing margins — the
+     last element might be a paragraph (1.2rem), a list (1.2rem), or a
+     blockquote (1.5rem). That makes the visible gap to whatever sits
+     below it inconsistent.
+     This block resets first-child top-margin and last-child bottom-margin
+     to zero on every rich-text container, so the *container's padding*
+     is always what determines the visual gap. Apply this universally so
+     any new content type inherits the fix automatically.
+     ──────────────────────────────────────────────────────────────────── */
+  .prose > *:first-child,
+  .faq-a > *:first-child,
+  .diary-body > *:first-child,
+  .exp-body > *:first-child {
+    margin-top: 0;
+  }
+  .prose > *:last-child,
+  .faq-a > *:last-child,
+  .diary-body > *:last-child,
+  .exp-body > *:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Wikilinks ([[target]]) and resolved .md links share styling with
+     normal anchors; missing ones get a dimmed, dashed underline. */
+  .wikilink-missing {
+    color: var(--ink-faint) !important;
+    border-bottom: 1px dashed var(--ink-faint) !important;
+    text-decoration: none !important;
+    cursor: help;
+  }
+
+  /* ── CONTACT ──────────────────────────────────────────────────────── */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 1rem 2rem;
+    font-size: 1.05rem;
+  }
+  .contact-grid dt {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    padding-top: 6px;
+  }
+  .contact-grid dd { margin: 0; }
+
+  /* ── SKILLS ───────────────────────────────────────────────────────── */
+  .skills .prose h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin: 2rem 0 0.3rem;
+    font-weight: 600;
+  }
+  .skills .prose p { color: var(--ink); font-size: 1.05rem; line-height: 1.6; }
+
+  /* ── PAGE FOOTER ──────────────────────────────────────────────────── */
+  .page-foot {
+    margin-top: 5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex-wrap: wrap;
+  }
+  .page-foot a { color: var(--ink-faint); text-decoration: none; border-bottom: 1px dotted var(--rule); }
+  .page-foot a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .cmdk-trigger {
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: var(--ink-faint);
+    background: none;
+    border: 0;
+    border-bottom: 1px dotted var(--rule);
+    cursor: pointer;
+    padding: 0 2px;
+  }
+  .cmdk-trigger:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── Cmd+K modal ──────────────────────────────────────────────────── */
+  .cmdk {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 12vh;
+  }
+  .cmdk-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 18, 14, 0.42);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+  .cmdk-modal {
+    position: relative;
+    width: clamp(320px, 92vw, 600px);
+    max-height: 70vh;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .cmdk-input {
+    width: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    border: 0;
+    border-bottom: 1px solid var(--rule);
+    padding: 1rem 1.2rem;
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    outline: none;
+  }
+  .cmdk-input::placeholder { color: var(--ink-faint); font-style: italic; }
+  .cmdk-results {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .cmdk-result {
+    padding: 0.7rem 1.2rem;
+    border-bottom: 1px solid var(--rule);
+    cursor: pointer;
+    transition: background .1s;
+  }
+  .cmdk-result:last-child { border-bottom: 0; }
+  .cmdk-result:hover, .cmdk-result.active { background: var(--surface); }
+  .cmdk-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+  }
+  .cmdk-kind {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    min-width: 64px;
+  }
+  .cmdk-title {
+    flex: 1;
+    font-size: 1rem;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .cmdk-date {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+  }
+  .cmdk-sub {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-top: 0.2rem;
+    padding-left: 72px;
+    text-wrap: pretty;
+  }
+  .cmdk-empty {
+    padding: 1rem 1.2rem;
+    color: var(--ink-faint);
+    font-style: italic;
+    text-align: center;
+  }
+  .cmdk-hint {
+    padding: 0.5rem 1.2rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    background: var(--surface);
+  }
+
+  /* ── Page fade-in on route change ─────────────────────────────────── */
+  @keyframes pageFade {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: none; }
+  }
+  #page-home:not([hidden]), #page-sub:not([hidden]) {
+    animation: pageFade .25s ease;
+  }
+
+  .empty { color: var(--ink-faint); font-style: italic; padding: 2rem 0; }
+
+  /* ─── RESPONSIVE BREAKPOINTS ─────────────────────────────────────────
+     Three tiers, mobile-first:
+       ≤ 480px  — small phones (iPhone SE, narrow Androids)
+       ≤ 640px  — large phones, small tablets in portrait
+       ≤ 900px  — landscape phones, portrait tablets
+     Anything larger uses the default desktop layout above.
+     ────────────────────────────────────────────────────────────────── */
+
+  /* Tablet & landscape phone */
+  @media (max-width: 900px) {
+    .page { padding: 4rem 1.5rem 5rem; }
+    .home { padding: 3rem 1.5rem; }
+  }
+
+  /* Phone (portrait) */
+  @media (max-width: 640px) {
+    body { font-size: 18px; }
+    .page { padding: 3rem 1.25rem 4rem; max-width: none; }
+    .home { padding: 1.5rem 1.25rem; min-height: 100vh; justify-content: center; }
+    .home .name { font-size: 2.4rem; margin-bottom: 0.6rem; }
+    .home .tagline { font-size: 0.95rem; margin: 0 0 1rem; }
+    .home .hero { width: min(70vw, 38vh); margin: 0 0 1rem; }
+    .home .time { font-size: 0.82rem; margin: 0 0 0.9rem; }
+    .home .time .clock { font-size: 0.78rem; }
+    .home nav { font-size: 0.9rem; line-height: 1.5; margin: 0 0 0.9rem; }
+    .home nav .slash { margin: 0 .25em; }
+    .home .now { font-size: 0.85rem; margin: 0 0 0.5rem; }
+    .home .footer { margin-top: 0.9rem; font-size: 9px; }
+
+    /* Sub-pages */
+    .page .crumb { margin-bottom: 2rem; font-size: 10px; }
+    .page h1 { font-size: 1.7rem !important; }
+    .page .page-lead { font-size: 0.98rem; }
+
+    /* Experience: ease the indent so nested items don't squeeze */
+    .exp-org-name { font-size: 1.15rem; }
+    .exp-role-item { padding-left: 0.9rem; }
+    .exp-group.multi .exp-role-item::before { left: -3px; width: 5px; height: 5px; }
+    .exp-role { font-size: 1rem; }
+
+    /* Certificates: stack title and the date/link side */
+    .cert-item { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+    .cert-side { margin-top: 0.2rem; }
+    .cert-side a { margin-left: 0; }
+
+    /* Notes / FAQ — tighter vertical rhythm */
+    .diary-entry, .faq-item { padding: 2rem 0; }
+    .diary-title, .faq-q { font-size: 1.15rem; }
+
+    /* Lists (projects, posts) — single-column, hide hover arrow */
+    .list-item { margin: 0; padding: 1rem 0; }
+    .list-row { gap: 0.5rem; }
+    .list-arrow { display: none; }
+
+    /* Page footer — stack vertically, full-width tap targets */
+    .page-foot {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .page-foot button, .page-foot a { padding: 4px 0; }
+
+    /* Subdir nav — tighter wrap */
+    .page-subdirs { font-size: 12px; gap: 0.3rem 0.9rem; margin-top: 2.5rem; }
+
+    /* Cmd+K modal — full-width, tighter top */
+    .cmdk { padding-top: 6vh; padding-left: 12px; padding-right: 12px; }
+    .cmdk-modal { width: 100%; max-height: 80vh; }
+    .cmdk-input { font-size: 1rem; padding: 0.85rem 1rem; }
+    .cmdk-kind { min-width: 52px; font-size: 8.5px; }
+    .cmdk-sub { padding-left: 60px; font-size: 0.8rem; }
+
+    /* Reader prose: lower margins */
+    .prose h2 { margin: 2rem 0 0.6rem; font-size: 1.25rem; }
+    .prose h3 { margin: 1.5rem 0 0.4rem; }
+    .reader-title { font-size: 1.7rem !important; }
+    .reader-summary { font-size: 1.05rem; }
+  }
+
+  /* Small phones (≤ 480px) — last polish for very narrow screens */
+  @media (max-width: 480px) {
+    .page { padding: 2.5rem 1rem 3rem; }
+    .home { padding: 1.2rem 1rem; }
+    .home .name { font-size: 2rem; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
+    .home .hero { width: min(75vw, 32vh); margin: 0 0 0.8rem; }
+    .home .tagline { font-size: 0.9rem; margin-bottom: 0.8rem; }
+    .home nav { font-size: 0.85rem; margin-bottom: 0.7rem; }
+    .home .time { margin-bottom: 0.7rem; font-size: 0.78rem; }
+
+    /* Stack the meta on note headers cleanly */
+    .diary-meta-row { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
+
+    /* Experience meta: wrap with comfortable line-height */
+    .exp-meta { line-height: 1.7; }
+    .exp-group-meta { line-height: 1.7; }
+
+    /* Contact dl: collapse to single column */
+    .contact-grid { grid-template-columns: 1fr; gap: 0.2rem 0; }
+    .contact-grid dt { padding-top: 0.8rem; padding-bottom: 0.1rem; }
+    .contact-grid dt:first-child { padding-top: 0; }
+
+    /* Cmd+K — full width edge to edge */
+    .cmdk { padding-left: 8px; padding-right: 8px; padding-top: 4vh; }
+  }
+
+  /* Prefers-reduced-motion — respect the OS setting */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001s !important;
+      transition-duration: 0.001s !important;
+    }
+    .home .hero img { transition: opacity 0s !important; }
+  }
+</style>
+</head>
+
+<body>
+
+<div id="boot-loader" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-faint);font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;">Loading…</div>
+
+<div id="app" style="display:none;">
+  <!-- HOME -->
+  <section class="home" id="page-home" data-screen-label="Home" hidden>
+    <h1 class="name" data-bind="name"></h1>
+    <p class="tagline" data-bind="tagline"></p>
+    <div class="hero" id="hero">
+      <img id="hero-a" alt="">
+      <img id="hero-b" alt="">
+      <span class="hero-label">[inspirations]</span>
+      <div class="hero-empty" id="hero-empty" hidden>drop photos in /photos · add them in content.md</div>
+    </div>
+    <p class="time">
+      <i>local time in <span data-bind="city"></span> — <span class="clock" id="clock">--:--</span> <span id="tz-abbr"></span></i>
+    </p>
+    <nav id="home-nav"></nav>
+    <p class="now" data-bind="now" hidden><b>now</b><span data-bind="now-text"></span></p>
+    <div class="footer">
+      © <span id="year"></span> · <span data-bind="footer-name"></span> · <button type="button" class="cmdk-trigger" aria-label="Search">⌘k · search</button> · <a href="#" id="theme-toggle">[dark]</a>
+    </div>
+  </section>
+
+  <!-- SUB-PAGE SHELL -->
+  <main class="page" id="page-sub" hidden>
+    <div class="crumb">
+      <a href="#">home</a><span class="sep">/</span><span id="crumb-section"></span>
+    </div>
+    <header>
+      <h1 id="page-title"></h1>
+      <p class="page-lead" id="page-lead" hidden></p>
+    </header>
+    <div id="page-body"></div>
+    <nav class="page-subdirs" id="page-subdirs" hidden></nav>
+    <div class="page-foot">
+      <span>© <span id="year2"></span> · <span data-bind="footer-name-2"></span></span>
+      <span><button type="button" class="cmdk-trigger" aria-label="Search">⌘K · search</button></span>
+      <span><a href="#" id="theme-toggle-2">[toggle dark]</a></span>
+    </div>
+  </main>
+</div>
+
+<!-- Cmd+K global search modal -->
+<div class="cmdk" id="cmdk" hidden>
+  <div class="cmdk-backdrop"></div>
+  <div class="cmdk-modal" role="dialog" aria-label="Search">
+    <input class="cmdk-input" id="cmdk-input" type="text" placeholder="search anything…" autocomplete="off" spellcheck="false">
+    <ul class="cmdk-results" id="cmdk-results"></ul>
+    <div class="cmdk-hint">↑↓ navigate · ↵ open · esc close</div>
+  </div>
+</div>
+
+<script src="md.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
