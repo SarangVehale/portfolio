@@ -1,35 +1,26 @@
 # content/faq.md
+
 #
+
 # Each `---` block is one Q&A. The `title:` line is the question, the
+
 # body is the answer. Use `order: N` to control the order on the page
+
 # (lower numbers first). Without `order:`, entries fall to the bottom.
+
 #
+
 # To add a question:
-#   1. Scroll to the bottom of this file.
-#   2. Type --- on its own line.
-#   3. Write `title: <the question>` and a blank line.
-#   4. Write the answer in Markdown.
-#   5. Save. Refresh. Done.
 
----
+# 1. Scroll to the bottom of this file.
 
-kind: faq
-parent: about
-order: 1
-title: What do you actually do?
+# 2. Type --- on its own line.
 
-I'm a researcher and engineer working at the intersection of
-**cybersecurity** and **quantum computing**. Day-to-day that means:
+# 3. Write `title: <the question>` and a blank line.
 
-- Writing benchmarking and verification tools for quantum systems
-  (most recently *CERTIFY-ED*, now on arXiv).
-- Building OSINT and threat-intelligence systems for Indian law
-  enforcement (through I4C / MHA).
-- Researching post-quantum cryptography and the lattice-based
-  side of integer factorization.
+# 4. Write the answer in Markdown.
 
-When I'm not doing that I write systems software in Rust, maintain
-a Proxmox homelab, and occasionally design my own keyboards.
+# 5. Save. Refresh. Done.
 
 ---
 
@@ -40,13 +31,11 @@ title: Are you available for work?
 
 Yes, selectively. I'm interested in:
 
-- Research collaborations on quantum benchmarking, post-quantum
-  cryptography, or hybrid classical–quantum algorithms.
+- Research collaborations on quantum benchmarking, quantum information,
+  post-quantum cryptography, or hybrid classical–quantum algorithms.
 - Short consulting engagements on OSINT tooling, threat intel
   pipelines, or LEA-facing systems.
-- Speaking / teaching opportunities (especially anything that
-  needs translation between cybersecurity practitioners and
-  judicial / policy audiences).
+- Speaking / teaching opportunities
 
 Email is the fastest way to start a conversation:
 [sarangvehale2@gmail.com](mailto:sarangvehale2@gmail.com).
@@ -56,16 +45,9 @@ Email is the fastest way to start a conversation:
 kind: faq
 parent: about
 order: 3
-title: What's your tech stack?
+title: What's that gear?
 
-- **Daily driver** — Arch Linux on a ThinkPad. Tmux + Neovim.
-- **Programming** — Python and Rust most days. C for systems work,
-  R for statistics, Bash for everything in between.
-- **Quantum** — Qiskit, PennyLane, SageMath, NumPy.
-- **Infrastructure** — Proxmox, Docker, pfSense, Snort. Self-hosted
-  most of what I use.
-- **Writing this site** — three files: `index.html`, `app.js`,
-  `md.js`. Zero dependencies. Markdown for everything else.
+For all of my gear and tech related refer to my blog [current gear](#blog/gear.md)
 
 ---
 
@@ -89,8 +71,8 @@ The [notes](#/notes) and [blog](#/writing) pages are the canonical
 sources. There's no newsletter or RSS feed yet — if either would be
 useful to you, let me know and I'll add it.
 
-For papers: my Google Scholar profile is the most up-to-date list.
-For code: GitHub.
+For papers: my [Google Scholar](https://scholar.google.com/citations?user=x-3dXnMAAAAJ&hl=en) profile is the most up-to-date list.
+For code: GitHub (for [research-related](https://github.com/sarang-kernel); [general-software](https://github.com/SarangVehale)).
 
 ---
 
