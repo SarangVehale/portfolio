@@ -169,7 +169,7 @@ photo: photos/15-ipod-book.jpeg | center 60%
 
 # ── Structured single-entry files (one source of truth per page) ─────────
 
-file: content/about.md
+file: content/About.md
 file: content/skills.md
 file: content/contact.md
 file: content/faq.md
