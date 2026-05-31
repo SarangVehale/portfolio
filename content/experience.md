@@ -4,7 +4,7 @@ org: Centre for Development of Advanced Computing (CDAC)
 location: Pune, India
 date: 2025-08-01
 end: 2026-03-31
-cert: https://drive.google.com/file/d/REPLACE_ME/view
+cert: https://drive.google.com/file/d/1KElb48MF49XiHeT2jqkBYnKnYdknVPxe/view?usp=sharing
 summary: Built CERTIFY-ED, a benchmarking framework for noisy low-scale quantum systems.
 
 - Developed a benchmarking framework for quantum computers using exact diagonalization algorithms (**CERTIFY-ED**) for system validation.
