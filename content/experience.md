@@ -19,7 +19,7 @@ org: Centre for Development of Advanced Computing (CDAC)
 location: Pune, India
 date: 2024-05-01
 end: 2024-07-31
-cert: https://drive.google.com/file/d/REPLACE_ME/view
+cert: https://drive.google.com/file/d/1qgTM64AhDfbA9imPlFQ_sFgGICwOf10V/view?usp=sharing
 summary: Hybrid quantum–classical algorithms for integer factorization (Babai + Schnorr + QAOA).
 
 - Designed hybrid quantum algorithms combining **Babai's** and **Schnorr's** algorithms with **QAOA** for enhanced computational efficiency.
@@ -33,7 +33,7 @@ org: National Cyber-Crime Research & Innovation Centre (I4C, MHA)
 location: Delhi, India
 date: 2024-12-01
 end: 2025-03-31
-cert: https://drive.google.com/file/d/REPLACE_ME/view
+cert: https://drive.google.com/file/d/1NPrq9V5THP7-eZefK99sZY5L5vHxnCcI/view?usp=sharing
 summary: Built a flagship OSINT platform for Indian law-enforcement agencies; trained judicial officers.
 
 - Developed a flagship **OSINT platform** integrated into the Swayam platform for Law Enforcement Agencies.
@@ -64,7 +64,7 @@ org: Stanford Code in Place (CS106A)
 location: Remote
 date: 2025-04-01
 end: 2025-05-31
-cert: https://drive.google.com/file/d/REPLACE_ME/view
+cert: https://drive.google.com/file/d/1sy3BXzlH2n1LWPqGu2PupYnbxt-7_Rvf/view?usp=sharing
 summary: Led weekly Python sections for global students, using the Karel pedagogy.
 
 - Led weekly sections for **CS106A: Introduction to Python**, supporting students through the Karel pedagogy.
@@ -79,7 +79,7 @@ org: Quantum Open Source Foundation (QOSF)
 location: Canberra, Australia (remote)
 date: 2024-04-01
 end: 2024-06-30
-cert: https://drive.google.com/file/d/REPLACE_ME/view
+cert: https://qosf.org/mentorship_cohort_9/
 summary: Quantum key distribution and teleportation-based interstellar communication.
 
 - Investigated advanced **key-distribution protocols** employing quantum cryptographic techniques to improve secure communications.
@@ -93,7 +93,7 @@ org: Bhoomi-Itech
 location: Delhi, India
 date: 2023-05-01
 end: 2023-07-31
-cert: https://drive.google.com/file/d/REPLACE_ME/view
+cert: https://drive.google.com/file/d/1Z8eol29V7COwsY4rj5o28oepjf3cRT1P/view?usp=sharing
 summary: CALDERA + MITRE ATT&CK threat simulation and incident triage.
 
 - Established **CALDERA** and **MITRE ATT&CK** frameworks for threat simulations, improving the lab's cybersecurity capabilities.
