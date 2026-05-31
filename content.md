@@ -108,7 +108,7 @@
 
 # ═══════════════════════════════════════════════════════════════════════════
 
-name: Sarang Vehale
+name: Sarang Kailas Vehale
 role: Cybersecurity & Quantum Researcher
 location: Pune, India
 tz: Asia/Kolkata
