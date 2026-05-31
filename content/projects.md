@@ -1,6 +1,6 @@
 kind: project
 title: neiro
-date: :2026-05-30
+date: 2026-05-30
 tags: music, software, open-source
 summary: NEIRO (音色) is a free, public music archive — a zero-infrastructure static site over a GitHub repository. No backend, no database, no tracking.
 link: https://github.com/SarangVehale/hibiki
