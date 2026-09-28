@@ -122,7 +122,7 @@ now: Finishing a B.S. in Data Science at IIT Madras and preparing CERTIFY-ED and
 link: email | mailto:sarangvehale2@gmail.com
 link: github | https://github.com/SarangVehale
 link: linkedin | https://linkedin.com/in/sarangvehale
-link: resume | https://ggl.link/4FbABLZ
+link: resume | resume.pdf
 
 # ── Repo (required for the auto-folder discovery via GitHub API) ─────────
 
