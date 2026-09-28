@@ -39,21 +39,11 @@ kind: project
 title: OSINT Platform for I4C (Indian Ministry of Home Affairs)
 date: 2025-03-01
 tags: osint, cybersecurity, llm, python
-summary: A flagship open-source-intelligence platform integrated into the Swayam platform for Indian law-enforcement agencies.
+summary: An intelligence platform built during an internship at India's Ministry of Home Affairs (I4C). Details are under NDA.
 
-A six-month engagement with the **National Cyber-Crime Research & Innovation Centre** (NCR&IC) at I4C, under the Ministry of Home Affairs.
+Built during an internship at India's Ministry of Home Affairs (I4C). An intelligence platform covering data collection, cleansing and entity correlation, delivered with documentation and training for non-technical users.
 
-## What I built
-
-- An **OSINT platform** integrated into the Swayam platform for use by Indian Law Enforcement Agencies. The platform combines social-media reconnaissance, public records, and threat-intel feeds behind a single investigative interface.
-- A set of **LLM workflows** fine-tuned for LEA-specific NLP — entity extraction from FIRs, multi-lingual triage of cybercrime reports, and summarisation of long forensic transcripts.
-
-## What I also did
-
-- Conducted specialised training sessions for **judicial officers and LEAs** on cybersecurity best practices and investigation techniques.
-- Coordinated the **Cyber Commandos Program** — designing the response playbooks and the threat-response workflow.
-
-Cannot share code or screenshots. Happy to talk about the architecture in person.
+Details of the platform's internal workings, data and findings are covered by an NDA, and the code is not public.
 
 ---
 

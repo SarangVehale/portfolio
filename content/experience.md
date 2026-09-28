@@ -34,12 +34,11 @@ location: Delhi, India
 date: 2024-12-01
 end: 2025-03-31
 cert: https://drive.google.com/file/d/1NPrq9V5THP7-eZefK99sZY5L5vHxnCcI/view?usp=sharing
-summary: Built a flagship OSINT platform for Indian law-enforcement agencies; trained judicial officers.
+summary: Built an intelligence platform for India's Ministry of Home Affairs; trained judicial officers and LEAs. Details are under NDA.
 
-- Developed a flagship **OSINT platform** integrated into the Swayam platform for Law Enforcement Agencies.
+- Built an intelligence platform for the Ministry of Home Affairs (I4C), covering data collection, cleansing and entity correlation, delivered with documentation and training for non-technical users.
 - Conducted specialised training sessions for **judicial officers and LEAs** on cybersecurity best practices and investigation techniques.
-- Coordinated the **Cyber Commandos Program**, enhancing response strategies for cybersecurity threats.
-- Trained large language models for NLP applications tailored to LEA-specific requirements.
+- Details of the platform's internal workings, data and findings are covered by an NDA.
 
 ---
 

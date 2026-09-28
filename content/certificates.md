@@ -1,12 +1,4 @@
 kind: certificate
-title: GATE Qualified — Computer Science
-issuer: Indian Institute of Technology, Guwahati
-date: 2026-02-01
-link: https://drive.google.com/file/d/1-UFTyok3YZIBc0s1GTa227p3uiRQAxtZ/view?usp=sharing
-
----
-
-kind: certificate
 title: Quantum Information Science and Engineering Program
 issuer: Virginia Tech & C2QA
 date: 2025-08-01
@@ -71,10 +63,9 @@ link: https://drive.google.com/file/d/1wNt2i4w3E5oBlD_fHEfMha5q42OrC9Ck/view?usp
 ---
 
 kind: certificate
-title: Supervised Machine Learning — Regression and Classification
+title: Supervised Machine Learning, Regression and Classification
 issuer: Coursera (Andrew Ng)
 date: 2024-09-01
-link: https://drive.google.com/file/d/REPLACE_ME/view
 
 ---
 
@@ -82,7 +73,6 @@ kind: certificate
 title: Foundations of Cyber Security
 issuer: Coursera (Google)
 date: 2024-06-01
-link: https://drive.google.com/file/d/REPLACE_ME/view
 
 ---
 
@@ -90,7 +80,6 @@ kind: certificate
 title: AWS Machine Learning Foundations
 issuer: Amazon Web Services
 date: 2024-03-01
-link: https://drive.google.com/file/d/REPLACE_ME/view
 
 ---
 
@@ -98,4 +87,3 @@ kind: certificate
 title: AWS Introduction to Cloud (Semesters 1–3)
 issuer: Amazon Web Services
 date: 2023-09-01
-link: https://drive.google.com/file/d/REPLACE_ME/view
