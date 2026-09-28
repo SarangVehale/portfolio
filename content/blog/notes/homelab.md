@@ -22,7 +22,7 @@ plugin to pull and push updates to the server.
 I also run pi-hole for dns, although that is mostly active on situation basis (I have to run networking
 from my room back to the router- queued project since forever). I personally am not a fan of nextcloud,
 plex, or similar services as in the past they have failed more times than i've used them. All of my music
-syncs over git over to my music platform [Neiro | 音色](sarangvehale.github.io/hibiki).
+syncs over git over to my music platform [Neiro | 音色](https://sarangvehale.github.io/hibiki).
 
 There are a few docker containers running some things, but that is mostly trivial. The future plan that
 I've lined up is running local llms on the server, and having some obsidian workflows for my daily routines.
