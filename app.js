@@ -92,6 +92,7 @@
     "experience.md":   "experience",
     "projects.md":     "project",
     "certificates.md": "certificate",
+    "publications.md": "publication",
   };
   const KIND_BY_DIR_PATH = {
     "content/experience":   "experience",
@@ -458,6 +459,7 @@
       { id: "about",        label: "about",        always: true },
       { id: "experience",   label: "experience",   always: true },
       { id: "projects",     label: "projects",     always: true },
+      { id: "publications", label: "publications", always: true },
       { id: "writing",      label: "blog",         always: true },
       { id: "certificates", label: "certificates", always: true },
       { id: "skills",       label: "skills",       always: true },
@@ -612,6 +614,7 @@
     faq: "FAQ", post: "Writing", note: "Notes",
     project: "Projects", certificate: "Certificates",
     experience: "Experience", skills: "Skills", about: "About", contact: "Contact",
+    publication: "Publications",
   };
   function findEntryByPageId(id) {
     const lower = String(id || "").toLowerCase();
@@ -690,6 +693,10 @@
       case "certificate": {
         const ext = e.link && !e.link.includes("REPLACE_ME") ? safeExternal(e.link) : null;
         return ext || "#/certificates";
+      }
+      case "publication": {
+        const ext = e.link ? safeExternal(e.link) : null;
+        return ext || "#/publications";
       }
       case "project":
       case "post": {
@@ -904,6 +911,48 @@
     }).join("");
   }
 
+  /* Publications keep their curated order (newest work first, as written
+     in content/publications.md) rather than sorting by date — several
+     entries only have a year, not a month, and forcing a fabricated month
+     into the sort key would misrepresent them. */
+  const PUB_STATUS_LABEL = {
+    published: "Published",
+    "under review": "Under review",
+    submitted: "Submitted",
+    accepted: "Accepted",
+  };
+  function renderPublications() {
+    setCrumb([{ label: "publications" }]);
+    setTitle("Publications");
+    setLead("Papers and preprints, newest first.");
+    showSubdirs("publications");
+    const list = entries.filter(e => e.kind === "publication");
+    if (!list.length) {
+      $("#page-body").className = "";
+      $("#page-body").innerHTML = `<p class="empty">No publications yet.</p>`;
+      return;
+    }
+    $("#page-body").className = "list-section";
+    $("#page-body").innerHTML = list.map(p => {
+      const statusKey = (p.status || "").toLowerCase();
+      const statusLabel = p.statusnote || PUB_STATUS_LABEL[statusKey] || p.status || "";
+      const linkPart = p.link && safeExternal(p.link)
+        ? `<a href="${safeUrl(p.link)}" target="_blank" rel="noopener noreferrer">view ↗</a>`
+        : "";
+      const metaBits = [p.authors, [p.venue, p.year].filter(Boolean).join(", ")].filter(Boolean).join(" · ");
+      return `
+        <article class="pub-item">
+          <div class="pub-title">${escapeHtml(p.title || "")}</div>
+          ${metaBits ? `<div class="pub-meta">${escapeHtml(metaBits)}</div>` : ""}
+          <div class="pub-side">
+            ${statusLabel ? `<span class="pub-status pub-status-${escapeHtml(statusKey.replace(/\s+/g, "-"))}">${escapeHtml(statusLabel)}</span>` : ""}
+            ${p.role ? `<span class="sep">·</span><span>${escapeHtml(p.role)}</span>` : ""}
+            ${linkPart ? `<span class="sep">·</span>${linkPart}` : ""}
+          </div>
+        </article>`;
+    }).join("");
+  }
+
   let currentNotesTag = null;
 
   function renderNotesInline() {
@@ -1112,6 +1161,7 @@
       case "faq":          showSub(); renderFaq(); return;
       case "experience":   showSub(); renderExperience(); return;
       case "projects":     showSub(); renderList("project", "Projects", "Software, research, and the occasional piece of hardware."); return;
+      case "publications": showSub(); renderPublications(); return;
       case "writing":      showSub(); renderList("post", "Writing", "Essays and notes from the work."); return;
       case "notes":        showSub(); renderNotesInline(); return;
       case "certificates": showSub(); renderCertificates(); return;
@@ -1272,6 +1322,7 @@
       if (e.kind === "note")        return "#/notes";
       if (e.kind === "experience")  return "#/experience";
       if (e.kind === "certificate") return e.link && !e.link.includes("REPLACE_ME") ? e.link : "#/certificates";
+      if (e.kind === "publication") return e.link ? e.link : "#/publications";
       if (e.kind === "project")     return e.link ? e.link : "#/entry/" + e.slug;
       if (e.kind === "post")        return "#/entry/" + e.slug;
       return "#/" + (sectionMap[e.kind] || "");

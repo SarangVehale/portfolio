@@ -82,6 +82,8 @@
 
 # certificate — completion certificate
 
+# publication — paper, preprint, or book chapter
+
 #
 
 # ─── FRICTION-FREE DEFAULTS ──────────────────────────────────────────────
@@ -113,7 +115,7 @@ role: Cybersecurity & Quantum Researcher
 location: Pune, India
 tz: Asia/Kolkata
 tagline: Working at the intersection of cybersecurity, quantum computing, and systems engineering.
-now: CERTIFY-ED is on arXiv and being pushed to SciPost. Maintaining a homelab. Learning Japanese.
+now: Finishing a B.S. in Data Science at IIT Madras and preparing CERTIFY-ED and symveig for peer review. Looking for research roles and PhD positions in quantum information theory, entropy, channels and coding.
 
 # ── Header links ─────────────────────────────────────────────────────────
 
@@ -176,6 +178,7 @@ file: content/faq.md
 file: content/experience.md
 file: content/projects.md
 file: content/certificates.md
+file: content/publications.md
 
 # ── Auto-discovered folders (drop a .md file in, it shows up) ────────────
 

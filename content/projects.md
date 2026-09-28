@@ -2,8 +2,12 @@ kind: project
 title: neiro
 date: 2026-05-30
 tags: music, software, open-source
-summary: NEIRO (音色) is a free, public music archive — a zero-infrastructure static site over a GitHub repository. No backend, no database, no tracking.
+summary: NEIRO (音色) is a free, public music archive, a zero-infrastructure static site over a GitHub repository. No backend, no database, no tracking.
 link: https://github.com/SarangVehale/hibiki
+
+Most personal music archives depend on a server, a database, or a third-party host, any of which can go away.
+
+NEIRO is a static site built directly over a GitHub repository: no backend, no database, no tracking. The archive lives entirely in version control, so it can be forked or mirrored, and hosting it costs nothing.
 
 ---
 
@@ -13,25 +17,25 @@ date: 2026-03-15
 tags: quantum, research, python, validation
 summary: A formal verification and benchmarking framework for exact diagonalization of quantum many-body systems. On arXiv; being submitted to SciPost.
 
-**The problem.** Quantum simulations are only as trustworthy as the implementations that produce them. When two libraries disagree by a part in a million, which one is right? CERTIFY-ED is an attempt to answer that question with a verifiable consensus across multiple independent oracles.
+Quantum simulations are only as trustworthy as the implementations that produce them. When two libraries disagree by a part in a million, which one is right?
 
-## How it works
+CERTIFY-ED is a multi-oracle validation framework that cross-checks quantum many-body simulations across **SageMath**, **NumPy** and **Lanczos methods**: symbolic Hermiticity certification of the Hamiltonian, deterministic eigenvalue resolution across three independent solvers, and reproducibility guarantees across environments.
 
-CERTIFY-ED is a multi-oracle validation framework that integrates **SageMath**, **NumPy**, and **Lanczos methods** for cross-verification of quantum simulations of many-body systems. It performs:
+Achieved relative error below 10⁻¹¹ and 12-digit agreement with analytical solutions across the benchmark systems tested, and is used as the validation backbone for the wider Noisy Low-Scale Quantum Systems (NLSQ) work at CDAC Pune. The preprint is on arXiv; the manuscript is being submitted to SciPost.
 
-- Symbolic **Hermiticity certification** of the Hamiltonian before any numerical work begins.
-- Deterministic eigenvalue resolution across three independent solvers, with consensus-based reporting.
-- Reproducibility guarantees across heterogeneous environments — the same input produces the same eigenstructure on a laptop, an HPC node, or a CI runner.
+---
 
-## Results
+kind: project
+title: symveig
+date: 2026-06-16
+tags: quantum, research, python, validation
+summary: Verified eigenvalue enclosures for symmetry-decomposed Hermitian matrices. Extends CERTIFY-ED. Open source, with a Zenodo-archived test suite.
 
-Achieved relative error below 10⁻¹¹ and **12-digit agreement** with analytical solutions across the benchmark systems we tested. Used as the validation backbone for our wider work on Noisy Low-Scale Quantum Systems (NLSQ).
+An eigenvalue solver returns a number, not a guarantee. Without a verified enclosure, a result can only look plausible, not be provably within a known distance of the true eigenvalue.
 
-> The goal isn't faster simulation. It's _trustworthy_ simulation — knowing the number you're reading is the number physics produced.
+symveig extends CERTIFY-ED with verified eigenvalue enclosures, using symmetry-sector decomposition to keep certification tractable as system size grows: each Hermitian matrix is decomposed by symmetry sector before the enclosure is computed, so verification cost scales with the sector, not the full matrix.
 
-## Status
-
-The preprint is live on **arXiv**; the manuscript is being submitted to **SciPost** (originally targeted for MDPI Axioms; switched venue after revisions). Built at CDAC Pune as part of the NLSQ benchmarking initiative.
+Released open source, with a Zenodo-archived test suite. The preprint is on arXiv (see [publications](publications.md)) and has been submitted to Computer Physics Communications.
 
 ---
 

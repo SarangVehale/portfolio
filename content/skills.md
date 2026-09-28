@@ -6,23 +6,23 @@ OSINT · Digital Forensics · Threat Intelligence · MITRE ATT&CK · Incident Re
 
 ### Quantum Computing
 
-Qiskit · Quantum Algorithms · Quantum Cryptography · Many-Body Systems · Exact Diagonalization
+Qiskit · PennyLane · Quantum Algorithms · Quantum Cryptography · Many-Body Systems · Exact Diagonalization
 
 ### Programming
 
-Python · C / C++ · Rust · R · Bash · SQL · TypeScript
+Python (primary) · Rust · C · C++ · Java · Bash · SQL · R
 
-### Data Science
+### Machine Learning & AI
 
-Machine Learning · Statistics · NLP · Data Analytics · Deep learning & Gen AI
+PyTorch · TensorFlow · scikit-learn · LangGraph · LangChain · MCP · RAG · FAISS · Ollama · NLP · Statistics
 
-### Systems
+### Scientific Computing
 
-Linux · Docker · Proxmox · pfSense · Snort · KiCad · Git
+NumPy · SciPy · Pandas · SageMath · mpmath
 
-### Tools
+### Systems & Tools
 
-API Integration · Data Scraping · Ergogen · QMK firmware · SageMath · NumPy
+Linux (Arch, bare-metal administration) · Docker · Git · GitHub Actions · FastAPI · AWS (foundational) · Proxmox · pfSense · Snort · KiCad · Ergogen · QMK firmware · API Integration · Data Scraping
 
 ### Languages
 

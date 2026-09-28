@@ -633,6 +633,46 @@
   }
   .cert-side a:hover { background: var(--accent); color: var(--bg); }
 
+  /* ── PUBLICATIONS LIST ────────────────────────────────────────────── */
+  .pub-item {
+    padding: 1.1rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  .list-section .pub-item:last-child { border-bottom: 1px solid var(--rule); }
+  .pub-title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: 0.25rem;
+    text-wrap: pretty;
+  }
+  .pub-meta {
+    color: var(--ink-soft);
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    text-wrap: pretty;
+  }
+  .pub-side {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 0.6rem;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
+  }
+  .pub-side .sep { color: var(--rule); }
+  .pub-status { text-transform: uppercase; }
+  .pub-status-published { color: var(--accent); }
+  .pub-side a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+  }
+  .pub-side a:hover { background: var(--accent); color: var(--bg); }
+
   /* ── INDEX LIST (projects, posts, notes) ──────────────────────────── */
   .list-item {
     cursor: pointer;
@@ -1005,6 +1045,10 @@
     .cert-item { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
     .cert-side { margin-top: 0.2rem; }
     .cert-side a { margin-left: 0; }
+
+    /* Publications: tighten spacing on narrow screens */
+    .pub-item { padding: 0.9rem 0; }
+    .pub-side { line-height: 1.6; }
 
     /* Notes / FAQ — tighter vertical rhythm */
     .diary-entry, .faq-item { padding: 2rem 0; }

@@ -1,4 +1,11 @@
 kind: certificate
+title: Aspire Leadership Program
+issuer: Aspire Institute
+date: 2026-01-01
+
+---
+
+kind: certificate
 title: Quantum Information Science and Engineering Program
 issuer: Virginia Tech & C2QA
 date: 2025-08-01

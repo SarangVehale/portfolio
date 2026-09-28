@@ -28,7 +28,7 @@ summary: Hybrid quantum–classical algorithms for integer factorization (Babai 
 ---
 
 kind: experience
-role: Security Researcher & Mentor
+role: Security Researcher & Mentor (Internship)
 org: National Cyber-Crime Research & Innovation Centre (I4C, MHA)
 location: Delhi, India
 date: 2024-12-01
@@ -43,13 +43,13 @@ summary: Built an intelligence platform for India's Ministry of Home Affairs; tr
 ---
 
 kind: experience
-role: Section Leader
+role: Section Leader (Internship)
 org: Stanford Code in Place (CS106A)
 location: Remote
 date: 2026-04-01
 end: 2026-05-31
 cert: https://drive.google.com/file/d/REPLACE_ME/view
-summary: Returning section leader for CS106A — second cohort.
+summary: Returning section leader for CS106A, second cohort.
 
 - Led weekly sections for **CS106A: Introduction to Python**, returning for the second offering.
 - Continued the LLM-integration work piloted in the 2025 cohort.
@@ -58,7 +58,7 @@ summary: Returning section leader for CS106A — second cohort.
 ---
 
 kind: experience
-role: Section Leader
+role: Section Leader (Internship)
 org: Stanford Code in Place (CS106A)
 location: Remote
 date: 2025-04-01
