@@ -3,6 +3,10 @@
 # on every push. Local dev rebuilds it via ./scripts/sync-photos.sh.
 manifest.json
 
+# Generated at deploy time by scripts/prerender.py + the dist/ assembly
+# step in deploy.yml. Never commit the build output.
+dist/
+
 # OS / editor noise
 .DS_Store
 Thumbs.db

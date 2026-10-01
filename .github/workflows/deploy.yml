@@ -58,6 +58,16 @@ jobs:
           cp index.html app.js md.js content.md manifest.json sitemap.xml robots.txt resume.pdf llms.txt .nojekyll dist/
           cp -r content photos dist/
 
+      # Write a static, no-JS HTML snapshot of every page into dist/
+      # (about/index.html, projects/index.html, etc). Most AI crawlers
+      # don't execute the SPA's JavaScript, so without this step they'd
+      # see an empty shell. These are a crawler-facing mirror; humans
+      # still get the interactive site, and each static page links back
+      # to it. See scripts/prerender.py for what it does and doesn't
+      # cover.
+      - name: prerender crawler-readable pages
+        run: python3 scripts/prerender.py
+
       - name: package site
         uses: actions/upload-pages-artifact@v3
         with:
