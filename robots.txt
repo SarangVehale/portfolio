@@ -1,8 +1,55 @@
 User-agent: *
 Allow: /
 
+# Explicit allow for AI crawlers and answer engines. The wildcard rule
+# above already permits these (nothing on this site is disallowed),
+# they're named here so the intent is unambiguous: this site wants to
+# be read, indexed, and cited by AI systems.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
 # Sitemap location
 Sitemap: https://sarangvehale.github.io/portfolio/sitemap.xml
+
+# LLM-oriented plain-text index of this site's content (see
+# https://llmstxt.org for the convention)
+# https://sarangvehale.github.io/portfolio/llms.txt
 
 # Be a good neighbour: don't hammer the API listings
 Crawl-delay: 1

@@ -51,39 +51,136 @@
 <meta name="twitter:description" content="Portfolio, blog, and notes of Sarang Vehale — a cybersecurity and quantum computing researcher.">
 <meta name="twitter:image" content="https://sarangvehale.github.io/portfolio/photos/01-shepherd-golden-hour.jpeg">
 
-<!-- Structured data: Person schema. Helps Google build the knowledge
-     panel and connects this page to Sarang's other public profiles. -->
+<!-- Structured data: Person + publications, as a linked @graph. Helps
+     Google build the knowledge panel, and gives AI crawlers and answer
+     engines (which mostly don't execute JS) a machine-readable summary
+     of who this is and what they've published, straight from the raw
+     HTML. See also /llms.txt for a plain-language index of the site. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Sarang Vehale",
-  "url": "https://sarangvehale.github.io/portfolio/",
-  "image": "https://sarangvehale.github.io/portfolio/photos/01-shepherd-golden-hour.jpeg",
-  "jobTitle": "Cybersecurity & Quantum Researcher",
-  "email": "mailto:sarangvehale2@gmail.com",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Pune",
-    "addressCountry": "IN"
-  },
-  "alumniOf": [
-    { "@type": "CollegeOrUniversity", "name": "National Forensic Sciences University" },
-    { "@type": "CollegeOrUniversity", "name": "Indian Institute of Technology, Madras" }
-  ],
-  "sameAs": [
-    "https://github.com/SarangVehale",
-    "https://linkedin.com/in/sarang-vehale-a76210247"
-  ],
-  "knowsAbout": [
-    "Cybersecurity",
-    "Quantum Computing",
-    "OSINT",
-    "Exact Diagonalization",
-    "Post-Quantum Cryptography",
-    "Rust",
-    "Python",
-    "Linux Systems"
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://sarangvehale.github.io/portfolio/#person",
+      "name": "Sarang Vehale",
+      "url": "https://sarangvehale.github.io/portfolio/",
+      "image": "https://sarangvehale.github.io/portfolio/photos/01-shepherd-golden-hour.jpeg",
+      "jobTitle": "Cybersecurity & Quantum Researcher",
+      "email": "mailto:sarangvehale2@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Pune",
+        "addressCountry": "IN"
+      },
+      "alumniOf": [
+        { "@type": "CollegeOrUniversity", "name": "National Forensic Sciences University" },
+        { "@type": "CollegeOrUniversity", "name": "Indian Institute of Technology, Madras" }
+      ],
+      "sameAs": [
+        "https://github.com/SarangVehale",
+        "https://github.com/sarang-kernel",
+        "https://linkedin.com/in/sarang-vehale-a76210247",
+        "https://scholar.google.com/citations?user=x-3dXnMAAAAJ&hl=en",
+        "https://orcid.org/0009-0001-5911-9503"
+      ],
+      "knowsAbout": [
+        "Cybersecurity",
+        "Quantum Computing",
+        "Quantum Information Theory",
+        "OSINT",
+        "Exact Diagonalization",
+        "Post-Quantum Cryptography",
+        "Entropy",
+        "Scientific Computing",
+        "Rust",
+        "Python",
+        "Linux Systems"
+      ]
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "name": "Survey of Integer Factorization Using Lattice-Based Algorithms",
+      "author": [
+        { "@id": "https://sarangvehale.github.io/portfolio/#person" },
+        { "@type": "Person", "name": "D. Kushwah" },
+        { "@type": "Person", "name": "R. K. Neiwal" },
+        { "@type": "Person", "name": "A. Saxena" }
+      ],
+      "isPartOf": { "@type": "Periodical", "name": "SN Computer Science" },
+      "publisher": "Springer Nature",
+      "datePublished": "2026",
+      "identifier": "doi:10.1007/s42979-026-05231-x",
+      "url": "https://doi.org/10.1007/s42979-026-05231-x",
+      "creativeWorkStatus": "Published",
+      "description": "First and corresponding author."
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "name": "CERTIFY-ED: A Multi-Layer Verification Framework for Exact Diagonalization of Quantum Many-Body Systems",
+      "author": [
+        { "@id": "https://sarangvehale.github.io/portfolio/#person" },
+        { "@type": "Person", "name": "R. Goel" }
+      ],
+      "datePublished": "2026",
+      "identifier": "arXiv:2605.11787",
+      "url": "https://arxiv.org/abs/2605.11787",
+      "creativeWorkStatus": "Under review (SciPost Physics Codebases)",
+      "description": "First author."
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "name": "symveig: Verified Eigenvalue Enclosures for Symmetry-Decomposed Hermitian Matrices",
+      "author": [
+        { "@id": "https://sarangvehale.github.io/portfolio/#person" },
+        { "@type": "Person", "name": "R. Goel" }
+      ],
+      "datePublished": "2026",
+      "identifier": "arXiv:2606.16217",
+      "url": "https://arxiv.org/abs/2606.16217",
+      "creativeWorkStatus": "Submitted (Computer Physics Communications)",
+      "description": "First author."
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "name": "Hierarchical Quantum-Accelerated Federated Learning for Scalable, Auditable, Cross-Enterprise AI Governance",
+      "author": [
+        { "@id": "https://sarangvehale.github.io/portfolio/#person" },
+        { "@type": "Person", "name": "R. Vehale" }
+      ],
+      "isPartOf": { "@type": "Periodical", "name": "International Journal of Scientific Research and Engineering Trends" },
+      "datePublished": "2025",
+      "identifier": "doi:10.5281/zenodo.17441935",
+      "url": "https://doi.org/10.5281/zenodo.17441935",
+      "creativeWorkStatus": "Published",
+      "description": "First author."
+    },
+    {
+      "@type": "Chapter",
+      "name": "Bits to Qubits and Shor",
+      "author": { "@id": "https://sarangvehale.github.io/portfolio/#person" },
+      "isPartOf": { "@type": "Book", "name": "Quantum Computing and Machine Learning (QCML'25)", "publisher": "CRC Press" },
+      "datePublished": "2025",
+      "creativeWorkStatus": "Accepted, not yet published",
+      "description": "First author."
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "name": "Some Results on Cumulative Residual Inaccuracy Measure of k-Record Values",
+      "author": [
+        { "@type": "Person", "name": "R. Goel" },
+        { "@type": "Person", "name": "V. Kumar" },
+        { "@id": "https://sarangvehale.github.io/portfolio/#person" },
+        { "@type": "Person", "name": "T. C. Scott" }
+      ],
+      "isPartOf": { "@type": "Periodical", "name": "Entropy" },
+      "publisher": "MDPI",
+      "datePublished": "2026",
+      "identifier": "doi:10.3390/e28010017",
+      "url": "https://doi.org/10.3390/e28010017",
+      "creativeWorkStatus": "Published",
+      "description": "Co-author."
+    }
   ]
 }
 </script>

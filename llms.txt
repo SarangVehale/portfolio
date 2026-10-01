@@ -1,0 +1,36 @@
+# Sarang Vehale
+
+> Portfolio, publications, and notes for Sarang Vehale, a researcher working across quantum information, cybersecurity, and scientific computing. Finishing a B.S. in Data Science at IIT Madras (expected May 2027) after completing an integrated B.Tech + M.Tech in Cyber Security at the National Forensic Sciences University (May 2026). Looking for research roles and PhD positions in quantum information theory, entropy, channels and coding.
+
+This is a static, framework-free site (no build step, no backend). Every link below is plain Markdown, fetchable directly without executing JavaScript.
+
+## Core
+
+- [About](https://sarangvehale.github.io/portfolio/content/about.md): Bio, education, research focus.
+- [Experience](https://sarangvehale.github.io/portfolio/content/experience.md): Research and teaching internships, with start/end dates.
+- [Projects](https://sarangvehale.github.io/portfolio/content/projects.md): Software and research projects; problem, approach, and outcome for each.
+- [Publications](https://sarangvehale.github.io/portfolio/content/publications.md): Papers and preprints, with authors, venue, DOI/arXiv ID, and status (published, under review, submitted, or accepted).
+- [Skills](https://sarangvehale.github.io/portfolio/content/skills.md): Languages, frameworks, and tools.
+- [Certificates](https://sarangvehale.github.io/portfolio/content/certificates.md): Courses and programs completed.
+- [Contact](https://sarangvehale.github.io/portfolio/content/contact.md): How to reach out.
+- [FAQ](https://sarangvehale.github.io/portfolio/content/faq.md): Short answers to common questions, including availability for work.
+- [Resume (PDF)](https://sarangvehale.github.io/portfolio/resume.pdf)
+
+## Writing
+
+- [Current gear](https://sarangvehale.github.io/portfolio/content/blog/gear.md): Everyday carry and desk setup.
+- [The homelab as a learning environment](https://sarangvehale.github.io/portfolio/content/blog/homelab-as-a-learning-environment.md): Why running your own infrastructure teaches systems engineering.
+- [How to actually disable OneDrive on Windows](https://sarangvehale.github.io/portfolio/content/blog/disable-onedrive-windows.md)
+
+## Notes
+
+- [Homelab](https://sarangvehale.github.io/portfolio/content/blog/notes/homelab.md): Remote dev setup and homeserver architecture.
+- [On Snort rules](https://sarangvehale.github.io/portfolio/content/blog/notes/on-snort-rules.md)
+- [Interview challenge question](https://sarangvehale.github.io/portfolio/content/blog/notes/answer-to-difficult.md)
+
+## Optional
+
+- [Site manifest](https://sarangvehale.github.io/portfolio/content.md): Machine-readable index of every section, with header metadata (name, links, repo).
+- [Source code](https://github.com/SarangVehale/portfolio): This site's repository. No build step, no third-party JavaScript, Markdown in, static HTML/CSS/JS out.
+- [Google Scholar](https://scholar.google.com/citations?user=x-3dXnMAAAAJ&hl=en)
+- [ORCID](https://orcid.org/0009-0001-5911-9503)

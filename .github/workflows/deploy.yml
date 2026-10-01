@@ -55,7 +55,7 @@ jobs:
         run: |
           set -eu
           mkdir -p dist
-          cp index.html app.js md.js content.md manifest.json sitemap.xml robots.txt resume.pdf .nojekyll dist/
+          cp index.html app.js md.js content.md manifest.json sitemap.xml robots.txt resume.pdf llms.txt .nojekyll dist/
           cp -r content photos dist/
 
       - name: package site
