@@ -9,14 +9,11 @@ This is a single static HTML page, with no build step and no backend. Every sect
 - [The whole site](https://sarangvehale.github.io/portfolio/): one page, every section below is a same-page anchor (#record, #research, #workshop, #publications, #training, #questions, #about, #contact).
 - [Resume (PDF)](https://sarangvehale.github.io/portfolio/resume.pdf)
 
-## Writing (older posts, not yet re-linked from the current homepage)
+## Pages
 
-- [Current gear](https://sarangvehale.github.io/portfolio/content/blog/gear.md): Everyday carry and desk setup.
-- [The homelab as a learning environment](https://sarangvehale.github.io/portfolio/content/blog/homelab-as-a-learning-environment.md): Why running your own infrastructure teaches systems engineering.
-- [How to actually disable OneDrive on Windows](https://sarangvehale.github.io/portfolio/content/blog/disable-onedrive-windows.md)
-- [Homelab](https://sarangvehale.github.io/portfolio/content/blog/notes/homelab.md): Remote dev setup and homeserver architecture.
-- [On Snort rules](https://sarangvehale.github.io/portfolio/content/blog/notes/on-snort-rules.md)
-- [Interview challenge question](https://sarangvehale.github.io/portfolio/content/blog/notes/answer-to-difficult.md)
+- [Writing](https://sarangvehale.github.io/portfolio/writing/): essays and notes, one HTML page each.
+- [Uses](https://sarangvehale.github.io/portfolio/uses/): desk, computers, everyday carry, watches.
+- [Photos](https://sarangvehale.github.io/portfolio/photos/): photographs.
 
 ## Optional
 

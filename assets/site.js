@@ -358,6 +358,40 @@ document.documentElement.classList.add("js");
     });
   }
 
+  /* ---- A split keyboard, for the uses page ---- */
+  function keyboard(svg) {
+    svg.setAttribute("viewBox", "0 0 760 420");
+    const u = 46, gap = 6, stag = [14, 6, 0, 6, 12, 16];
+    const half = (ox, mirror) => {
+      for (let c = 0; c < 6; c++) {
+        for (let r = 0; r < 3; r++) {
+          const cc = mirror ? 5 - c : c;
+          el(svg, "rect", { class: "g-line", x: ox + cc * (u + gap), y: 60 + stag[c] + r * (u + gap), width: u, height: u, rx: 5 });
+        }
+      }
+      for (let t = 0; t < 3; t++) {
+        const x = mirror ? ox + t * (u + gap) - 10 : ox + (3 + t) * (u + gap) + 10;
+        el(svg, "rect", { class: "g-strong", x, y: 60 + 3 * (u + gap) + 24 + (mirror ? (2 - t) : t) * 8, width: u, height: u, rx: 5 });
+      }
+    };
+    half(20, false);
+    half(420, true);
+    el(svg, "text", { class: "g-text", x: 380, y: 404, "text-anchor": "middle", opacity: 0.6 }, "split, column-staggered, three thumb keys a side");
+  }
+
+  /* ---- photo lightbox ---- */
+  function photos() {
+    const dlg = $("#photo-lb");
+    if (!dlg) return;
+    const img = $("img", dlg), cap = $(".plb-cap", dlg);
+    $$(".ph-btn").forEach((b) => b.addEventListener("click", () => {
+      img.src = b.dataset.full; img.alt = b.dataset.cap; cap.textContent = b.dataset.cap;
+      dlg.showModal();
+    }));
+    $(".lb-close", dlg).addEventListener("click", () => dlg.close());
+    dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+  }
+
   function drawGeometry() {
     const map = {
       bloch, yantra, circuit,
@@ -365,7 +399,7 @@ document.documentElement.classList.add("js");
       lattice,
       surface: (s) => surface(s, +s.dataset.d || 5, { dot: +s.dataset.dot || 2.2 }),
       kolam: (s) => kolam(s, +s.dataset.m || 7, +s.dataset.n || 5),
-      seigaiha,
+      seigaiha, keyboard,
       barcode: (s) => barcode(s, s.dataset.text || "SARANG"),
     };
     $$("svg[data-geo]").forEach((s) => map[s.dataset.geo] && map[s.dataset.geo](s));
@@ -399,6 +433,7 @@ document.documentElement.classList.add("js");
   /* ---- header state, spine, current section ---- */
   function chrome() {
     const hdr = $(".hdr");
+    if (!hdr) return;
     const onScroll = () => hdr.classList.toggle("solid", scrollY > 24);
     addEventListener("scroll", onScroll, { passive: true });
     onScroll();
@@ -412,7 +447,7 @@ document.documentElement.classList.add("js");
       hdr.classList.remove("open");
       burger.setAttribute("aria-expanded", "false");
     }));
-    const tabs = $$(".spine-tab,.hdr-link");
+    const tabs = $$(".spine-tab");
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (!e.isIntersecting) return;
@@ -430,7 +465,8 @@ document.documentElement.classList.add("js");
     const imgs = $$(".frame-img", frame);
     const sheet = $(".frame-sheet", frame);
     const sheetImg = $("img", sheet);
-    const sheetTxt = $("span", sheet);
+    const openK = $(".frame-open__k", frame);
+    const originEl = $(".frame-origin");
     const tag = $(".frame-copy .tag");
     const note = $(".frame-note");
     const count = $(".frame-count");
@@ -457,11 +493,12 @@ document.documentElement.classList.add("js");
       if (d.cert) {
         sheet.classList.remove("is-text");
         sheetImg.src = d.cert + "-t.webp";
-        sheetTxt.textContent = "Open certificate";
+        openK.textContent = "Open certificate";
       } else {
         sheet.classList.add("is-text");
-        sheetTxt.textContent = "Open record";
+        openK.textContent = "Open record";
       }
+      if (originEl) originEl.textContent = "Plate from " + d.origin;
       tag.textContent = String(cur + 1).padStart(2, "0") + " // " + d.tag;
       note.textContent = d.note;
       count.textContent = cur + 1 + " / " + thumbs.length;
@@ -537,7 +574,8 @@ document.documentElement.classList.add("js");
       $(".mf-body", dlg).scrollTop = 0;
     };
     $$(".ledger-btn").forEach((b) => b.addEventListener("click", () => open(b.dataset.q)));
-    $(".open-btn").addEventListener("click", () => open(""));
+    const ob = $(".open-btn");
+    if (ob) ob.addEventListener("click", () => open(""));
     $(".mf-close", dlg).addEventListener("click", () => dlg.close());
     dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
   }
@@ -547,6 +585,7 @@ document.documentElement.classList.add("js");
     chrome();
     gallery();
     manifest();
+    photos();
     reveals();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);

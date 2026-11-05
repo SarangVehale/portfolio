@@ -1,0 +1,10 @@
+# Photos shown on /photos/, in this order.
+# file | caption | focal position (optional)
+# Run python3 scripts/build_pages.py after editing. Metadata such as GPS is not carried over.
+01-shepherd-golden-hour.jpeg | Shepherd, golden hour
+02-arch-courtyard.jpeg | Courtyard through an arch
+03-jaipur-stained-glass.jpeg | Jaipur, through stained glass
+04-sunbird.jpeg | Sunbird
+13-river.jpeg | River
+14-puppy.jpeg | Puppy asleep in the light
+15-ipod-book.jpeg | iPod and a book

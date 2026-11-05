@@ -5,31 +5,36 @@ A static single page. No framework, no build step, no third-party requests.
 ## Structure
 
 ```
-index.html            all content, in plain HTML
-assets/site.css       tokens and components
-assets/site.js        draws the geometry, runs the gallery, manifest, spine and reveals
-assets/fonts/         self-hosted Fraunces, Space Grotesk, Space Mono, Noto subsets
-images/art/           halftones, painted through CSS masks
-images/plates/        colour plates and certificate images for the gallery
-scripts/build_art.py  makes images/art and images/plates from the source works
-scripts/fonts.py      fetches and subsets the fonts
-certs/                certificates served as PDFs
-content/blog/         older posts, not linked from the homepage
-resume.pdf
-robots.txt, sitemap.xml, llms.txt
+index.html              homepage, all content in plain HTML
+writing/ uses/ photos/  generated pages (do not edit by hand)
+assets/site.css         tokens and components
+assets/site.js          geometry, gallery, manifest, lightboxes, spine, reveals
+assets/fonts/           self-hosted Fraunces, Space Grotesk, Space Mono, Noto subsets
+images/art/             halftones, painted through CSS masks
+images/plates/          colour plates and certificate images
+images/photos/          resized photos, metadata stripped
+content/blog/           posts (*.md) and notes (notes/*.md); gear.md feeds /uses/
+photos/                 source photos and photos.txt (originals are never deployed)
+scripts/build_pages.py  header, footer, writing, uses, photos, sitemap
+scripts/build_art.py    halftones and plates from the source works
+scripts/build_name.py   the hero's three-script name as SVG outlines
+scripts/fonts.py        fetches the fonts and subsets them to the glyphs in use
 ```
 
 ## Editing
 
-Change copy, dates and links directly in `index.html`.
-
-- Experience: one `.frame-thumb` button and one `.record` article per role.
-- Projects: one `.ledger-row` and one `.mf-group` card per project.
-- Publications: `.pub`. Credentials: `.cert`. Skills: `.skill`.
-
-Update the counts in `.hero-vitals` and `.included-stats` when these change.
-If `index.html` uses a new kanji, Devanagari or maths glyph, add it to
-`scripts/fonts.py` and rerun it, because those fonts are subsets.
+- **A new post:** add `content/blog/<slug>.md` (or `content/blog/notes/`) with
+  front matter `title`, `date` (YYYY-MM-DD), `tags`, `summary`. Add `draft: true`
+  to keep it off the site. Then run `python3 scripts/build_pages.py`.
+- **Uses:** edit `content/blog/gear.md`, then rebuild.
+- **Photos:** add the file to `photos/`, add a line to `photos/photos.txt`, then rebuild.
+- **Header or footer:** edit them in `scripts/build_pages.py`. The script writes
+  them into `index.html` and every generated page.
+- **Homepage content:** edit `index.html` directly. Experience: one `.frame-thumb`
+  plus one `.record` per role. Projects: `.ledger-row` plus `.mf-group`.
+  Publications: `.pcard`. Credentials: `.chip` in the year matrix.
+- **New kanji or Devanagari:** run `python3 scripts/fonts.py`. It rescans the
+  pages and subsets the fonts to every glyph in use.
 
 ## Design
 

@@ -2,6 +2,7 @@
 title: The homelab as a learning environment
 date: 2025-02-14
 tags: [linux, systems, homelab]
+draft: true
 summary: Why running your own infrastructure is the best CS course you'll ever take.
 ---
 
