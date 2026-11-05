@@ -42,7 +42,7 @@
 <title>Sarang Vehale: Cybersecurity &amp; Quantum Researcher</title>
 <meta name="description" content="Portfolio of Sarang Vehale, cybersecurity and quantum computing researcher. Publications, experience, and projects in exact diagonalization, lattice cryptography, and OSINT.">
 <meta name="author" content="Sarang Vehale">
-<meta name="theme-color" content="#17130d">
+<meta name="theme-color" content="#1c1c1c">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="https://sarangvehale.github.io/portfolio/">
 
@@ -87,7 +87,7 @@
 </script>
 
 <link rel="sitemap" type="application/xml" href="sitemap.xml">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%2317130d%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2219%22%20font-style%3D%22italic%22%20fill%3D%22%23f1e7d3%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%231c1c1c%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2219%22%20font-style%3D%22italic%22%20fill%3D%22%23f2f1ee%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E">
 
 <!--
   Content-Security-Policy — strict, unchanged in spirit from before:
@@ -111,15 +111,15 @@
 
 <style>
   :root {
-    --bg:        #17130d;
-    --bg-raised: #1f1a12;
-    --ink:       #f1e7d3;
-    --ink-soft:  rgba(241,231,211,.66);
-    --ink-faint: rgba(241,231,211,.4);
-    --rule:      rgba(241,231,211,.14);
-    --rule-strong: rgba(241,231,211,.26);
-    --accent:    #d9742f;
-    --accent-soft: rgba(217,116,47,.5);
+    --bg:        #1c1c1c;
+    --bg-raised: #242424;
+    --ink:       #f2f1ee;
+    --ink-soft:  rgba(242,241,238,.66);
+    --ink-faint: rgba(242,241,238,.4);
+    --rule:      rgba(242,241,238,.14);
+    --rule-strong: rgba(242,241,238,.26);
+    --accent:    #ffffff;
+    --accent-soft: rgba(255,255,255,.45);
     --serif: 'Fraunces', 'Noto Serif Devanagari', Georgia, serif;
     --sans:  'Inter', 'Noto Sans JP', -apple-system, sans-serif;
     --mono:  'JetBrains Mono', ui-monospace, Menlo, monospace;
@@ -234,6 +234,22 @@
   .facts dt { color: var(--ink-faint); letter-spacing: .04em; text-transform: uppercase; font-size: 10.5px; margin-top: 1.1rem; }
   .facts dt:first-child { margin-top: 0; }
   .facts dd { margin: .3rem 0 0; color: var(--ink); }
+
+  /* ── research-triad infographic ───────────────────────────────── */
+  .triad { margin: 3.5rem 0 0; text-align: center; }
+  .triad-svg { width: 100%; max-width: 440px; height: auto; }
+  .triad-circle { fill: var(--ink); fill-opacity: .055; stroke: var(--rule-strong); stroke-width: 1.5; }
+  .triad-label { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; fill: var(--ink-faint); text-anchor: middle; }
+  .triad-sub { font-family: var(--mono); font-size: 10.5px; fill: var(--ink-soft); text-anchor: middle; }
+  .triad-center { font-family: var(--serif); font-style: italic; font-size: 12.5px; font-weight: 600; fill: var(--ink); text-anchor: middle; }
+  .triad figcaption { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin-top: .8rem; }
+
+  /* ── full-width / accent image dividers between sections ────────── */
+  .divider-img { padding: 3.5rem 0; text-align: center; border-bottom: 1px solid var(--rule); }
+  .divider-img img { margin: 0 auto; display: block; }
+  .divider-img.wide img { width: 100%; max-height: 340px; object-fit: cover; }
+  .divider-img.square img { max-width: 280px; width: 100%; }
+  .divider-img figcaption { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin-top: 1rem; }
 
   /* ── EXPERIENCE (spec-sheet rows) ─────────────────────────────── */
   .exp-row { padding: 1.6rem 0; border-top: 1px solid var(--rule); display: grid; grid-template-columns: 220px 1fr; gap: 2rem; }
@@ -374,8 +390,8 @@
         <span class="sans">तमसो मा ज्योतिर्गमय</span>
         <span class="gloss">"From darkness, lead me to light," Bṛhadāraṇyaka Upaniṣad 1.3.28</span>
       </blockquote>
-      <p class="tagline">Working at the intersection of cybersecurity, quantum computing, and systems engineering.</p>
-      <p class="now"><b>Now</b>Finishing a B.S. in Data Science at IIT Madras and preparing CERTIFY-ED and symveig for peer review. Looking for research roles and PhD positions in quantum information theory, entropy, channels and coding.</p>
+      <p class="tagline">Working at the intersection of mathematics, quantum information theory, and applied cybersecurity.</p>
+      <p class="now"><b>Now</b>Working on open problems in mathematics and in quantum Shannon theory (entropy, channels, coding), with quantum error-correcting codes as where I'd like that to go next. Finishing a B.S. in Data Science at IIT Madras. Looking for research roles and PhD positions in quantum information theory, entropy, channels and coding.</p>
       <div class="cta-row">
         <a class="btn btn-solid" href="#contact">Get in touch</a>
         <a class="btn btn-line" href="#publications">Read the papers</a>
@@ -409,13 +425,14 @@
       <div>
         <p class="eyebrow"><span class="num">01</span> The researcher</p>
         <h2>About</h2>
+        <p class="block-lead">What the light falls on, in order: training, then questions, then everything outside the work.</p>
       </div>
       <div class="block-glyph"><span class="jp">智</span><span class="dev">विद्या</span></div>
     </div>
     <div class="about-grid">
       <div class="prose">
         <p>I completed an integrated <strong>B.Tech + M.Tech in Cyber Security</strong> at the <a href="https://nfsu.ac.in/" target="_blank" rel="noopener">National Forensic Sciences University</a> in May 2026, and I'm now finishing a <strong>B.S. in Data Science</strong> at <a href="https://study.iitm.ac.in/" target="_blank" rel="noopener">IIT Madras</a>, expected May 2027.</p>
-        <p>My research sits at the boundary between <strong>quantum computing</strong>, <strong>quantum informatics</strong> and <strong>applied cybersecurity</strong>: exact diagonalization for many-body systems, lattice-based integer factorization, OSINT pipelines for law enforcement, and the validation frameworks that make any of this trustworthy.</p>
+        <p>My research sits at the boundary between <strong>mathematics</strong>, <strong>quantum information theory</strong> and <strong>applied cybersecurity</strong>: open problems in pure mathematics, quantum Shannon theory (entropy, channels, coding), exact diagonalization for many-body systems, lattice-based integer factorization, and the validation frameworks that make any of this trustworthy. Quantum error-correcting codes, where several of these threads meet, is where I'd like to go next.</p>
         <p>Outside of research I write systems software, maintain a homelab, occasionally design my own keyboards, and have served on the organising committees of internet-governance forums.</p>
         <p>The fastest way to reach me is <a href="mailto:sarangvehale2@gmail.com">email</a>. I read everything.</p>
       </div>
@@ -426,6 +443,22 @@
         <dt>Elsewhere</dt><dd><a href="https://scholar.google.com/citations?user=x-3dXnMAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a> &middot; <a href="https://orcid.org/0009-0001-5911-9503" target="_blank" rel="noopener">ORCID</a></dd>
       </dl>
     </div>
+    <figure class="triad">
+      <svg viewBox="0 0 440 410" role="img" aria-labelledby="triad-title" class="triad-svg">
+        <title id="triad-title">Where the research sits: mathematics, quantum information theory, and cybersecurity, with their overlaps.</title>
+        <circle cx="220" cy="150" r="120" class="triad-circle"></circle>
+        <circle cx="158" cy="260" r="120" class="triad-circle"></circle>
+        <circle cx="282" cy="260" r="120" class="triad-circle"></circle>
+        <text x="220" y="18" class="triad-label">Mathematics</text>
+        <text x="86" y="400" class="triad-label">Quantum Information</text>
+        <text x="354" y="400" class="triad-label">Cybersecurity</text>
+        <text x="165" y="200" class="triad-sub"><tspan x="165" dy="0">Shannon</tspan><tspan x="165" dy="13">theory</tspan></text>
+        <text x="278" y="200" class="triad-sub"><tspan x="278" dy="0">Lattice</tspan><tspan x="278" dy="13">crypto</tspan></text>
+        <text x="220" y="300" class="triad-sub">Post-quantum</text>
+        <text x="220" y="228" class="triad-center"><tspan x="220" dy="0">Exact</tspan><tspan x="220" dy="14">diagonalization</tspan></text>
+      </svg>
+      <figcaption>Where the research sits</figcaption>
+    </figure>
   </section>
 
   <section class="block wrap" id="experience">
@@ -433,6 +466,7 @@
       <div>
         <p class="eyebrow"><span class="num">02</span> Where I've worked</p>
         <h2>Experience</h2>
+        <p class="block-lead">The path, mapped by where the work actually happened.</p>
       </div>
       <div class="block-glyph"><span class="jp">道</span><span class="dev">कर्म</span></div>
     </div>
@@ -548,11 +582,17 @@
     </div>
   </section>
 
+  <figure class="divider-img wide wrap">
+    <img src="images/matsushima.png" alt="Waves at Matsushima, a screen painting of flowing water around pine-covered rocks. Tawaraya Sotatsu, 17th century, public domain." loading="lazy">
+    <figcaption>波 &middot; Channels, the way water finds them. Sotatsu, 17th century.</figcaption>
+  </figure>
+
   <section class="block wrap" id="projects">
     <div class="block-head">
       <div>
         <p class="eyebrow"><span class="num">03</span> What I've built</p>
         <h2>Projects</h2>
+        <p class="block-lead">What got made while looking for an answer.</p>
       </div>
       <div class="block-glyph"><span class="jp">創</span><span class="dev">सृष्टि</span></div>
     </div>
@@ -625,6 +665,7 @@
       <div>
         <p class="eyebrow"><span class="num">04</span> Papers and preprints</p>
         <h2>Publications</h2>
+        <p class="block-lead">What's been written down, checked, and made to hold.</p>
       </div>
       <div class="block-glyph"><span class="jp">文</span><span class="dev">शास्त्र</span></div>
     </div>
@@ -691,11 +732,17 @@
     </div>
   </section>
 
+  <figure class="divider-img square wrap">
+    <img src="images/sriyantra.png" alt="A Sri Yantra, a geometric diagram of nine interlocking triangles, engraved in copper. Public domain." loading="lazy">
+    <figcaption>यन्त्र &middot; Structure, worked out in advance.</figcaption>
+  </figure>
+
   <section class="block wrap" id="credentials">
     <div class="block-head">
       <div>
         <p class="eyebrow"><span class="num">05</span> Certificates and skills</p>
         <h2>Credentials</h2>
+        <p class="block-lead">Proof of practice, and the tools it's practiced with.</p>
       </div>
       <div class="block-glyph"><span class="jp">技</span><span class="dev">कौशल्य</span></div>
     </div>
@@ -735,6 +782,7 @@
       <div>
         <p class="eyebrow"><span class="num">06</span> Common questions</p>
         <h2>FAQ</h2>
+        <p class="block-lead">The questions that keep coming back around.</p>
       </div>
       <div class="block-glyph"><span class="jp">問</span><span class="dev">प्रश्न</span></div>
     </div>
@@ -767,6 +815,7 @@
       <div>
         <p class="eyebrow"><span class="num">07</span> Reach out</p>
         <h2>Contact</h2>
+        <p class="block-lead">Where this thread meets the next one.</p>
       </div>
       <div class="block-glyph"><span class="jp">縁</span><span class="dev">संबंध</span></div>
     </div>
