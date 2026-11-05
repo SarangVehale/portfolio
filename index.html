@@ -107,29 +107,35 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;600&family=Noto+Serif+Devanagari:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;600&family=Noto+Serif+Devanagari:wght@400;600&display=swap">
 
 <style>
   :root {
-    --bg:        #1c1c1c;
-    --bg-raised: #242424;
-    --ink:       #f2f1ee;
-    --ink-soft:  rgba(242,241,238,.66);
-    --ink-faint: rgba(242,241,238,.4);
-    --rule:      rgba(242,241,238,.14);
-    --rule-strong: rgba(242,241,238,.26);
-    --accent:    #ffffff;
-    --accent-soft: rgba(255,255,255,.45);
+    /* Matched directly from ryoku.dev's shipped CSS (default/"Ryoku"
+       edition): --paper, --ink, --ink-dim, --ink-muted, --ink-faint,
+       --line(-soft/-strong), --signal, in their entry bundle. */
+    --bg:        #000000;
+    --bg-raised: #0a0a0a;
+    --ink:       #cdc4ba;
+    --ink-soft:  #b0a9a0;
+    --ink-faint: #807a73;
+    --ink-faintest: rgba(205,196,186,.18);
+    --rule:      rgba(205,196,186,.13);
+    --rule-strong: rgba(205,196,186,.26);
+    --accent:    #ce5e32;
+    --accent-soft: rgba(206,94,50,.5);
     --serif: 'Fraunces', 'Noto Serif Devanagari', Georgia, serif;
-    --sans:  'Inter', 'Noto Sans JP', -apple-system, sans-serif;
-    --mono:  'JetBrains Mono', ui-monospace, Menlo, monospace;
+    --sans:  'Space Grotesk', 'Noto Sans JP', -apple-system, sans-serif;
+    --mono:  'Space Mono', ui-monospace, Menlo, monospace;
     --devanagari: 'Noto Serif Devanagari', var(--serif);
     --jp: 'Noto Sans JP', var(--sans);
     --max: 1180px;
+    --r: 2px;
   }
 
   * { box-sizing: border-box; }
-  html { background: var(--bg); scroll-behavior: smooth; }
+  html { background: var(--bg); scroll-behavior: smooth; scroll-snap-type: y proximity; }
+  @media (max-width: 640px) { html { scroll-snap-type: none; } } /* fighting the keyboard/URL-bar chrome on mobile isn't worth it */
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   body {
     margin: 0;
@@ -178,8 +184,13 @@
   .nav-toggle-btn { display: none; font-size: 1.5rem; line-height: 1; color: var(--ink); cursor: pointer; padding: 4px; }
 
   /* ── COVER ────────────────────────────────────────────────────── */
+  /* The hero text column sits at the same left edge the rest of the
+     page's .wrap content does; the art column is deliberately NOT
+     wrap-constrained, so the images bleed to the actual viewport edge
+     instead of stopping at a centred container like a boxed-in card. */
   .cover { padding: 4.5rem 0 5rem; border-bottom: 1px solid var(--rule); }
-  .cover-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 3.5rem; align-items: center; }
+  .cover-grid { display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; column-gap: 3rem; }
+  .cover-text { padding-left: max(2rem, calc(50vw - (var(--max) / 2) + 2rem)); padding-right: 1rem; }
   .cover h1 {
     font-family: var(--serif);
     font-size: clamp(3rem, 6.4vw, 5.4rem);
@@ -197,10 +208,19 @@
   .cover .now b { color: var(--accent); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; margin-right: .5em; }
 
   .cover-art { position: relative; }
-  .cover-art figure { margin: 0; position: relative; }
-  .cover-art img { width: 100%; border-radius: 2px; }
-  .cover-art figcaption { margin-top: .6rem; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); display: flex; justify-content: space-between; }
-  .art-pair { display: grid; grid-template-columns: 1fr; gap: 1.8rem; }
+  .cover-art figure { margin: 0; position: relative; overflow: hidden; }
+  .cover-art img { width: 100%; display: block; }
+  .cover-art figure::after {
+    content: ""; position: absolute; inset: auto 0 0 0; height: 40%;
+    background: linear-gradient(to top, rgba(0,0,0,.6), transparent);
+    pointer-events: none;
+  }
+  .cover-art figcaption {
+    position: absolute; left: 1.2rem; right: 1.2rem; bottom: .9rem; z-index: 1;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink); display: flex; justify-content: space-between;
+  }
+  .art-pair { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--rule); }
 
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--rule); margin-top: 3rem; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; }
   .stat { background: var(--bg); padding: 1.1rem 1.2rem; }
@@ -215,6 +235,16 @@
   .btn-line:hover { border-color: var(--accent); color: var(--accent); }
 
   /* ── SECTION SHELL ────────────────────────────────────────────── */
+  /* Each section fills at least one screen, so scrolling reads as
+     moving between pages rather than one continuous unbroken scroll —
+     content-heavy sections simply run past 100vh naturally; short ones
+     (FAQ, Contact) centre within the full page height instead of
+     floating at the top with empty space below. */
+  .cover, section.block {
+    scroll-snap-align: start; scroll-margin-top: 64px;
+    min-height: calc(100vh - 64px);
+    display: flex; flex-direction: column; justify-content: center;
+  }
   section.block { padding: 5rem 0; border-bottom: 1px solid var(--rule); }
   section.block:last-of-type { border-bottom: 0; }
   .block-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; margin-bottom: 2.6rem; flex-wrap: wrap; }
@@ -236,20 +266,47 @@
   .facts dd { margin: .3rem 0 0; color: var(--ink); }
 
   /* ── research-triad infographic ───────────────────────────────── */
-  .triad { margin: 3.5rem 0 0; text-align: center; }
-  .triad-svg { width: 100%; max-width: 440px; height: auto; }
-  .triad-circle { fill: var(--ink); fill-opacity: .055; stroke: var(--rule-strong); stroke-width: 1.5; }
+  /* The Venn diagram lives BEHIND the About text, not below it as a
+     separate figure — the text column sits on top via z-index, the
+     diagram bleeds past the text measure on every side. */
+  .about-stage { position: relative; }
+  .triad-backdrop {
+    position: absolute;
+    top: 50%; left: 55%;
+    transform: translate(-50%, -50%);
+    width: min(920px, 92vw);
+    height: auto;
+    opacity: .55;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .triad-circle { fill: var(--ink); fill-opacity: .05; stroke: var(--rule-strong); stroke-width: 1.5; }
   .triad-label { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; fill: var(--ink-faint); text-anchor: middle; }
-  .triad-sub { font-family: var(--mono); font-size: 10.5px; fill: var(--ink-soft); text-anchor: middle; }
-  .triad-center { font-family: var(--serif); font-style: italic; font-size: 12.5px; font-weight: 600; fill: var(--ink); text-anchor: middle; }
-  .triad figcaption { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin-top: .8rem; }
+  .triad-sub { font-family: var(--mono); font-size: 10.5px; fill: var(--ink-faint); text-anchor: middle; }
+  .triad-center { font-family: var(--serif); font-style: italic; font-size: 12.5px; font-weight: 600; fill: var(--ink-soft); text-anchor: middle; }
+  .about-grid { position: relative; z-index: 1; }
+  .dd-muted { color: var(--ink-faint) !important; font-family: var(--sans) !important; font-size: .85rem !important; text-transform: none !important; letter-spacing: 0 !important; }
 
   /* ── full-width / accent image dividers between sections ────────── */
-  .divider-img { padding: 3.5rem 0; text-align: center; border-bottom: 1px solid var(--rule); }
-  .divider-img img { margin: 0 auto; display: block; }
-  .divider-img.wide img { width: 100%; max-height: 340px; object-fit: cover; }
-  .divider-img.square img { max-width: 280px; width: 100%; }
-  .divider-img figcaption { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin-top: 1rem; }
+  /* These bleed edge-to-edge (no .wrap constraint on the <figure>
+     itself) and carry their caption burned directly onto the image,
+     the way ryoku.dev's own imagery sits flush with no card/border
+     around it, rather than as a boxed figure sitting between sections. */
+  .divider-img { position: relative; display: block; overflow: hidden; margin: 0; }
+  .divider-img img { width: 100%; display: block; }
+  .divider-img.wide img { height: 44vw; max-height: 460px; min-height: 220px; object-fit: cover; }
+  .divider-img.square { max-width: 640px; margin: 0 auto; }
+  .divider-img.square img { height: auto; }
+  .divider-img::after {
+    content: ""; position: absolute; inset: auto 0 0 0; height: 45%;
+    background: linear-gradient(to top, rgba(0,0,0,.65), transparent);
+    pointer-events: none;
+  }
+  .divider-img figcaption {
+    position: absolute; left: 2rem; right: 2rem; bottom: 1.3rem; z-index: 1;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink);
+  }
 
   /* ── EXPERIENCE (spec-sheet rows) ─────────────────────────────── */
   .exp-row { padding: 1.6rem 0; border-top: 1px solid var(--rule); display: grid; grid-template-columns: 220px 1fr; gap: 2rem; }
@@ -381,9 +438,9 @@
   </div>
 </nav>
 
-<header class="cover wrap">
+<header class="cover">
   <div class="cover-grid">
-    <div>
+    <div class="cover-text">
       <p class="eyebrow"><span class="num">00</span> Cybersecurity &amp; Quantum Researcher</p>
       <h1>Sarang<br>Vehale</h1>
       <blockquote class="verse">
@@ -429,22 +486,8 @@
       </div>
       <div class="block-glyph"><span class="jp">智</span><span class="dev">विद्या</span></div>
     </div>
-    <div class="about-grid">
-      <div class="prose">
-        <p>I completed an integrated <strong>B.Tech + M.Tech in Cyber Security</strong> at the <a href="https://nfsu.ac.in/" target="_blank" rel="noopener">National Forensic Sciences University</a> in May 2026, and I'm now finishing a <strong>B.S. in Data Science</strong> at <a href="https://study.iitm.ac.in/" target="_blank" rel="noopener">IIT Madras</a>, expected May 2027.</p>
-        <p>My research sits at the boundary between <strong>mathematics</strong>, <strong>quantum information theory</strong> and <strong>applied cybersecurity</strong>: open problems in pure mathematics, quantum Shannon theory (entropy, channels, coding), exact diagonalization for many-body systems, lattice-based integer factorization, and the validation frameworks that make any of this trustworthy. Quantum error-correcting codes, where several of these threads meet, is where I'd like to go next.</p>
-        <p>Outside of research I write systems software, maintain a homelab, occasionally design my own keyboards, and have served on the organising committees of internet-governance forums.</p>
-        <p>The fastest way to reach me is <a href="mailto:sarangvehale2@gmail.com">email</a>. I read everything.</p>
-      </div>
-      <dl class="facts">
-        <dt>Based in</dt><dd>Pune, India</dd>
-        <dt>Degrees</dt><dd>B.Tech + M.Tech, Cyber Security (NFSU, 2026)<br>B.S., Data Science (IIT Madras, expected 2027)</dd>
-        <dt>Languages</dt><dd>English, Hindi, Marathi, Japanese (learning)</dd>
-        <dt>Elsewhere</dt><dd><a href="https://scholar.google.com/citations?user=x-3dXnMAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a> &middot; <a href="https://orcid.org/0009-0001-5911-9503" target="_blank" rel="noopener">ORCID</a></dd>
-      </dl>
-    </div>
-    <figure class="triad">
-      <svg viewBox="0 0 440 410" role="img" aria-labelledby="triad-title" class="triad-svg">
+    <div class="about-stage">
+      <svg class="triad-backdrop" viewBox="0 0 440 410" role="img" aria-labelledby="triad-title" aria-hidden="true">
         <title id="triad-title">Where the research sits: mathematics, quantum information theory, and cybersecurity, with their overlaps.</title>
         <circle cx="220" cy="150" r="120" class="triad-circle"></circle>
         <circle cx="158" cy="260" r="120" class="triad-circle"></circle>
@@ -457,8 +500,22 @@
         <text x="220" y="300" class="triad-sub">Post-quantum</text>
         <text x="220" y="228" class="triad-center"><tspan x="220" dy="0">Exact</tspan><tspan x="220" dy="14">diagonalization</tspan></text>
       </svg>
-      <figcaption>Where the research sits</figcaption>
-    </figure>
+      <div class="about-grid">
+        <div class="prose">
+          <p>I completed an integrated <strong>B.Tech + M.Tech in Cyber Security</strong> at the <a href="https://nfsu.ac.in/" target="_blank" rel="noopener">National Forensic Sciences University</a> in May 2026, and I'm now finishing a <strong>B.S. in Data Science</strong> at <a href="https://study.iitm.ac.in/" target="_blank" rel="noopener">IIT Madras</a>, expected May 2027.</p>
+          <p>My research sits at the boundary between <strong>mathematics</strong>, <strong>quantum information theory</strong> and <strong>applied cybersecurity</strong>: open problems in pure mathematics, quantum Shannon theory (entropy, channels, coding), exact diagonalization for many-body systems, lattice-based integer factorization, and the validation frameworks that make any of this trustworthy. Quantum error-correcting codes, where several of these threads meet, is where I'd like to go next.</p>
+          <p>Outside of research I write systems software, maintain a homelab, occasionally design my own keyboards, and have served on the organising committees of internet-governance forums.</p>
+          <p>The fastest way to reach me is <a href="mailto:sarangvehale2@gmail.com">email</a>. I read everything.</p>
+        </div>
+        <dl class="facts">
+          <dt>Based in</dt><dd>Pune, India</dd>
+          <dt>Degrees</dt><dd>B.Tech + M.Tech, Cyber Security (NFSU, 2026)<br>B.S., Data Science (IIT Madras, expected 2027)</dd>
+          <dt>Languages</dt><dd>English, Hindi, Marathi, Japanese (learning)</dd>
+          <dt>Elsewhere</dt><dd><a href="https://scholar.google.com/citations?user=x-3dXnMAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a> &middot; <a href="https://orcid.org/0009-0001-5911-9503" target="_blank" rel="noopener">ORCID</a></dd>
+          <dt>Research, mapped</dt><dd class="dd-muted">Mathematics &times; quantum information &times; cybersecurity, in the diagram behind this text.</dd>
+        </dl>
+      </div>
+    </div>
   </section>
 
   <section class="block wrap" id="experience">
@@ -582,7 +639,7 @@
     </div>
   </section>
 
-  <figure class="divider-img wide wrap">
+  <figure class="divider-img wide">
     <img src="images/matsushima.png" alt="Waves at Matsushima, a screen painting of flowing water around pine-covered rocks. Tawaraya Sotatsu, 17th century, public domain." loading="lazy">
     <figcaption>波 &middot; Channels, the way water finds them. Sotatsu, 17th century.</figcaption>
   </figure>
@@ -732,7 +789,7 @@
     </div>
   </section>
 
-  <figure class="divider-img square wrap">
+  <figure class="divider-img square">
     <img src="images/sriyantra.png" alt="A Sri Yantra, a geometric diagram of nine interlocking triangles, engraved in copper. Public domain." loading="lazy">
     <figcaption>यन्त्र &middot; Structure, worked out in advance.</figcaption>
   </figure>
