@@ -1,6 +1,6 @@
 # Portfolio: Sarang Vehale
 
-A static single page. No framework, no build step, no third-party requests.
+A static site: a homepage plus generated Writing, Uses and Photos pages. No framework and no third-party requests.
 
 ## Structure
 
@@ -33,8 +33,8 @@ scripts/fonts.py        fetches the fonts and subsets them to the glyphs in use
 - **Homepage content:** edit `index.html` directly. Experience: one `.frame-thumb`
   plus one `.record` per role. Projects: `.ledger-row` plus `.mf-group`.
   Publications: `.pcard`. Credentials: `.chip` in the year matrix.
-- **New kanji or Devanagari:** run `python3 scripts/fonts.py`. It rescans the
-  pages and subsets the fonts to every glyph in use.
+- **New kanji or Devanagari:** add the characters to `JP` or `DV` in
+  `scripts/fonts.py` and run it, because the fonts are subsets.
 
 ## Design
 
