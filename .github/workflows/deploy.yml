@@ -38,7 +38,7 @@ jobs:
           set -eu
           mkdir -p dist
           cp index.html sitemap.xml robots.txt resume.pdf llms.txt .nojekyll dist/
-          cp -r images dist/
+          cp -r images certs dist/
           mkdir -p dist/content/blog
           cp -r content/blog/*.md dist/content/blog/ 2>/dev/null || true
           cp -r content/blog/notes dist/content/blog/ 2>/dev/null || true
