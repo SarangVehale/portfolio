@@ -1,10 +1,9 @@
 # Deploy the static site to GitHub Pages.
 #
-# This replaces the "build from branch" mode in Settings → Pages.
-# Why this exists
-#   GitHub's classic Pages serving is slow to update (sometimes minutes)
-#   and has a separate cache layer. The Actions deploy is direct, ~30s
-#   end-to-end, and you get a clean run log per deploy.
+# As of the mythology redesign, this site is one hand-written
+# index.html plus an images/ folder — no manifest generation, no
+# prerendering, no content pipeline. The deploy step is just "copy
+# the files GitHub Pages needs into dist/ and upload it."
 #
 # One-time setup on GitHub
 #   Settings → Pages → Build and deployment → Source = "GitHub Actions".
@@ -13,20 +12,15 @@
 name: deploy to pages
 
 on:
-  # Run whenever main changes…
   push:
     branches: [main]
-  # …and let us trigger it by hand from the Actions tab.
   workflow_dispatch: {}
 
-# GitHub Pages requires these specific permissions.
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Don't queue concurrent deploys; if a new one arrives while one is in
-# flight, cancel the old. The site is fully static, so newest wins.
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -37,36 +31,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Generate manifest.json from the actual filesystem so the live
-      # site doesn't need to call the GitHub Contents API (60 req/hr
-      # rate limit per IP). Fails the build if a `dir:` directive
-      # points at a non-existent folder, so typos surface immediately
-      # instead of producing silent blank pages.
-      - name: build manifest
-        run: python3 scripts/build-manifest.py
-
-      # Stage only the files the site actually needs to a clean dist/
-      # directory and upload that. This prevents non-site artefacts —
-      # build scripts, design bundles, local docs, accidentally
-      # committed zips, uploaded sources — from being published to the
-      # live URL. Add a path here when you add a new top-level folder
-      # the runtime depends on.
+      # Stage only what the site needs into a clean dist/, so stray
+      # repo files (scripts, source images, docs) never get published.
       - name: assemble dist/
         run: |
           set -eu
           mkdir -p dist
-          cp index.html app.js md.js content.md manifest.json sitemap.xml robots.txt resume.pdf llms.txt .nojekyll dist/
-          cp -r content photos dist/
-
-      # Write a static, no-JS HTML snapshot of every page into dist/
-      # (about/index.html, projects/index.html, etc). Most AI crawlers
-      # don't execute the SPA's JavaScript, so without this step they'd
-      # see an empty shell. These are a crawler-facing mirror; humans
-      # still get the interactive site, and each static page links back
-      # to it. See scripts/prerender.py for what it does and doesn't
-      # cover.
-      - name: prerender crawler-readable pages
-        run: python3 scripts/prerender.py
+          cp index.html sitemap.xml robots.txt resume.pdf llms.txt .nojekyll dist/
+          cp -r images dist/
+          mkdir -p dist/content/blog
+          cp -r content/blog/*.md dist/content/blog/ 2>/dev/null || true
+          cp -r content/blog/notes dist/content/blog/ 2>/dev/null || true
 
       - name: package site
         uses: actions/upload-pages-artifact@v3

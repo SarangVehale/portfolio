@@ -1,20 +1,37 @@
 <!doctype html>
 <!--
   ═══════════════════════════════════════════════════════════════════════
-  index.html — page shell, styles, and DOM scaffolding for the portfolio.
+  index.html — Sarang Vehale, research portfolio.
 
-  The site renders entirely from content.md (the manifest) and the files
-  it points at in content/. To change copy, edit those Markdown files —
-  not this one. To change colours, fonts, spacing, or layout, see the
-  :root { … } block and the section comments inside <style> below.
+  A full rebuild, written from scratch: no code, markup, or CSS carried
+  over from any earlier version of this site. Single long-scroll page,
+  hand-written per section (no markdown-rendering pipeline) — in the
+  spirit of ryoku.dev, which this was studied against directly (fetched
+  and screenshotted, not guessed at).
 
-  Files loaded by this page (all in this folder):
-    md.js     — minimal Markdown renderer
-    app.js    — content loader, router, page renderers
-    content.md — manifest (site header + which content files to load)
+  Design concept: two mythologies about light overcoming darkness,
+  paired deliberately rather than decoratively — Amaterasu (Shinto sun
+  goddess, emerging from the cave to return light to the world) and
+  Saraswati (Hindu goddess of knowledge, music, and clarity). Every
+  section carries one kanji and one Devanagari word of matching
+  meaning. The hero line is a real, correctly-attributed Sanskrit verse
+  (Bṛhadāraṇyaka Upaniṣad 1.3.28), not an invented phrase.
 
-  Run locally with `python3 -m http.server 8000` (the page fetches
-  content.md over HTTP — double-clicking won't work without a server).
+  Images: two public-domain 19th-century artworks (Raja Ravi Varma's
+  "Saraswati", 1894 — Utagawa Kunisada's Amaterasu triptych, 1856),
+  sourced from Wikimedia Commons, confirmed PD-old-100-expired, then
+  processed locally into a Floyd–Steinberg halftone unifying them into
+  one visual register (see dither.py in the repo scripts/ folder for
+  the exact process — nothing AI-generated, nothing traced).
+
+  Content facts (bio, experience, projects, publications, certificates)
+  are the same vetted facts as the previous version of this site, hand-
+  transcribed here — GATE/GPA/Swayam-free, NDA-safe, dates verified
+  against LinkedIn per that earlier work. Only the presentation and
+  architecture are new.
+
+  No third-party JS. Strict CSP, self-hosted fonts via Google Fonts
+  (styles/fonts only, no script origin added).
   ═══════════════════════════════════════════════════════════════════════
 -->
 <html lang="en">
@@ -22,40 +39,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- ── SEO + social metadata ──────────────────────────────────────────
-  Most search engines render JS now (Googlebot, Bing/IndexNow). Open
-  Graph and Twitter Card tags are read by every social platform's
-  link-preview bot and never run JS, so populate them statically here.
-  Update SITE_URL if you move off the default github.io path.
-  ──────────────────────────────────────────────────────────────────── -->
-<title>Sarang Vehale — Cybersecurity &amp; Quantum Researcher</title>
-<meta name="description" content="Portfolio, blog, and notes of Sarang Vehale — a cybersecurity and quantum computing researcher building OSINT platforms, quantum benchmarking frameworks, and the occasional mechanical keyboard.">
+<title>Sarang Vehale: Cybersecurity &amp; Quantum Researcher</title>
+<meta name="description" content="Portfolio of Sarang Vehale, cybersecurity and quantum computing researcher. Publications, experience, and projects in exact diagonalization, lattice cryptography, and OSINT.">
 <meta name="author" content="Sarang Vehale">
-<meta name="keywords" content="Sarang Vehale, cybersecurity, quantum computing, OSINT, exact diagonalization, CERTIFY-ED, NFSU, IIT Madras, I4C, post-quantum cryptography, lattice cryptography, homelab, Rust, Python">
-<meta name="theme-color" content="#f2eedf">
-<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#17130d">
+<meta name="color-scheme" content="dark">
 <link rel="canonical" href="https://sarangvehale.github.io/portfolio/">
 
-<!-- Open Graph (Facebook, LinkedIn, Slack, Discord, etc.) -->
-<meta property="og:title" content="Sarang Vehale — Cybersecurity &amp; Quantum Researcher">
-<meta property="og:description" content="Portfolio, blog, and notes of Sarang Vehale — a cybersecurity and quantum computing researcher.">
+<meta property="og:title" content="Sarang Vehale: Cybersecurity &amp; Quantum Researcher">
+<meta property="og:description" content="Portfolio of Sarang Vehale, cybersecurity and quantum computing researcher.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sarangvehale.github.io/portfolio/">
-<meta property="og:image" content="https://sarangvehale.github.io/portfolio/photos/01-shepherd-golden-hour.jpeg">
+<meta property="og:image" content="https://sarangvehale.github.io/portfolio/images/saraswati.png">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Sarang Vehale">
-
-<!-- Twitter / X cards -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Sarang Vehale — Cybersecurity &amp; Quantum Researcher">
-<meta name="twitter:description" content="Portfolio, blog, and notes of Sarang Vehale — a cybersecurity and quantum computing researcher.">
-<meta name="twitter:image" content="https://sarangvehale.github.io/portfolio/photos/01-shepherd-golden-hour.jpeg">
+<meta name="twitter:title" content="Sarang Vehale: Cybersecurity &amp; Quantum Researcher">
+<meta name="twitter:image" content="https://sarangvehale.github.io/portfolio/images/saraswati.png">
 
-<!-- Structured data: Person + publications, as a linked @graph. Helps
-     Google build the knowledge panel, and gives AI crawlers and answer
-     engines (which mostly don't execute JS) a machine-readable summary
-     of who this is and what they've published, straight from the raw
-     HTML. See also /llms.txt for a plain-language index of the site. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -65,14 +66,9 @@
       "@id": "https://sarangvehale.github.io/portfolio/#person",
       "name": "Sarang Vehale",
       "url": "https://sarangvehale.github.io/portfolio/",
-      "image": "https://sarangvehale.github.io/portfolio/photos/01-shepherd-golden-hour.jpeg",
       "jobTitle": "Cybersecurity & Quantum Researcher",
       "email": "mailto:sarangvehale2@gmail.com",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Pune",
-        "addressCountry": "IN"
-      },
+      "address": { "@type": "PostalAddress", "addressLocality": "Pune", "addressCountry": "IN" },
       "alumniOf": [
         { "@type": "CollegeOrUniversity", "name": "National Forensic Sciences University" },
         { "@type": "CollegeOrUniversity", "name": "Indian Institute of Technology, Madras" }
@@ -84,125 +80,26 @@
         "https://scholar.google.com/citations?user=x-3dXnMAAAAJ&hl=en",
         "https://orcid.org/0009-0001-5911-9503"
       ],
-      "knowsAbout": [
-        "Cybersecurity",
-        "Quantum Computing",
-        "Quantum Information Theory",
-        "OSINT",
-        "Exact Diagonalization",
-        "Post-Quantum Cryptography",
-        "Entropy",
-        "Scientific Computing",
-        "Rust",
-        "Python",
-        "Linux Systems"
-      ]
-    },
-    {
-      "@type": "ScholarlyArticle",
-      "name": "Survey of Integer Factorization Using Lattice-Based Algorithms",
-      "author": [
-        { "@id": "https://sarangvehale.github.io/portfolio/#person" },
-        { "@type": "Person", "name": "D. Kushwah" },
-        { "@type": "Person", "name": "R. K. Neiwal" },
-        { "@type": "Person", "name": "A. Saxena" }
-      ],
-      "isPartOf": { "@type": "Periodical", "name": "SN Computer Science" },
-      "publisher": "Springer Nature",
-      "datePublished": "2026",
-      "identifier": "doi:10.1007/s42979-026-05231-x",
-      "url": "https://doi.org/10.1007/s42979-026-05231-x",
-      "creativeWorkStatus": "Published",
-      "description": "First and corresponding author."
-    },
-    {
-      "@type": "ScholarlyArticle",
-      "name": "CERTIFY-ED: A Multi-Layer Verification Framework for Exact Diagonalization of Quantum Many-Body Systems",
-      "author": [
-        { "@id": "https://sarangvehale.github.io/portfolio/#person" },
-        { "@type": "Person", "name": "R. Goel" }
-      ],
-      "datePublished": "2026",
-      "identifier": "arXiv:2605.11787",
-      "url": "https://arxiv.org/abs/2605.11787",
-      "creativeWorkStatus": "Under review (SciPost Physics Codebases)",
-      "description": "First author."
-    },
-    {
-      "@type": "ScholarlyArticle",
-      "name": "symveig: Verified Eigenvalue Enclosures for Symmetry-Decomposed Hermitian Matrices",
-      "author": [
-        { "@id": "https://sarangvehale.github.io/portfolio/#person" },
-        { "@type": "Person", "name": "R. Goel" }
-      ],
-      "datePublished": "2026",
-      "identifier": "arXiv:2606.16217",
-      "url": "https://arxiv.org/abs/2606.16217",
-      "creativeWorkStatus": "Submitted (Computer Physics Communications)",
-      "description": "First author."
-    },
-    {
-      "@type": "ScholarlyArticle",
-      "name": "Hierarchical Quantum-Accelerated Federated Learning for Scalable, Auditable, Cross-Enterprise AI Governance",
-      "author": [
-        { "@id": "https://sarangvehale.github.io/portfolio/#person" },
-        { "@type": "Person", "name": "R. Vehale" }
-      ],
-      "isPartOf": { "@type": "Periodical", "name": "International Journal of Scientific Research and Engineering Trends" },
-      "datePublished": "2025",
-      "identifier": "doi:10.5281/zenodo.17441935",
-      "url": "https://doi.org/10.5281/zenodo.17441935",
-      "creativeWorkStatus": "Published",
-      "description": "First author."
-    },
-    {
-      "@type": "Chapter",
-      "name": "Bits to Qubits and Shor",
-      "author": { "@id": "https://sarangvehale.github.io/portfolio/#person" },
-      "isPartOf": { "@type": "Book", "name": "Quantum Computing and Machine Learning (QCML'25)", "publisher": "CRC Press" },
-      "datePublished": "2025",
-      "creativeWorkStatus": "Accepted, not yet published",
-      "description": "First author."
-    },
-    {
-      "@type": "ScholarlyArticle",
-      "name": "Some Results on Cumulative Residual Inaccuracy Measure of k-Record Values",
-      "author": [
-        { "@type": "Person", "name": "R. Goel" },
-        { "@type": "Person", "name": "V. Kumar" },
-        { "@id": "https://sarangvehale.github.io/portfolio/#person" },
-        { "@type": "Person", "name": "T. C. Scott" }
-      ],
-      "isPartOf": { "@type": "Periodical", "name": "Entropy" },
-      "publisher": "MDPI",
-      "datePublished": "2026",
-      "identifier": "doi:10.3390/e28010017",
-      "url": "https://doi.org/10.3390/e28010017",
-      "creativeWorkStatus": "Published",
-      "description": "Co-author."
+      "knowsAbout": ["Cybersecurity", "Quantum Computing", "Quantum Information Theory", "OSINT", "Exact Diagonalization", "Post-Quantum Cryptography", "Entropy", "Scientific Computing"]
     }
   ]
 }
 </script>
 
-<!-- Hint to search engines this site has a sitemap -->
 <link rel="sitemap" type="application/xml" href="sitemap.xml">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%2317130d%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2219%22%20font-style%3D%22italic%22%20fill%3D%22%23f1e7d3%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E">
 
-<!-- Favicon (inline SVG; no separate file needed) -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%23f2eedf%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2220%22%20font-style%3D%22italic%22%20fill%3D%22%23221c10%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E">
 <!--
-  Content-Security-Policy
-  Strict by design: only this origin + Google Fonts. No inline JS, no
-  third-party scripts. `style-src` allows the inline <style> below; the
-  rendered Markdown body never produces style attributes (see md.js).
+  Content-Security-Policy — strict, unchanged in spirit from before:
+  self + Google Fonts only, no third-party scripts, no inline JS.
 -->
 <meta http-equiv="Content-Security-Policy" content="
   default-src 'self';
   script-src 'self';
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   font-src https://fonts.gstatic.com data:;
-  img-src 'self' data: https:;
-  connect-src 'self' https://api.github.com;
+  img-src 'self' data:;
+  connect-src 'self';
   base-uri 'self';
   form-action 'self';
 ">
@@ -210,1070 +107,712 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500;1,6..72,600;1,6..72,700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;600&family=Noto+Serif+Devanagari:wght@400;600&display=swap">
 
 <style>
   :root {
-    /* ─── Warm-paper palette (default) ─────────────────────────────────
-       Tuned to Munken Print Cream measurements (L*≈93.5, a*≈1.5, b*≈6.8
-       in CIE Lab). That's the paper Penguin Classics ship on, and it's
-       the most carefully-studied long-read substrate in commercial
-       publishing.
-
-       Why these specific values:
-         • Pure-white screens (L*100) over-stimulate cones, cause halation,
-           and ramp up melatonin suppression at night. Real book paper
-           sits around L*93–94 — high luminance but not maximum.
-         • A slight positive b* (warm yellow shift) reduces blue-light
-           output without making the page feel jaundiced. b*7 is the band
-           used in trade paperback printing.
-         • Body-text contrast 12.7 : 1 sits in the Beier & Larson (2013)
-           sweet spot of 10–13 for sustained reading. Higher = letter-edge
-           halation. Lower = effortful.
-
-       Hex values cross-checked against sRGB ↔ CIE-Lab conversions
-       assuming a D65 white point and standard gamma. Perceptually
-       matched against pages from Penguin Classics English Library
-       editions.
-       ──────────────────────────────────────────────────────────────── */
-    --bg:        #f2eedf;   /* Munken Print Cream  L*93.5  a*1.5  b*6.8 */
-    --surface:   #f8f4e8;   /* +3 L* lift for code blocks / cards */
-    --ink:       #221c10;   /* Warm near-black  contrast 12.7 : 1 vs --bg */
-    --ink-soft:  #4a4332;   /* 6.9 : 1  body-secondary */
-    --ink-faint: #8a8270;   /* 3.5 : 1  mono labels */
-    --rule:      #d2c8ae;
-    --accent:    #8a3a0e;   /* Warm bronze — internal links/hover */
-    --accent-soft: #8a3a0e;
-    --link-ext:  #1d4ed8;   /* Classic web blue — outbound http(s) only */
-    --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+    --bg:        #17130d;
+    --bg-raised: #1f1a12;
+    --ink:       #f1e7d3;
+    --ink-soft:  rgba(241,231,211,.66);
+    --ink-faint: rgba(241,231,211,.4);
+    --rule:      rgba(241,231,211,.14);
+    --rule-strong: rgba(241,231,211,.26);
+    --accent:    #d9742f;
+    --accent-soft: rgba(217,116,47,.5);
+    --serif: 'Fraunces', 'Noto Serif Devanagari', Georgia, serif;
+    --sans:  'Inter', 'Noto Sans JP', -apple-system, sans-serif;
     --mono:  'JetBrains Mono', ui-monospace, Menlo, monospace;
-  }
-
-  /* ─── White paper palette (clinical) ─────────────────────────────────
-     Pure white background, soft black ink to reduce halation. */
-  html[data-theme="white"] {
-    --bg:        #ffffff;
-    --surface:   #f5f5f5;
-    --ink:       #181818;
-    --ink-soft:  #555555;
-    --ink-faint: #8a8a8a;
-    --rule:      #e2e2e2;
-    --accent:    #8a3a0e;
-    --accent-soft: #8a3a0e;
-    --link-ext:  #1d4ed8;
-  }
-
-  /* ─── Night palette (warm-dark, paper-equivalent) ─────────────────── */
-  html[data-theme="dark"] {
-    --bg:        #15130d;
-    --surface:   #1d1b13;
-    --ink:       #e9e1c8;
-    --ink-soft:  #b1a88f;
-    --ink-faint: #756e5b;
-    --rule:      #322d21;
-    --accent:    #cf8554;
-    --accent-soft: #cf8554;
-    --link-ext:  #7aa8f0;
+    --devanagari: 'Noto Serif Devanagari', var(--serif);
+    --jp: 'Noto Sans JP', var(--sans);
+    --max: 1180px;
   }
 
   * { box-sizing: border-box; }
-  html, body { margin: 0; }
-  [hidden] { display: none !important; }
+  html { background: var(--bg); scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--serif);
-    font-size: 19px;
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    font-feature-settings: "kern", "liga";
-  }
-  ::selection { background: var(--accent-soft); color: var(--bg); }
-
-  /* Default <a>: internal links (relative, hash, mailto) inherit ink color
-     with a subtle underline. On hover they pick up the bronze accent. */
-  a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-decoration-thickness: 1px; text-underline-offset: 3px; transition: color .12s, text-decoration-color .12s, text-shadow .12s; }
-  a:hover { color: var(--accent); text-decoration-color: var(--accent); }
-  a:visited { color: var(--ink-soft); }
-  a:visited:hover { color: var(--accent); }
-
-  /* External http(s) links: classic web blue, always visible as links.
-     Markdown renderer adds target="_blank" so we target that for safety;
-     also catch explicit http(s) hrefs in static markup. */
-  a[href^="http://"], a[href^="https://"] {
-    color: var(--link-ext);
-    text-decoration-color: var(--link-ext);
-  }
-  a[href^="http://"]:visited, a[href^="https://"]:visited {
-    color: var(--link-ext);
-  }
-  a[href^="http://"]:hover, a[href^="https://"]:hover {
-    color: var(--link-ext);
-    text-decoration-color: var(--link-ext);
-    text-shadow: 0 0 0.5px var(--link-ext);
-  }
-
-  /* Reserve --accent (saturated red) for critical points: dots, numbers,
-     registration marks — the Sapper / Nothing red-on-joints convention. */
-
-  /* ── HOMEPAGE ─────────────────────────────────────────────────────── */
-  /* Single-screen layout: everything fits in 100vh without scroll. Sizes
-     scale down as the viewport shrinks. */
-  .home {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 2rem;
-    gap: 0;
-    position: relative;
-  }
-  /* Make the homepage nav use flex-wrap so items break cleanly on every
-     viewport width instead of relying on inline wrap heuristics. */
-  .home nav {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    column-gap: 0.5em;
-    row-gap: 0.5em;
-    font-size: 1.05rem;
-    margin: 0 0 2.5rem;
-    max-width: 42rem;
-    line-height: 1.4;
-  }
-  .home nav a { white-space: nowrap; }
-  /* First-letter accent on homepage nav — boosts scannability without
-     stealing horizontal space. Applies automatically to any new section
-     added to #home-nav (the rule targets the pseudo-element, not a
-     specific letter). The bronze stays through hover and visited states
-     because ::first-letter beats both on specificity. */
-  .home nav a::first-letter {
-    color: var(--accent);
-    font-weight: 600;
-  }
-  .home nav .slash { color: var(--ink-faint); }
-  .home .name {
-    font-size: clamp(2.4rem, 6vw, 4rem);
-    line-height: 1;
-    margin: 0 0 1rem;
-    font-style: italic;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    font-variation-settings: "opsz" 72;
-  }
-  .home .tagline {
-    font-size: 1rem;
-    color: var(--ink-soft);
-    font-style: italic;
-    margin: 0 0 1.4rem;
-    max-width: 48rem;
-    line-height: 1.5;
-    text-wrap: pretty;
-  }
-  .home .hero {
-    /* Compact square: leaves room for nav + footer in one screen. */
-    width: clamp(200px, min(38vh, 50vw), 360px);
-    aspect-ratio: 1 / 1;
-    position: relative;
-    margin: 0 0 1.4rem;
-    overflow: hidden;
-    background: var(--surface);
-    border: 1px solid var(--rule);
-  }
-  .home .hero img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 1.2s ease;
-  }
-  .home .hero img.active { opacity: 1; }
-  .home .hero-label {
-    position: absolute;
-    bottom: 10px;
-    right: 12px;
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    color: rgba(255, 252, 244, 0.88);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 0 12px rgba(0, 0, 0, 0.25);
-    pointer-events: none;
-    z-index: 2;
-    mix-blend-mode: normal;
-  }
-  .home .hero-empty {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--ink-faint);
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    background-image:
-      repeating-linear-gradient(135deg, transparent 0 11px, var(--rule) 11px 12px);
-  }
-  .home .time {
-    font-style: italic;
-    color: var(--ink-soft);
-    margin: 0 0 2rem;
-    font-size: 0.95rem;
-  }
-  .home .time a { color: var(--ink-soft); }
-  .home .time .clock {
-    font-family: var(--mono);
-    font-style: normal;
-    color: var(--ink);
-    font-size: 0.85rem;
-    margin: 0 .25em;
-  }
-  .home .now {
-    color: var(--ink-soft);
-    font-style: italic;
-    max-width: 36rem;
-    font-size: 0.9rem;
-    text-wrap: pretty;
-    margin: 0 0 0.6rem;
-  }
-  .home .now b {
-    font-style: normal;
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    font-weight: 500;
-    margin-right: .5em;
-  }
-  .home .footer {
-    margin-top: 1.2rem;
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--ink-faint);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  /* ── SUB-PAGES ────────────────────────────────────────────────────── */
-  .page {
-    max-width: 38rem;
-    margin: 0 auto;
-    padding: 5rem 2rem 6rem;
-  }
-  .page .crumb {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    color: var(--ink-faint);
-    margin-bottom: 3rem;
-    text-transform: lowercase;
-  }
-  .page .crumb a { text-decoration: none; border-bottom: 1px dotted var(--rule); color: var(--ink-soft); }
-  .page .crumb a:hover { color: var(--accent); border-bottom-color: var(--accent); }
-  .page .crumb .sep { color: var(--ink-faint); margin: 0 .5em; }
-  .page .crumb span { color: var(--ink); }
-  .page .crumb a span { color: inherit; border: 0; }
-
-  /* Subdir nav under the page content — bare HTML feel: monospace, brackets,
-     hash count = depth from root. */
-  .page-subdirs {
-    margin: 3rem 0 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 1.2rem;
-    font-family: var(--mono);
-    font-size: 13px;
-    letter-spacing: 0.02em;
-  }
-  .page-subdirs .subdir {
-    color: var(--ink-soft);
-    text-decoration: none;
-    border-bottom: 1px dotted transparent;
-  }
-  .page-subdirs .subdir:hover {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-  }
-
-  .page h1 {
-    font-size: clamp(1.8rem, 4vw, 2.4rem);
-    font-weight: 500;
-    margin: 0 0 0.5rem;
-    font-style: italic;
-    letter-spacing: -0.01em;
-    font-variation-settings: "opsz" 48;
-  }
-  .page .page-lead {
-    color: var(--ink-soft);
-    font-size: 1.05rem;
-    margin: 0 0 3rem;
-    text-wrap: pretty;
-  }
-
-  /* ── EXPERIENCE LIST ──────────────────────────────────────────────── */
-  .exp-group {
-    padding: 2rem 0;
-    border-top: 1px solid var(--rule);
-  }
-  .list-section .exp-group:last-child { border-bottom: 1px solid var(--rule); }
-  .exp-group-head { margin-bottom: 1rem; }
-  .exp-org-name {
-    font-size: 1.3rem;
-    font-weight: 500;
-    line-height: 1.25;
-    text-wrap: balance;
-  }
-  .exp-group-meta {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    color: var(--ink-faint);
-    margin-top: 0.3rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 0.6rem;
-    align-items: center;
-  }
-  .exp-group-meta .sep { color: var(--rule); }
-  .exp-role-item {
-    padding: 1.1rem 0 1.1rem 1.2rem;
-    border-left: 1px solid var(--rule);
-    margin: 0.8rem 0 0 0.25rem;
-    position: relative;
-  }
-  .exp-group.multi .exp-role-item::before {
-    content: "";
-    position: absolute;
-    left: -4px;
-    top: 1.5rem;
-    width: 7px;
-    height: 7px;
-    background: var(--bg);
-    border: 1px solid var(--rule);
-    border-radius: 50%;
-  }
-  .exp-group:not(.multi) .exp-role-item {
-    padding-left: 0;
-    margin-left: 0;
-    border-left: 0;
-  }
-  .exp-group:not(.multi) .exp-role-item::before { display: none; }
-  .exp-role {
-    font-size: 1.05rem;
-    font-weight: 500;
-    margin: 0 0 0.3rem;
-    line-height: 1.3;
-    font-style: italic;
-  }
-  .exp-meta {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--ink-faint);
-    letter-spacing: 0.04em;
-    margin-bottom: 0.7rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem 0.6rem;
-    align-items: center;
-  }
-  .exp-meta .sep { color: var(--rule); }
-  .exp-meta a.cert {
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px dotted var(--accent);
-  }
-  .exp-meta a.cert:hover { background: var(--accent); color: var(--bg); }
-  .exp-summary {
-    color: var(--ink-soft);
-    font-size: 1rem;
-    margin: 0 0 0.5rem;
-    text-wrap: pretty;
-  }
-  .exp-body {
-    color: var(--ink-soft);
-    font-size: 0.95rem;
-    line-height: 1.5;
-  }
-  .exp-body ul { padding-left: 1.2rem; margin: 0.4rem 0; }
-  .exp-body li { margin-bottom: 0.3rem; }
-  .exp-body strong { color: var(--ink); font-weight: 600; }
-
-  /* ── FAQ ──────────────────────────────────────────────────────────── */
-  .faq { display: flex; flex-direction: column; }
-  .faq-item {
-    padding: 2.5rem 0;
-    border-top: 1px dashed var(--rule);
-  }
-  .faq-item:first-child { padding-top: 0; border-top: 0; }
-  .faq-item:last-child { padding-bottom: 0; }
-  .faq-q {
-    font-size: 1.3rem;
-    font-weight: 500;
-    line-height: 1.3;
-    margin: 0 0 0.8rem;
-    font-style: italic;
-    font-variation-settings: "opsz" 36;
-    text-wrap: balance;
-  }
-  .faq-a { color: var(--ink-soft); line-height: 1.6; }
-  .faq-a > *:first-child { margin-top: 0; }
-  .faq-a > *:last-child  { margin-bottom: 0; }
-  .faq-a strong { color: var(--ink); }
-
-  /* ── DIARY (notes inline) ─────────────────────────────────────────── */
-  .diary { display: flex; flex-direction: column; }
-  .diary-entry {
-    padding: 2.5rem 0;
-    border-top: 1px dashed var(--rule);
-  }
-  .diary-entry:first-child { border-top: 0; padding-top: 0; }
-  .diary-entry:last-child { padding-bottom: 0; }
-  .diary-head { margin-bottom: 0.8rem; }
-  .diary-date {
-    display: block;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--ink-faint);
-  }
-  .diary-title {
-    font-size: 1.3rem;
-    font-weight: 500;
-    line-height: 1.25;
-    margin: 0.3rem 0 0;
-    font-style: italic;
-    font-variation-settings: "opsz" 36;
-    text-wrap: balance;
-  }
-  .diary-body {
-    color: var(--ink-soft);
-    line-height: 1.6;
-  }
-  .diary-body p:first-child { margin-top: 0; }
-  .diary-body strong { color: var(--ink); }
-  .note-tags {
-    margin-top: 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-  .note-tags .tag {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.06em;
-    color: var(--ink-faint);
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    padding: 2px 8px;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: color .12s, border-color .12s;
-  }
-  .note-tags .tag::before { content: "#"; opacity: 0.5; margin-right: 1px; }
-  .note-tags .tag:hover { color: var(--accent); border-color: var(--accent); }
-
-  .tag-filter-banner {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--ink-faint);
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px dashed var(--rule);
-  }
-  .tag-filter-banner span { color: var(--accent); }
-  .tag-filter-banner button {
-    background: none; border: 0;
-    color: var(--ink-soft);
-    text-decoration: underline;
-    cursor: pointer;
-    font: inherit;
-  }
-  .tag-filter-banner button:hover { color: var(--accent); }
-
-  /* ── CERT LIST ────────────────────────────────────────────────────── */
-  .cert-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1rem;
-    padding: 0.9rem 0;
-    border-top: 1px solid var(--rule);
-  }
-  .list-section .cert-item:last-child { border-bottom: 1px solid var(--rule); }
-  .cert-main { min-width: 0; }
-  .cert-title { font-size: 1rem; font-weight: 500; }
-  .cert-issuer {
-    color: var(--ink-soft);
-    font-style: italic;
-    font-size: 0.95rem;
-  }
-  .cert-side {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--ink-faint);
-    white-space: nowrap;
-    letter-spacing: 0.04em;
-  }
-  .cert-side a {
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px dotted var(--accent);
-    margin-left: 0.8rem;
-  }
-  .cert-side a:hover { background: var(--accent); color: var(--bg); }
-
-  /* ── PUBLICATIONS LIST ────────────────────────────────────────────── */
-  .pub-item {
-    padding: 1.1rem 0;
-    border-top: 1px solid var(--rule);
-  }
-  .list-section .pub-item:last-child { border-bottom: 1px solid var(--rule); }
-  .pub-title {
-    font-size: 1.05rem;
-    font-weight: 500;
-    line-height: 1.3;
-    margin-bottom: 0.25rem;
-    text-wrap: pretty;
-  }
-  .pub-meta {
-    color: var(--ink-soft);
-    font-style: italic;
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
-    text-wrap: pretty;
-  }
-  .pub-side {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.4rem 0.6rem;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    color: var(--ink-faint);
-  }
-  .pub-side .sep { color: var(--rule); }
-  .pub-status { text-transform: uppercase; }
-  .pub-status-published { color: var(--accent); }
-  .pub-side a {
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px dotted var(--accent);
-  }
-  .pub-side a:hover { background: var(--accent); color: var(--bg); }
-
-  /* ── INDEX LIST (projects, posts, notes) ──────────────────────────── */
-  .list-item {
-    cursor: pointer;
-    transition: background .12s;
-    margin: 0 -1rem;
-    padding: 1.2rem 1rem;
-    border-top: 1px solid var(--rule);
-  }
-  .list-section > .list-item:first-child { border-top: 1px solid var(--rule); }
-  .list-section > .list-item:last-child { border-bottom: 1px solid var(--rule); }
-  .list-item:hover { background: var(--surface); }
-  .list-item:hover .list-title { color: var(--accent); }
-  .list-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1rem;
-    margin-bottom: 0.3rem;
-  }
-  .list-title {
-    font-size: 1.1rem;
-    font-weight: 500;
-    line-height: 1.3;
-    text-wrap: balance;
-    transition: color .12s;
-  }
-  .list-date {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--ink-faint);
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .list-tags {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--ink-faint);
-    letter-spacing: 0.04em;
-    margin-top: 0.4rem;
-  }
-  .list-tags .tag::before { content: "#"; opacity: 0.5; }
-  .list-tags .tag + .tag { margin-left: 0.6rem; }
-  .list-arrow {
-    color: var(--ink-faint);
-    transition: transform .12s, color .12s;
-    font-family: var(--mono);
-    flex-shrink: 0;
-  }
-  .list-item:hover .list-arrow { color: var(--accent); transform: translateX(2px); }
-  .list-summary {
-    color: var(--ink-soft);
-    font-size: 1rem;
-    margin: 0 0 0.5rem;
-    text-wrap: pretty;
-  }
-
-  /* ── READER ───────────────────────────────────────────────────────── */
-  .reader-meta {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    color: var(--ink-faint);
-    margin-bottom: 1.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    text-transform: lowercase;
-  }
-  .reader-meta .sep { color: var(--rule); }
-  .reader-summary {
-    font-size: 1.15rem;
-    color: var(--ink-soft);
-    font-style: italic;
-    text-wrap: pretty;
-    margin: 0 0 2.5rem;
-  }
-
-  /* ── PROSE (markdown) ─────────────────────────────────────────────── */
-  .prose h2 {
-    font-size: 1.4rem;
-    font-weight: 500;
-    margin: 2.5rem 0 0.8rem;
-    letter-spacing: -0.005em;
-    font-style: italic;
-    font-variation-settings: "opsz" 36;
-  }
-  .prose h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 1.8rem 0 0.5rem;
-  }
-  .prose p { margin: 0 0 1.2rem; text-wrap: pretty; }
-  .prose ul, .prose ol { padding-left: 1.4rem; margin: 0 0 1.2rem; }
-  .prose li { margin-bottom: 0.4rem; }
-  .prose li::marker { color: var(--ink-faint); }
-  .prose blockquote {
-    margin: 1.5rem 0;
-    padding: 0.2rem 0 0.2rem 1.2rem;
-    border-left: 2px solid var(--accent);
-    color: var(--ink-soft);
-    font-style: italic;
-  }
-  .prose code {
-    font-family: var(--mono);
-    font-size: 0.85em;
-    background: var(--surface);
-    padding: 1px 5px;
-    border-radius: 2px;
-    border: 1px solid var(--rule);
-  }
-  .prose pre {
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: 2px;
-    padding: 1rem 1.2rem;
-    overflow-x: auto;
-    margin: 1.5rem 0;
-  }
-  .prose pre code { background: none; border: 0; padding: 0; font-size: 0.85rem; color: var(--ink-soft); }
-  .prose hr { border: 0; border-top: 1px dashed var(--rule); margin: 2.5rem 0; }
-  .prose img { max-width: 100%; margin: 1.5rem 0; }
-  .prose strong { font-weight: 600; }
-
-  /* ── UNIVERSAL CONTENT-STACK RULE ─────────────────────────────────────
-     Every rich-text container has unpredictable trailing margins — the
-     last element might be a paragraph (1.2rem), a list (1.2rem), or a
-     blockquote (1.5rem). That makes the visible gap to whatever sits
-     below it inconsistent.
-     This block resets first-child top-margin and last-child bottom-margin
-     to zero on every rich-text container, so the *container's padding*
-     is always what determines the visual gap. Apply this universally so
-     any new content type inherits the fix automatically.
-     ──────────────────────────────────────────────────────────────────── */
-  .prose > *:first-child,
-  .faq-a > *:first-child,
-  .diary-body > *:first-child,
-  .exp-body > *:first-child {
-    margin-top: 0;
-  }
-  .prose > *:last-child,
-  .faq-a > *:last-child,
-  .diary-body > *:last-child,
-  .exp-body > *:last-child {
-    margin-bottom: 0;
-  }
-
-  /* Wikilinks ([[target]]) and resolved .md links share styling with
-     normal anchors; missing ones get a dimmed, dashed underline. */
-  .wikilink-missing {
-    color: var(--ink-faint) !important;
-    border-bottom: 1px dashed var(--ink-faint) !important;
-    text-decoration: none !important;
-    cursor: help;
-  }
-
-  /* ── CONTACT ──────────────────────────────────────────────────────── */
-  .contact-grid {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 1rem 2rem;
-    font-size: 1.05rem;
-  }
-  .contact-grid dt {
-    font-family: var(--mono);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ink-faint);
-    padding-top: 6px;
-  }
-  .contact-grid dd { margin: 0; }
-
-  /* ── SKILLS ───────────────────────────────────────────────────────── */
-  .skills .prose h3 {
-    font-family: var(--mono);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-    margin: 2rem 0 0.3rem;
-    font-weight: 600;
-  }
-  .skills .prose p { color: var(--ink); font-size: 1.05rem; line-height: 1.6; }
-
-  /* ── PAGE FOOTER ──────────────────────────────────────────────────── */
-  .page-foot {
-    margin-top: 5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--rule);
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--ink-faint);
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    flex-wrap: wrap;
-  }
-  .page-foot a { color: var(--ink-faint); text-decoration: none; border-bottom: 1px dotted var(--rule); }
-  .page-foot a:hover { color: var(--accent); border-bottom-color: var(--accent); }
-
-  .cmdk-trigger {
-    font: inherit;
-    letter-spacing: inherit;
-    text-transform: inherit;
-    color: var(--ink-faint);
-    background: none;
-    border: 0;
-    border-bottom: 1px dotted var(--rule);
-    cursor: pointer;
-    padding: 0 2px;
-  }
-  .cmdk-trigger:hover { color: var(--accent); border-bottom-color: var(--accent); }
-
-  /* ── Cmd+K modal ──────────────────────────────────────────────────── */
-  .cmdk {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 12vh;
-  }
-  .cmdk-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(20, 18, 14, 0.42);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-  }
-  .cmdk-modal {
-    position: relative;
-    width: clamp(320px, 92vw, 600px);
-    max-height: 70vh;
-    background: var(--bg);
-    border: 1px solid var(--rule);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  .cmdk-input {
-    width: 100%;
-    background: var(--bg);
-    color: var(--ink);
-    border: 0;
-    border-bottom: 1px solid var(--rule);
-    padding: 1rem 1.2rem;
-    font-family: var(--serif);
-    font-size: 1.15rem;
-    outline: none;
-  }
-  .cmdk-input::placeholder { color: var(--ink-faint); font-style: italic; }
-  .cmdk-results {
-    list-style: none;
-    padding: 0;
     margin: 0;
-    overflow-y: auto;
-    flex: 1;
-  }
-  .cmdk-result {
-    padding: 0.7rem 1.2rem;
-    border-bottom: 1px solid var(--rule);
-    cursor: pointer;
-    transition: background .1s;
-  }
-  .cmdk-result:last-child { border-bottom: 0; }
-  .cmdk-result:hover, .cmdk-result.active { background: var(--surface); }
-  .cmdk-row {
-    display: flex;
-    align-items: baseline;
-    gap: 0.8rem;
-  }
-  .cmdk-kind {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    color: var(--ink-faint);
-    min-width: 64px;
-  }
-  .cmdk-title {
-    flex: 1;
-    font-size: 1rem;
+    background: var(--bg);
     color: var(--ink);
-    line-height: 1.3;
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
-  .cmdk-date {
+  ::selection { background: var(--accent); color: var(--bg); }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 2rem; }
+  .mono { font-family: var(--mono); }
+  .eyebrow {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 11.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
     color: var(--ink-faint);
+    display: flex; align-items: center; gap: .6em;
   }
-  .cmdk-sub {
-    font-size: 0.85rem;
-    color: var(--ink-soft);
-    margin-top: 0.2rem;
-    padding-left: 72px;
-    text-wrap: pretty;
-  }
-  .cmdk-empty {
-    padding: 1rem 1.2rem;
-    color: var(--ink-faint);
-    font-style: italic;
-    text-align: center;
-  }
-  .cmdk-hint {
-    padding: 0.5rem 1.2rem;
-    border-top: 1px solid var(--rule);
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.08em;
-    color: var(--ink-faint);
-    background: var(--surface);
-  }
+  .eyebrow .num { color: var(--accent); }
+  .glyphs { font-family: var(--jp); color: var(--ink-soft); }
+  .glyphs .dev { font-family: var(--devanagari); }
 
-  /* ── Page fade-in on route change ─────────────────────────────────── */
-  @keyframes pageFade {
-    from { opacity: 0; transform: translateY(4px); }
-    to   { opacity: 1; transform: none; }
+  /* ── NAV ──────────────────────────────────────────────────────── */
+  .nav {
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(23,19,13,.88);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
   }
-  #page-home:not([hidden]), #page-sub:not([hidden]) {
-    animation: pageFade .25s ease;
+  .nav-bar { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 1.5rem; flex-wrap: wrap; }
+  .nav-mark { display: flex; align-items: center; gap: .6rem; font-family: var(--serif); font-size: 1.15rem; font-weight: 600; white-space: nowrap; }
+  .nav-mark .jp { font-family: var(--jp); color: var(--accent); font-size: 1.3rem; }
+  .nav-links { display: flex; gap: 1.6rem; font-family: var(--mono); font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { text-decoration: none; color: var(--ink-soft); white-space: nowrap; border-bottom: 1px solid transparent; padding-bottom: 2px; transition: color .15s, border-color .15s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); border-color: var(--accent); }
+  .nav-cta { font-family: var(--mono); font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--bg); background: var(--ink); padding: 8px 14px; border-radius: 3px; text-decoration: none; white-space: nowrap; flex-shrink: 0; }
+  .nav-cta:hover { background: var(--accent); color: var(--bg); }
+  .nav-toggle-input { display: none; }
+  .nav-toggle-btn { display: none; font-size: 1.5rem; line-height: 1; color: var(--ink); cursor: pointer; padding: 4px; }
+
+  /* ── COVER ────────────────────────────────────────────────────── */
+  .cover { padding: 4.5rem 0 5rem; border-bottom: 1px solid var(--rule); }
+  .cover-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 3.5rem; align-items: center; }
+  .cover h1 {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 6.4vw, 5.4rem);
+    font-weight: 600;
+    line-height: .98;
+    margin: .9rem 0 .4rem;
+    letter-spacing: -.01em;
   }
+  .cover .role { font-family: var(--serif); font-style: italic; font-size: 1.3rem; color: var(--ink-soft); margin: 0 0 1.6rem; }
+  .verse { margin: 0 0 1.6rem; padding-left: 1.1rem; border-left: 2px solid var(--accent); }
+  .verse .sans { font-family: var(--devanagari); font-size: 1.25rem; color: var(--ink); display: block; margin-bottom: .3rem; }
+  .verse .gloss { font-family: var(--sans); font-size: .92rem; color: var(--ink-faint); font-style: italic; }
+  .cover .tagline { font-size: 1.08rem; color: var(--ink-soft); max-width: 42ch; margin: 0 0 1rem; }
+  .cover .now { font-size: .95rem; color: var(--ink-faint); max-width: 48ch; }
+  .cover .now b { color: var(--accent); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; margin-right: .5em; }
 
-  .empty { color: var(--ink-faint); font-style: italic; padding: 2rem 0; }
+  .cover-art { position: relative; }
+  .cover-art figure { margin: 0; position: relative; }
+  .cover-art img { width: 100%; border-radius: 2px; }
+  .cover-art figcaption { margin-top: .6rem; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); display: flex; justify-content: space-between; }
+  .art-pair { display: grid; grid-template-columns: 1fr; gap: 1.8rem; }
 
-  /* ─── RESPONSIVE BREAKPOINTS ─────────────────────────────────────────
-     Three tiers, mobile-first:
-       ≤ 480px  — small phones (iPhone SE, narrow Androids)
-       ≤ 640px  — large phones, small tablets in portrait
-       ≤ 900px  — landscape phones, portrait tablets
-     Anything larger uses the default desktop layout above.
-     ────────────────────────────────────────────────────────────────── */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--rule); margin-top: 3rem; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; }
+  .stat { background: var(--bg); padding: 1.1rem 1.2rem; }
+  .stat .n { font-family: var(--serif); font-size: 2rem; font-weight: 600; color: var(--ink); display: block; }
+  .stat .l { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
 
-  /* Tablet & landscape phone */
+  .cta-row { display: flex; gap: .9rem; margin-top: 2rem; flex-wrap: wrap; align-items: center; }
+  .btn { font-family: var(--mono); font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; padding: 11px 20px; border-radius: 3px; text-decoration: none; display: inline-block; }
+  .btn-solid { background: var(--ink); color: var(--bg); }
+  .btn-solid:hover { background: var(--accent); }
+  .btn-line { border: 1px solid var(--rule-strong); color: var(--ink); }
+  .btn-line:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── SECTION SHELL ────────────────────────────────────────────── */
+  section.block { padding: 5rem 0; border-bottom: 1px solid var(--rule); }
+  section.block:last-of-type { border-bottom: 0; }
+  .block-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; margin-bottom: 2.6rem; flex-wrap: wrap; }
+  .block-head h2 { font-family: var(--serif); font-size: clamp(1.8rem, 3.2vw, 2.5rem); font-weight: 600; margin: .5rem 0 0; }
+  .block-glyph { text-align: right; font-size: 1.6rem; line-height: 1.1; }
+  .block-glyph .jp { font-family: var(--jp); display: block; }
+  .block-glyph .dev { font-family: var(--devanagari); font-size: 1.1rem; color: var(--accent); }
+  .block-lead { color: var(--ink-soft); max-width: 60ch; font-size: 1.02rem; margin: .8rem 0 0; }
+
+  /* ── ABOUT ────────────────────────────────────────────────────── */
+  .about-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 3rem; }
+  .prose p { margin: 0 0 1.2rem; color: var(--ink-soft); font-size: 1.04rem; }
+  .prose strong { color: var(--ink); font-weight: 600; }
+  .prose a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-soft); }
+  .prose a:hover { text-decoration-color: var(--accent); }
+  .facts { font-family: var(--mono); font-size: 13px; }
+  .facts dt { color: var(--ink-faint); letter-spacing: .04em; text-transform: uppercase; font-size: 10.5px; margin-top: 1.1rem; }
+  .facts dt:first-child { margin-top: 0; }
+  .facts dd { margin: .3rem 0 0; color: var(--ink); }
+
+  /* ── EXPERIENCE (spec-sheet rows) ─────────────────────────────── */
+  .exp-row { padding: 1.6rem 0; border-top: 1px solid var(--rule); display: grid; grid-template-columns: 220px 1fr; gap: 2rem; }
+  .list-section .exp-row:last-child { border-bottom: 1px solid var(--rule); }
+  .exp-org { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; }
+  .exp-dates { font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); margin-top: .35rem; }
+  .exp-role { font-family: var(--serif); font-style: italic; font-size: 1.05rem; color: var(--accent); margin: 0 0 .4rem; }
+  .exp-summary { color: var(--ink-soft); font-size: .98rem; margin: 0 0 .6rem; }
+  .exp-body { color: var(--ink-soft); font-size: .93rem; }
+  .exp-body ul { margin: 0; padding-left: 1.2rem; }
+  .exp-body li { margin-bottom: .3rem; }
+  .exp-body strong { color: var(--ink); }
+  .exp-cert { font-family: var(--mono); font-size: 10.5px; color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent-soft); }
+
+  /* ── PROJECTS (grid cards) ────────────────────────────────────── */
+  .proj-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .proj-card { background: var(--bg); padding: 1.6rem; }
+  .proj-card h3 { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; margin: 0 0 .2rem; }
+  .proj-card h3 a { text-decoration: none; }
+  .proj-card h3 a:hover { color: var(--accent); }
+  .proj-date { font-family: var(--mono); font-size: 10.5px; color: var(--ink-faint); margin-bottom: .7rem; display: block; }
+  .proj-card p { color: var(--ink-soft); font-size: .93rem; margin: 0; }
+  .proj-tags { margin-top: .9rem; font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: .04em; }
+  .proj-tags span + span::before { content: " / "; color: var(--ink-faint); }
+
+  /* ── PUBLICATIONS ─────────────────────────────────────────────── */
+  .pub-row { padding: 1.4rem 0; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; gap: 2rem; }
+  .list-section .pub-row:last-child { border-bottom: 1px solid var(--rule); }
+  .pub-main { flex: 1; min-width: 0; }
+  .pub-title { font-family: var(--serif); font-size: 1.08rem; font-weight: 600; margin: 0 0 .3rem; }
+  .pub-meta { color: var(--ink-faint); font-size: .88rem; font-style: italic; }
+  .pub-side { flex-shrink: 0; text-align: right; font-family: var(--mono); font-size: 10.5px; }
+  .pub-status { display: inline-block; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-faint); }
+  .pub-status.is-published { color: var(--accent); }
+  .pub-side a { display: block; margin-top: .4rem; color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent-soft); }
+
+  /* ── CREDENTIALS (certs + skills, data-dense) ─────────────────── */
+  .cred-split { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .cred-col h3 { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+  .cert-row { display: flex; justify-content: space-between; gap: 1rem; padding: .7rem 0; border-top: 1px dashed var(--rule); font-size: .92rem; }
+  .cert-row:first-of-type { border-top: 0; }
+  .cert-name { color: var(--ink); }
+  .cert-issuer { color: var(--ink-faint); font-size: .82rem; display: block; }
+  .cert-row a { color: var(--accent); font-family: var(--mono); font-size: 10px; text-decoration: none; white-space: nowrap; }
+  .skill-group { margin-bottom: 1.3rem; }
+  .skill-group h4 { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 .4rem; }
+  .skill-group p { margin: 0; color: var(--ink-soft); font-size: .92rem; }
+
+  /* ── FAQ ──────────────────────────────────────────────────────── */
+  .faq-row { padding: 1.5rem 0; border-top: 1px solid var(--rule); }
+  .list-section .faq-row:last-child { border-bottom: 1px solid var(--rule); }
+  .faq-q { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; margin: 0 0 .5rem; }
+  .faq-a { color: var(--ink-soft); font-size: .96rem; }
+  .faq-a a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-soft); }
+  .faq-a ul { padding-left: 1.2rem; margin: .5rem 0; }
+
+  /* ── CONTACT ──────────────────────────────────────────────────── */
+  .contact-block { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  .contact-links { display: flex; flex-direction: column; gap: 0; }
+  .contact-link { display: flex; justify-content: space-between; padding: 1.1rem 0; border-top: 1px solid var(--rule); text-decoration: none; color: var(--ink); font-family: var(--mono); font-size: .95rem; }
+  .contact-links .contact-link:last-child { border-bottom: 1px solid var(--rule); }
+  .contact-link:hover { color: var(--accent); }
+  .contact-link .arr { color: var(--ink-faint); }
+  .contact-link:hover .arr { color: var(--accent); }
+
+  /* ── FOOTER ───────────────────────────────────────────────────── */
+  footer { padding: 3.5rem 0 2.5rem; }
+  .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 2.5rem; margin-bottom: 2.5rem; }
+  .foot-mark { font-family: var(--serif); font-size: 1.3rem; font-weight: 600; }
+  .foot-mark .jp { font-family: var(--jp); color: var(--accent); margin-right: .4rem; }
+  .foot-desc { color: var(--ink-faint); font-size: .88rem; margin-top: .8rem; max-width: 34ch; }
+  .foot-col h5 { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 .8rem; }
+  .foot-col a { display: block; color: var(--ink-soft); text-decoration: none; font-size: .92rem; margin-bottom: .55rem; }
+  .foot-col a:hover { color: var(--accent); }
+  .foot-bottom { border-top: 1px solid var(--rule); padding-top: 1.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-family: var(--mono); font-size: 11px; color: var(--ink-faint); }
+  .signoff { text-align: center; padding: 3rem 0 0; font-family: var(--devanagari); font-size: 1.1rem; color: var(--ink-soft); }
+  .signoff .en { display: block; font-family: var(--sans); font-style: italic; font-size: .85rem; color: var(--ink-faint); margin-top: .4rem; }
+
+  /* ── RESPONSIVE ───────────────────────────────────────────────── */
   @media (max-width: 900px) {
-    .page { padding: 4rem 1.5rem 5rem; }
-    .home { padding: 3rem 1.5rem; }
+    .wrap { padding: 0 1.25rem; }
+    .cover-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .cover-art { order: -1; }
+    .art-pair { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .about-grid, .cred-split, .contact-block { grid-template-columns: 1fr; gap: 2rem; }
+    .proj-grid { grid-template-columns: 1fr; }
+    .exp-row { grid-template-columns: 1fr; gap: .6rem; }
+    .foot-grid { grid-template-columns: 1fr; gap: 1.8rem; }
+    .nav-links { gap: 1.1rem; }
   }
-
-  /* Phone (portrait) */
-  @media (max-width: 640px) {
-    body { font-size: 18px; }
-    .page { padding: 3rem 1.25rem 4rem; max-width: none; }
-    .home { padding: 1.5rem 1.25rem; min-height: 100vh; justify-content: center; }
-    .home .name { font-size: 2.4rem; margin-bottom: 0.6rem; }
-    .home .tagline { font-size: 0.95rem; margin: 0 0 1rem; }
-    .home .hero { width: min(70vw, 38vh); margin: 0 0 1rem; }
-    .home .time { font-size: 0.82rem; margin: 0 0 0.9rem; }
-    .home .time .clock { font-size: 0.78rem; }
-    .home nav { font-size: 0.9rem; line-height: 1.5; margin: 0 0 0.9rem; }
-    .home nav .slash { margin: 0 .25em; }
-    .home .now { font-size: 0.85rem; margin: 0 0 0.5rem; }
-    .home .footer { margin-top: 0.9rem; font-size: 9px; }
-
-    /* Sub-pages */
-    .page .crumb { margin-bottom: 2rem; font-size: 10px; }
-    .page h1 { font-size: 1.7rem !important; }
-    .page .page-lead { font-size: 0.98rem; }
-
-    /* Experience: ease the indent so nested items don't squeeze */
-    .exp-org-name { font-size: 1.15rem; }
-    .exp-role-item { padding-left: 0.9rem; }
-    .exp-group.multi .exp-role-item::before { left: -3px; width: 5px; height: 5px; }
-    .exp-role { font-size: 1rem; }
-
-    /* Certificates: stack title and the date/link side */
-    .cert-item { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
-    .cert-side { margin-top: 0.2rem; }
-    .cert-side a { margin-left: 0; }
-
-    /* Publications: tighten spacing on narrow screens */
-    .pub-item { padding: 0.9rem 0; }
-    .pub-side { line-height: 1.6; }
-
-    /* Notes / FAQ — tighter vertical rhythm */
-    .diary-entry, .faq-item { padding: 2rem 0; }
-    .diary-title, .faq-q { font-size: 1.15rem; }
-
-    /* Lists (projects, posts) — single-column, hide hover arrow */
-    .list-item { margin: 0; padding: 1rem 0; }
-    .list-row { gap: 0.5rem; }
-    .list-arrow { display: none; }
-
-    /* Page footer — stack vertically, full-width tap targets */
-    .page-foot {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.75rem;
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    .nav-bar { height: auto; padding: .8rem 0; }
+    .nav-toggle-btn { display: block; }
+    .nav-cta { order: 1; margin-left: auto; }
+    .nav-links {
+      display: none; order: 10; width: 100%;
+      flex-direction: column; gap: 0; margin-top: .8rem;
+      max-height: 60vh; overflow-y: auto;
     }
-    .page-foot button, .page-foot a { padding: 4px 0; }
-
-    /* Subdir nav — tighter wrap */
-    .page-subdirs { font-size: 12px; gap: 0.3rem 0.9rem; margin-top: 2.5rem; }
-
-    /* Cmd+K modal — full-width, tighter top */
-    .cmdk { padding-top: 6vh; padding-left: 12px; padding-right: 12px; }
-    .cmdk-modal { width: 100%; max-height: 80vh; }
-    .cmdk-input { font-size: 1rem; padding: 0.85rem 1rem; }
-    .cmdk-kind { min-width: 52px; font-size: 8.5px; }
-    .cmdk-sub { padding-left: 60px; font-size: 0.8rem; }
-
-    /* Reader prose: lower margins */
-    .prose h2 { margin: 2rem 0 0.6rem; font-size: 1.25rem; }
-    .prose h3 { margin: 1.5rem 0 0.4rem; }
-    .reader-title { font-size: 1.7rem !important; }
-    .reader-summary { font-size: 1.05rem; }
-  }
-
-  /* Small phones (≤ 480px) — last polish for very narrow screens */
-  @media (max-width: 480px) {
-    .page { padding: 2.5rem 1rem 3rem; }
-    .home { padding: 1.2rem 1rem; }
-    .home .name { font-size: 2rem; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
-    .home .hero { width: min(75vw, 32vh); margin: 0 0 0.8rem; }
-    .home .tagline { font-size: 0.9rem; margin-bottom: 0.8rem; }
-    .home nav { font-size: 0.85rem; margin-bottom: 0.7rem; }
-    .home .time { margin-bottom: 0.7rem; font-size: 0.78rem; }
-
-    /* Stack the meta on note headers cleanly */
-    .diary-meta-row { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
-
-    /* Experience meta: wrap with comfortable line-height */
-    .exp-meta { line-height: 1.7; }
-    .exp-group-meta { line-height: 1.7; }
-
-    /* Contact dl: collapse to single column */
-    .contact-grid { grid-template-columns: 1fr; gap: 0.2rem 0; }
-    .contact-grid dt { padding-top: 0.8rem; padding-bottom: 0.1rem; }
-    .contact-grid dt:first-child { padding-top: 0; }
-
-    /* Cmd+K — full width edge to edge */
-    .cmdk { padding-left: 8px; padding-right: 8px; padding-top: 4vh; }
-  }
-
-  /* Prefers-reduced-motion — respect the OS setting */
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.001s !important;
-      transition-duration: 0.001s !important;
-    }
-    .home .hero img { transition: opacity 0s !important; }
+    .nav-toggle-input:checked ~ .nav-links { display: flex; }
+    .nav-links a { padding: .9rem 0; border-top: 1px solid var(--rule); }
+    section.block { padding: 3.5rem 0; }
+    .pub-row, .cert-row { flex-direction: column; gap: .4rem; }
+    .pub-side { text-align: left; }
+    .block-head { flex-direction: column; align-items: flex-start; gap: .8rem; }
+    .block-glyph { text-align: left; }
   }
 </style>
 </head>
-
 <body>
 
-<div id="boot-loader" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-faint);font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;">Loading…</div>
-
-<div id="app" style="display:none;">
-  <!-- HOME -->
-  <section class="home" id="page-home" data-screen-label="Home" hidden>
-    <h1 class="name" data-bind="name"></h1>
-    <p class="tagline" data-bind="tagline"></p>
-    <div class="hero" id="hero">
-      <img id="hero-a" alt="">
-      <img id="hero-b" alt="">
-      <span class="hero-label">[inspirations]</span>
-      <div class="hero-empty" id="hero-empty" hidden>drop photos in /photos · add them in content.md</div>
+<nav class="nav">
+  <div class="wrap nav-bar">
+    <div class="nav-mark"><span class="jp">知</span> Sarang Vehale</div>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle-input">
+    <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle menu">&#9776;</label>
+    <div class="nav-links">
+      <a href="#about">about</a>
+      <a href="#experience">experience</a>
+      <a href="#projects">projects</a>
+      <a href="#publications">publications</a>
+      <a href="#credentials">credentials</a>
+      <a href="#faq">faq</a>
+      <a href="#contact">contact</a>
     </div>
-    <p class="time">
-      <i>local time in <span data-bind="city"></span> — <span class="clock" id="clock">--:--</span> <span id="tz-abbr"></span></i>
-    </p>
-    <nav id="home-nav"></nav>
-    <p class="now" data-bind="now" hidden><b>now</b><span data-bind="now-text"></span></p>
-    <div class="footer">
-      © <span id="year"></span> · <span data-bind="footer-name"></span> · <button type="button" class="cmdk-trigger" aria-label="Search">⌘k · search</button> · <a href="#" id="theme-toggle">[dark]</a>
+    <a class="nav-cta" href="resume.pdf">Résumé</a>
+  </div>
+</nav>
+
+<header class="cover wrap">
+  <div class="cover-grid">
+    <div>
+      <p class="eyebrow"><span class="num">00</span> Cybersecurity &amp; Quantum Researcher</p>
+      <h1>Sarang<br>Vehale</h1>
+      <blockquote class="verse">
+        <span class="sans">तमसो मा ज्योतिर्गमय</span>
+        <span class="gloss">"From darkness, lead me to light," Bṛhadāraṇyaka Upaniṣad 1.3.28</span>
+      </blockquote>
+      <p class="tagline">Working at the intersection of cybersecurity, quantum computing, and systems engineering.</p>
+      <p class="now"><b>Now</b>Finishing a B.S. in Data Science at IIT Madras and preparing CERTIFY-ED and symveig for peer review. Looking for research roles and PhD positions in quantum information theory, entropy, channels and coding.</p>
+      <div class="cta-row">
+        <a class="btn btn-solid" href="#contact">Get in touch</a>
+        <a class="btn btn-line" href="#publications">Read the papers</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="n">6</span><span class="l">Publications</span></div>
+        <div class="stat"><span class="n">10</span><span class="l">Projects</span></div>
+        <div class="stat"><span class="n">7</span><span class="l">Research roles</span></div>
+        <div class="stat"><span class="n">15</span><span class="l">Credentials</span></div>
+      </div>
+    </div>
+    <div class="cover-art">
+      <div class="art-pair">
+        <figure>
+          <img src="images/amaterasu.png" alt="Amaterasu emerging from the cave, radiating light. Utagawa Kunisada, 1856, public domain." loading="lazy">
+          <figcaption><span>天照大神 · Amaterasu</span><span>Kunisada, 1856</span></figcaption>
+        </figure>
+        <figure>
+          <img src="images/saraswati.png" alt="Saraswati, goddess of knowledge, with veena and peacock. Raja Ravi Varma, 1894, public domain." loading="lazy">
+          <figcaption><span>सरस्वती · Saraswati</span><span>Ravi Varma, 1894</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="block wrap" id="about">
+    <div class="block-head">
+      <div>
+        <p class="eyebrow"><span class="num">01</span> The researcher</p>
+        <h2>About</h2>
+      </div>
+      <div class="block-glyph"><span class="jp">智</span><span class="dev">विद्या</span></div>
+    </div>
+    <div class="about-grid">
+      <div class="prose">
+        <p>I completed an integrated <strong>B.Tech + M.Tech in Cyber Security</strong> at the <a href="https://nfsu.ac.in/" target="_blank" rel="noopener">National Forensic Sciences University</a> in May 2026, and I'm now finishing a <strong>B.S. in Data Science</strong> at <a href="https://study.iitm.ac.in/" target="_blank" rel="noopener">IIT Madras</a>, expected May 2027.</p>
+        <p>My research sits at the boundary between <strong>quantum computing</strong>, <strong>quantum informatics</strong> and <strong>applied cybersecurity</strong>: exact diagonalization for many-body systems, lattice-based integer factorization, OSINT pipelines for law enforcement, and the validation frameworks that make any of this trustworthy.</p>
+        <p>Outside of research I write systems software, maintain a homelab, occasionally design my own keyboards, and have served on the organising committees of internet-governance forums.</p>
+        <p>The fastest way to reach me is <a href="mailto:sarangvehale2@gmail.com">email</a>. I read everything.</p>
+      </div>
+      <dl class="facts">
+        <dt>Based in</dt><dd>Pune, India</dd>
+        <dt>Degrees</dt><dd>B.Tech + M.Tech, Cyber Security (NFSU, 2026)<br>B.S., Data Science (IIT Madras, expected 2027)</dd>
+        <dt>Languages</dt><dd>English, Hindi, Marathi, Japanese (learning)</dd>
+        <dt>Elsewhere</dt><dd><a href="https://scholar.google.com/citations?user=x-3dXnMAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a> &middot; <a href="https://orcid.org/0009-0001-5911-9503" target="_blank" rel="noopener">ORCID</a></dd>
+      </dl>
     </div>
   </section>
 
-  <!-- SUB-PAGE SHELL -->
-  <main class="page" id="page-sub" hidden>
-    <div class="crumb">
-      <a href="#">home</a><span class="sep">/</span><span id="crumb-section"></span>
+  <section class="block wrap" id="experience">
+    <div class="block-head">
+      <div>
+        <p class="eyebrow"><span class="num">02</span> Where I've worked</p>
+        <h2>Experience</h2>
+      </div>
+      <div class="block-glyph"><span class="jp">道</span><span class="dev">कर्म</span></div>
     </div>
-    <header>
-      <h1 id="page-title"></h1>
-      <p class="page-lead" id="page-lead" hidden></p>
-    </header>
-    <div id="page-body"></div>
-    <nav class="page-subdirs" id="page-subdirs" hidden></nav>
-    <div class="page-foot">
-      <span>© <span id="year2"></span> · <span data-bind="footer-name-2"></span></span>
-      <span><button type="button" class="cmdk-trigger" aria-label="Search">⌘K · search</button></span>
-      <span><a href="#" id="theme-toggle-2">[toggle dark]</a></span>
+    <div class="list-section">
+      <div class="exp-row">
+        <div>
+          <div class="exp-org">CDAC</div>
+          <div class="exp-dates">Aug 2025 &ndash; Mar 2026</div>
+        </div>
+        <div>
+          <p class="exp-role">Research Intern (Internship)</p>
+          <p class="exp-summary">Built CERTIFY-ED, a benchmarking framework for noisy low-scale quantum systems.</p>
+          <div class="exp-body"><ul>
+            <li>Developed a benchmarking framework for quantum computers using exact diagonalization algorithms (<strong>CERTIFY-ED</strong>) for system validation.</li>
+            <li>Delivered exact results for benchmarking <strong>Noisy Low-Scale Quantum (NLSQ)</strong> systems, contributing to the evaluation of quantum computational capabilities.</li>
+            <li>Authored the methodology now on arXiv and being submitted to SciPost.</li>
+          </ul></div>
+          <a class="exp-cert" href="https://drive.google.com/file/d/1KElb48MF49XiHeT2jqkBYnKnYdknVPxe/view?usp=sharing" target="_blank" rel="noopener">certificate &rarr;</a>
+        </div>
+      </div>
+      <div class="exp-row">
+        <div>
+          <div class="exp-org">CDAC</div>
+          <div class="exp-dates">May 2024 &ndash; Jul 2024</div>
+        </div>
+        <div>
+          <p class="exp-role">Research Intern (Internship)</p>
+          <p class="exp-summary">Hybrid quantum&ndash;classical algorithms for integer factorization (Babai + Schnorr + QAOA).</p>
+          <div class="exp-body"><ul>
+            <li>Designed hybrid quantum algorithms combining <strong>Babai's</strong> and <strong>Schnorr's</strong> algorithms with <strong>QAOA</strong> for enhanced computational efficiency.</li>
+            <li>Authored a research paper on integer factorization using lattice-based quantum algorithms, published in Springer Nature SN Computer Science.</li>
+          </ul></div>
+          <a class="exp-cert" href="https://drive.google.com/file/d/1qgTM64AhDfbA9imPlFQ_sFgGICwOf10V/view?usp=sharing" target="_blank" rel="noopener">certificate &rarr;</a>
+        </div>
+      </div>
+      <div class="exp-row">
+        <div>
+          <div class="exp-org">National Cyber-Crime Research &amp; Innovation Centre (I4C, MHA)</div>
+          <div class="exp-dates">Dec 2024 &ndash; Mar 2025</div>
+        </div>
+        <div>
+          <p class="exp-role">Security Researcher &amp; Mentor (Internship)</p>
+          <p class="exp-summary">Built an intelligence platform for India's Ministry of Home Affairs; trained judicial officers and LEAs. Details are under NDA.</p>
+          <div class="exp-body"><ul>
+            <li>Built an intelligence platform for the Ministry of Home Affairs (I4C), covering data collection, cleansing and entity correlation, delivered with documentation and training for non-technical users.</li>
+            <li>Conducted specialised training sessions for <strong>judicial officers and LEAs</strong> on cybersecurity best practices and investigation techniques.</li>
+            <li>Details of the platform's internal workings, data and findings are covered by an NDA.</li>
+          </ul></div>
+          <a class="exp-cert" href="https://drive.google.com/file/d/1NPrq9V5THP7-eZefK99sZY5L5vHxnCcI/view?usp=sharing" target="_blank" rel="noopener">certificate &rarr;</a>
+        </div>
+      </div>
+      <div class="exp-row">
+        <div>
+          <div class="exp-org">Stanford Code in Place (CS106A)</div>
+          <div class="exp-dates">Apr 2026 &ndash; May 2026</div>
+        </div>
+        <div>
+          <p class="exp-role">Section Leader (Internship)</p>
+          <p class="exp-summary">Returning section leader for CS106A, second cohort.</p>
+          <div class="exp-body"><ul>
+            <li>Led weekly sections for <strong>CS106A: Introduction to Python</strong>, returning for the second offering.</li>
+            <li>Continued the LLM-integration work piloted in the 2025 cohort.</li>
+            <li>Mentored students from over a dozen countries through Karel and into idiomatic Python.</li>
+          </ul></div>
+        </div>
+      </div>
+      <div class="exp-row">
+        <div>
+          <div class="exp-org">Stanford Code in Place (CS106A)</div>
+          <div class="exp-dates">Apr 2025 &ndash; May 2025</div>
+        </div>
+        <div>
+          <p class="exp-role">Section Leader (Internship)</p>
+          <p class="exp-summary">Led weekly Python sections for global students, using the Karel pedagogy.</p>
+          <div class="exp-body"><ul>
+            <li>Led weekly sections for <strong>CS106A: Introduction to Python</strong>, supporting students through the Karel pedagogy.</li>
+            <li>Facilitated integration of LLMs into course materials, exploring AI applications in Python.</li>
+            <li>Collaborated with Stanford instructors on interactive activities and assignments for a global audience.</li>
+          </ul></div>
+          <a class="exp-cert" href="https://drive.google.com/file/d/1sy3BXzlH2n1LWPqGu2PupYnbxt-7_Rvf/view?usp=sharing" target="_blank" rel="noopener">certificate &rarr;</a>
+        </div>
+      </div>
+      <div class="exp-row">
+        <div>
+          <div class="exp-org">Quantum Open Source Foundation (QOSF)</div>
+          <div class="exp-dates">Apr 2024 &ndash; Jun 2024</div>
+        </div>
+        <div>
+          <p class="exp-role">Research Intern (Internship) &middot; Remote (Canberra, Australia)</p>
+          <p class="exp-summary">Quantum key distribution and teleportation-based interstellar communication.</p>
+          <div class="exp-body"><ul>
+            <li>Investigated advanced <strong>key-distribution protocols</strong> employing quantum cryptographic techniques to improve secure communications.</li>
+            <li>Proposed a novel framework for utilising <strong>quantum teleportation in interstellar communication</strong>, advancing quantum networking protocols.</li>
+          </ul></div>
+          <a class="exp-cert" href="https://qosf.org/mentorship_cohort_9/" target="_blank" rel="noopener">certificate &rarr;</a>
+        </div>
+      </div>
+      <div class="exp-row">
+        <div>
+          <div class="exp-org">Bhoomi-Itech</div>
+          <div class="exp-dates">May 2023 &ndash; Jul 2023</div>
+        </div>
+        <div>
+          <p class="exp-role">Research Intern (Internship)</p>
+          <p class="exp-summary">CALDERA + MITRE ATT&amp;CK threat simulation and incident triage.</p>
+          <div class="exp-body"><ul>
+            <li>Established <strong>CALDERA</strong> and <strong>MITRE ATT&amp;CK</strong> frameworks for threat simulations, improving the lab's cybersecurity capabilities.</li>
+            <li>Triaged and analysed simulated cybersecurity incidents, identifying vulnerabilities, and strengthening response strategies.</li>
+          </ul></div>
+          <a class="exp-cert" href="https://drive.google.com/file/d/1Z8eol29V7COwsY4rj5o28oepjf3cRT1P/view?usp=sharing" target="_blank" rel="noopener">certificate &rarr;</a>
+        </div>
+      </div>
     </div>
-  </main>
-</div>
+  </section>
 
-<!-- Cmd+K global search modal -->
-<div class="cmdk" id="cmdk" hidden>
-  <div class="cmdk-backdrop"></div>
-  <div class="cmdk-modal" role="dialog" aria-label="Search">
-    <input class="cmdk-input" id="cmdk-input" type="text" placeholder="search anything…" autocomplete="off" spellcheck="false">
-    <ul class="cmdk-results" id="cmdk-results"></ul>
-    <div class="cmdk-hint">↑↓ navigate · ↵ open · esc close</div>
+  <section class="block wrap" id="projects">
+    <div class="block-head">
+      <div>
+        <p class="eyebrow"><span class="num">03</span> What I've built</p>
+        <h2>Projects</h2>
+      </div>
+      <div class="block-glyph"><span class="jp">創</span><span class="dev">सृष्टि</span></div>
+    </div>
+    <div class="proj-grid">
+      <div class="proj-card">
+        <h3><a href="https://arxiv.org/abs/2605.11787" target="_blank" rel="noopener">CERTIFY-ED</a></h3>
+        <span class="proj-date">Mar 2026</span>
+        <p>Quantum simulations are only as trustworthy as the implementations that produce them. CERTIFY-ED is a multi-oracle validation framework cross-checking quantum many-body simulations across SageMath, NumPy and Lanczos methods. Achieved relative error below 10⁻¹¹ and 12-digit agreement with analytical solutions; the validation backbone for CDAC's NLSQ work. Preprint on arXiv, being submitted to SciPost.</p>
+        <div class="proj-tags"><span>quantum</span><span>python</span><span>validation</span></div>
+      </div>
+      <div class="proj-card">
+        <h3><a href="https://arxiv.org/abs/2606.16217" target="_blank" rel="noopener">symveig</a></h3>
+        <span class="proj-date">Jun 2026</span>
+        <p>An eigenvalue solver returns a number, not a guarantee. symveig extends CERTIFY-ED with verified eigenvalue enclosures, using symmetry-sector decomposition to keep certification tractable as system size grows. Released open source with a Zenodo-archived test suite; submitted to Computer Physics Communications.</p>
+        <div class="proj-tags"><span>quantum</span><span>python</span><span>validation</span></div>
+      </div>
+      <div class="proj-card">
+        <h3>OSINT Platform for I4C</h3>
+        <span class="proj-date">Mar 2025</span>
+        <p>Built during an internship at India's Ministry of Home Affairs (I4C): an intelligence platform covering data collection, cleansing and entity correlation, delivered with documentation and training for non-technical users. Details of internal workings, data and findings are covered by an NDA; the code is not public.</p>
+        <div class="proj-tags"><span>osint</span><span>cybersecurity</span></div>
+      </div>
+      <div class="proj-card">
+        <h3><a href="https://github.com/SarangVehale/dotman" target="_blank" rel="noopener">dotman</a></h3>
+        <span class="proj-date">Jun 2025</span>
+        <p>A modular dotfiles manager with a terminal UI, written in Bash and Python, Git as the storage backend. Supports profiles, machine-specific overlays, and a <code>dotman doctor</code> command that diagnoses broken symlinks across a fleet of machines. Built because every existing one annoyed me.</p>
+        <div class="proj-tags"><span>rust</span><span>tui</span><span>dotfiles</span></div>
+      </div>
+      <div class="proj-card">
+        <h3><a href="https://github.com/SarangVehale/rdd" target="_blank" rel="noopener">rdd</a></h3>
+        <span class="proj-date">Apr 2025</span>
+        <p>A memory-safe reimplementation of GNU <code>dd</code> in Rust with built-in BLAKE3/SHA-256 verification and an extensible I/O architecture: adding a new source or sink is one file. Contributed back upstream to the GNU coreutils mailing list.</p>
+        <div class="proj-tags"><span>rust</span><span>systems</span><span>cryptography</span></div>
+      </div>
+      <div class="proj-card">
+        <h3>Integer factorization with lattices and QAOA</h3>
+        <span class="proj-date">Jul 2024</span>
+        <p>CDAC summer internship work: combined Babai's nearest-plane algorithm with Schnorr's reduction, using QAOA as the closest-vector solver, to test whether Schnorr's lattice-based factorization becomes computationally viable with a quantum accelerator. Published as a Survey of Integer Factorization using Lattice-Based Algorithms in Springer Nature SN Computer Science.</p>
+        <div class="proj-tags"><span>quantum</span><span>cryptography</span></div>
+      </div>
+      <div class="proj-card">
+        <h3>Custom mechanical keyboard</h3>
+        <span class="proj-date">Dec 2024</span>
+        <p>Designed a split keyboard end-to-end: schematic in Ergogen, routing in KiCad, fabrication via JLCPCB. ATmega32U4 brain, firmware is a QMK fork with a custom home-row-mod layer. Lesson learned the hard way: the first prototype is supposed to be wrong.</p>
+        <div class="proj-tags"><span>hardware</span><span>kicad</span><span>firmware</span></div>
+      </div>
+      <div class="proj-card">
+        <h3><a href="https://github.com/SarangVehale/reconGram" target="_blank" rel="noopener">reconGram</a></h3>
+        <span class="proj-date">Feb 2024</span>
+        <p>A Python tool gathering public reconnaissance data from Instagram profiles for investigative use: connected accounts, post metadata, geolocation tags where present, mutual follows, cross-platform handle correlation. Built for the I4C engagement, later open-sourced with the sensitive bits removed.</p>
+        <div class="proj-tags"><span>osint</span><span>python</span></div>
+      </div>
+      <div class="proj-card">
+        <h3><a href="https://github.com/SarangVehale/map-this" target="_blank" rel="noopener">map-this</a></h3>
+        <span class="proj-date">Jan 2024</span>
+        <p>A scraping and visualisation pipeline turning public cybercrime.gov.in reports into a localised, interactive map. Built as a teaching aid for LEA training: where complaints cluster geographically tells you more in 30 seconds than a quarterly report does in 30 pages.</p>
+        <div class="proj-tags"><span>osint</span><span>python</span><span>data</span></div>
+      </div>
+      <div class="proj-card">
+        <h3><a href="https://github.com/SarangVehale/hibiki" target="_blank" rel="noopener">neiro (音色)</a></h3>
+        <span class="proj-date">May 2026</span>
+        <p>A free, public music archive: a zero-infrastructure static site built directly over a GitHub repository. No backend, no database, no tracking. The archive lives entirely in version control, forkable and free to host.</p>
+        <div class="proj-tags"><span>music</span><span>open-source</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block wrap" id="publications">
+    <div class="block-head">
+      <div>
+        <p class="eyebrow"><span class="num">04</span> Papers and preprints</p>
+        <h2>Publications</h2>
+      </div>
+      <div class="block-glyph"><span class="jp">文</span><span class="dev">शास्त्र</span></div>
+    </div>
+    <div class="list-section">
+      <div class="pub-row">
+        <div class="pub-main">
+          <p class="pub-title">Survey of Integer Factorization Using Lattice-Based Algorithms</p>
+          <p class="pub-meta">S. Vehale, D. Kushwah, R. K. Neiwal, A. Saxena &middot; SN Computer Science 7:655, Springer Nature, 2026</p>
+        </div>
+        <div class="pub-side">
+          <span class="pub-status is-published">Published</span><br>First and corresponding author
+          <a href="https://doi.org/10.1007/s42979-026-05231-x" target="_blank" rel="noopener">DOI &rarr;</a>
+        </div>
+      </div>
+      <div class="pub-row">
+        <div class="pub-main">
+          <p class="pub-title">CERTIFY-ED: A Multi-Layer Verification Framework for Exact Diagonalization of Quantum Many-Body Systems</p>
+          <p class="pub-meta">S. Vehale, R. Goel &middot; arXiv:2605.11787, 2026</p>
+        </div>
+        <div class="pub-side">
+          <span class="pub-status">Under review &middot; SciPost Physics Codebases</span><br>First author
+          <a href="https://arxiv.org/abs/2605.11787" target="_blank" rel="noopener">arXiv &rarr;</a>
+        </div>
+      </div>
+      <div class="pub-row">
+        <div class="pub-main">
+          <p class="pub-title">symveig: Verified Eigenvalue Enclosures for Symmetry-Decomposed Hermitian Matrices</p>
+          <p class="pub-meta">S. Vehale, R. Goel &middot; arXiv:2606.16217, 2026</p>
+        </div>
+        <div class="pub-side">
+          <span class="pub-status">Submitted &middot; Computer Physics Communications</span><br>First author
+          <a href="https://arxiv.org/abs/2606.16217" target="_blank" rel="noopener">arXiv &rarr;</a>
+        </div>
+      </div>
+      <div class="pub-row">
+        <div class="pub-main">
+          <p class="pub-title">Hierarchical Quantum-Accelerated Federated Learning for Scalable, Auditable, Cross-Enterprise AI Governance</p>
+          <p class="pub-meta">S. Vehale, R. Vehale &middot; IJSRET 11(5), 2025</p>
+        </div>
+        <div class="pub-side">
+          <span class="pub-status is-published">Published</span><br>First author
+          <a href="https://doi.org/10.5281/zenodo.17441935" target="_blank" rel="noopener">DOI &rarr;</a>
+        </div>
+      </div>
+      <div class="pub-row">
+        <div class="pub-main">
+          <p class="pub-title">Bits to Qubits and Shor (book chapter)</p>
+          <p class="pub-meta">S. Vehale, et al. &middot; Quantum Computing and Machine Learning (QCML'25), CRC Press</p>
+        </div>
+        <div class="pub-side">
+          <span class="pub-status">Accepted, not yet published</span><br>First author
+        </div>
+      </div>
+      <div class="pub-row">
+        <div class="pub-main">
+          <p class="pub-title">Some Results on Cumulative Residual Inaccuracy Measure of k-Record Values</p>
+          <p class="pub-meta">R. Goel, V. Kumar, S. Vehale, T. C. Scott &middot; Entropy 28(1):17, MDPI, 2026</p>
+        </div>
+        <div class="pub-side">
+          <span class="pub-status is-published">Published</span><br>Co-author
+          <a href="https://doi.org/10.3390/e28010017" target="_blank" rel="noopener">DOI &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block wrap" id="credentials">
+    <div class="block-head">
+      <div>
+        <p class="eyebrow"><span class="num">05</span> Certificates and skills</p>
+        <h2>Credentials</h2>
+      </div>
+      <div class="block-glyph"><span class="jp">技</span><span class="dev">कौशल्य</span></div>
+    </div>
+    <div class="cred-split">
+      <div class="cred-col">
+        <h3>Certificates &amp; fellowships</h3>
+        <div class="cert-row"><div><span class="cert-name">Aspire Leaders Program</span><span class="cert-issuer">Aspire Institute &middot; Sep 2026</span></div></div>
+        <div class="cert-row"><div><span class="cert-name">YIGF Fellowship</span><span class="cert-issuer">Youth IGF India &middot; Sep 2025</span></div></div>
+        <div class="cert-row"><div><span class="cert-name">SOC Foundations</span><span class="cert-issuer">Microsoft &middot; Sep 2025</span></div><a href="https://drive.google.com/file/d/138bze_Pj2HDH5KYI3HrCJMozDdOHoPy_/view?usp=sharing" target="_blank" rel="noopener">view</a></div>
+        <div class="cert-row"><div><span class="cert-name">Intro to Quantum Information Science &amp; Engineering</span><span class="cert-issuer">Virginia Tech &middot; Sep 2025</span></div><a href="https://drive.google.com/file/d/1k1aVQ5U_u31xcDlcPCvwimXRPi2Dw3HH/view?usp=sharing" target="_blank" rel="noopener">view</a></div>
+        <div class="cert-row"><div><span class="cert-name">Quantum Algorithms for Nonlinear Problems</span><span class="cert-issuer">Washington Institute for STEM &middot; Aug 2025</span></div><a href="https://www.virtualbadge.io/certificate-validator?credential=0e59dfac-faca-4b12-9657-70210475abd0" target="_blank" rel="noopener">view</a></div>
+        <div class="cert-row"><div><span class="cert-name">Quantum Algorithms for PDEs</span><span class="cert-issuer">Washington Institute for STEM &middot; Aug 2025</span></div><a href="https://www.virtualbadge.io/certificate-validator?credential=07393b0d-bbbf-421d-aee7-79e13344f19d" target="_blank" rel="noopener">view</a></div>
+        <div class="cert-row"><div><span class="cert-name">PennyLane Trotterization Challenge</span><span class="cert-issuer">Xanadu PennyLane &middot; Aug 2025</span></div><a href="https://cloud.pennylane.ai/profiles/ob/certificates/permalink/65d9dc90-2dea-46a6-8505-8075cb972e5a" target="_blank" rel="noopener">view</a></div>
+        <div class="cert-row"><div><span class="cert-name">QBronze using Qiskit</span><span class="cert-issuer">QWorld &middot; Jul 2025</span></div><a href="https://drive.google.com/file/d/1ODRfSU2ChcCqROPJ8XaaMXdB8h4Goxza/view?usp=drive_link" target="_blank" rel="noopener">view</a></div>
+        <div class="cert-row"><div><span class="cert-name">Quantum Computing</span><span class="cert-issuer">CDAC, Noida &middot; Jun 2025</span></div><a href="https://drive.google.com/file/d/1wNt2i4w3E5oBlD_fHEfMha5q42OrC9Ck/view?usp=sharing" target="_blank" rel="noopener">view</a></div>
+        <div class="cert-row"><div><span class="cert-name">OT Security Boot Camp</span><span class="cert-issuer">NFSU &middot; Oct 2024</span></div><a href="https://drive.google.com/file/d/1H6NLuYHxa8vk9e0j3Bfi4w1UTF32UG8W/view?usp=sharing" target="_blank" rel="noopener">view</a></div>
+        <div class="cert-row"><div><span class="cert-name">Supervised Machine Learning</span><span class="cert-issuer">Coursera (Andrew Ng) &middot; Sep 2024</span></div></div>
+        <div class="cert-row"><div><span class="cert-name">Foundations of Cyber Security</span><span class="cert-issuer">Coursera (Google) &middot; Jun 2024</span></div></div>
+        <div class="cert-row"><div><span class="cert-name">AWS Machine Learning Foundations</span><span class="cert-issuer">Amazon Web Services &middot; Mar 2024</span></div></div>
+        <div class="cert-row"><div><span class="cert-name">inSIG Fellow</span><span class="cert-issuer">Internet Society &middot; Sep 2023</span></div></div>
+        <div class="cert-row"><div><span class="cert-name">AWS Introduction to Cloud</span><span class="cert-issuer">Amazon Web Services &middot; Sep 2023</span></div></div>
+      </div>
+      <div class="cred-col">
+        <h3>Skills</h3>
+        <div class="skill-group"><h4>Cybersecurity</h4><p>OSINT, Digital Forensics, Threat Intelligence, MITRE ATT&amp;CK, Incident Response</p></div>
+        <div class="skill-group"><h4>Quantum Computing</h4><p>Qiskit, PennyLane, Quantum Algorithms, Quantum Cryptography, Many-Body Systems, Exact Diagonalization</p></div>
+        <div class="skill-group"><h4>Programming</h4><p>Python (primary), Rust, C, C++, Java, Bash, SQL, R</p></div>
+        <div class="skill-group"><h4>Machine Learning &amp; AI</h4><p>PyTorch, TensorFlow, scikit-learn, LangGraph, LangChain, MCP, RAG, FAISS, Ollama, NLP, Statistics</p></div>
+        <div class="skill-group"><h4>Scientific Computing</h4><p>NumPy, SciPy, Pandas, SageMath, mpmath</p></div>
+        <div class="skill-group"><h4>Systems &amp; Tools</h4><p>Linux (Arch, bare-metal administration), Docker, Git, GitHub Actions, FastAPI, AWS (foundational), Proxmox, pfSense, Snort, KiCad, Ergogen, QMK firmware</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <div class="block-head">
+      <div>
+        <p class="eyebrow"><span class="num">06</span> Common questions</p>
+        <h2>FAQ</h2>
+      </div>
+      <div class="block-glyph"><span class="jp">問</span><span class="dev">प्रश्न</span></div>
+    </div>
+    <div class="list-section">
+      <div class="faq-row">
+        <p class="faq-q">Are you available for work?</p>
+        <div class="faq-a">
+          <p>Yes, selectively. I'm interested in:</p>
+          <ul>
+            <li>Research collaborations on quantum benchmarking, quantum information, post-quantum cryptography, or hybrid classical&ndash;quantum algorithms.</li>
+            <li>Short consulting engagements on OSINT tooling, threat intel pipelines, quantum informatics or LEA-facing systems.</li>
+            <li>Speaking / teaching opportunities.</li>
+          </ul>
+          <p>Email is the fastest way to start a conversation: <a href="mailto:sarangvehale2@gmail.com">sarangvehale2@gmail.com</a>.</p>
+        </div>
+      </div>
+      <div class="faq-row">
+        <p class="faq-q">Can I see the source code for this site?</p>
+        <div class="faq-a"><p>Yes &mdash; it's on <a href="https://github.com/SarangVehale/portfolio" target="_blank" rel="noopener">GitHub</a>. One HTML file, hand-written, no build step. Feel free to fork it.</p></div>
+      </div>
+      <div class="faq-row">
+        <p class="faq-q">How can I keep up with what you publish?</p>
+        <div class="faq-a"><p>My <a href="https://scholar.google.com/citations?user=x-3dXnMAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a> profile is the most up-to-date list of papers. For code: GitHub (<a href="https://github.com/sarang-kernel" target="_blank" rel="noopener">research-related</a>; <a href="https://github.com/SarangVehale" target="_blank" rel="noopener">general-software</a>).</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block wrap" id="contact" style="border-bottom:0;">
+    <div class="block-head">
+      <div>
+        <p class="eyebrow"><span class="num">07</span> Reach out</p>
+        <h2>Contact</h2>
+      </div>
+      <div class="block-glyph"><span class="jp">縁</span><span class="dev">संबंध</span></div>
+    </div>
+    <div class="contact-block">
+      <div class="prose">
+        <p>The fastest way to reach me is email. I read everything and reply to most things within a few days. Happy to talk about research collaboration, OSINT tooling, quantum benchmarking, custom keyboards, or homelab oddities.</p>
+        <p>For longer threads I'm on GitHub. For professional pings, LinkedIn.</p>
+      </div>
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:sarangvehale2@gmail.com"><span>Email</span><span class="arr">&rarr;</span></a>
+        <a class="contact-link" href="https://github.com/SarangVehale" target="_blank" rel="noopener"><span>GitHub</span><span class="arr">&rarr;</span></a>
+        <a class="contact-link" href="https://linkedin.com/in/sarangvehale" target="_blank" rel="noopener"><span>LinkedIn</span><span class="arr">&rarr;</span></a>
+        <a class="contact-link" href="resume.pdf"><span>Résumé (PDF)</span><span class="arr">&rarr;</span></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="foot-grid">
+    <div>
+      <div class="foot-mark"><span class="jp">知</span>Sarang Vehale</div>
+      <p class="foot-desc">Cybersecurity and quantum computing research. Built with two mythologies about light overcoming darkness, deliberately paired.</p>
+    </div>
+    <div class="foot-col">
+      <h5>Explore</h5>
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#publications">Publications</a>
+    </div>
+    <div class="foot-col">
+      <h5>Elsewhere</h5>
+      <a href="https://github.com/SarangVehale" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://scholar.google.com/citations?user=x-3dXnMAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
+      <a href="https://linkedin.com/in/sarangvehale" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:sarangvehale2@gmail.com">Email</a>
+    </div>
   </div>
-</div>
-
-<script src="md.js"></script>
-<script src="app.js"></script>
+  <div class="foot-bottom">
+    <span>&copy; 2026 Sarang Vehale</span>
+    <span>Saraswati (Ravi Varma, 1894) &amp; Amaterasu (Kunisada, 1856), public domain, via Wikimedia Commons</span>
+  </div>
+  <p class="signoff">तमसो मा ज्योतिर्गमय<span class="en">from darkness, lead me to light</span></p>
+</footer>
 
 </body>
 </html>
