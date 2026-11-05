@@ -1,9 +1,8 @@
 # Deploy the static site to GitHub Pages.
 #
-# As of the mythology redesign, this site is one hand-written
-# index.html plus an images/ folder — no manifest generation, no
-# prerendering, no content pipeline. The deploy step is just "copy
-# the files GitHub Pages needs into dist/ and upload it."
+# A static page: index.html, assets/ and images/. No manifest generation,
+# no prerendering, no content pipeline. The deploy step copies the files
+# GitHub Pages needs into dist/ and uploads it.
 #
 # One-time setup on GitHub
 #   Settings → Pages → Build and deployment → Source = "GitHub Actions".
@@ -38,7 +37,7 @@ jobs:
           set -eu
           mkdir -p dist
           cp index.html sitemap.xml robots.txt resume.pdf llms.txt .nojekyll dist/
-          cp -r images certs dist/
+          cp -r images certs assets dist/
           mkdir -p dist/content/blog
           cp -r content/blog/*.md dist/content/blog/ 2>/dev/null || true
           cp -r content/blog/notes dist/content/blog/ 2>/dev/null || true
