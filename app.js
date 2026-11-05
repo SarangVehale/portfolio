@@ -19,10 +19,13 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
   /* ─────────── theme (3-mode cycle, persisted to localStorage) ────
-     States: '' (warm, default) → 'white' → 'dark' → ''
+     States: '' (mocha, default) → 'white' (latte) → 'dark' (void) → ''
+     The data-theme attribute VALUES ("", "white", "dark") are unchanged
+     from the original design — only the display labels and the CSS
+     behind each one changed — so this cycle logic needed no rewrite.
      The footer toggle shows what comes next. */
   const THEME_CYCLE = ["", "white", "dark"];
-  const THEME_LABEL = { "": "warm", "white": "white", "dark": "dark" };
+  const THEME_LABEL = { "": "mocha", "white": "latte", "dark": "void" };
   const savedTheme = localStorage.getItem("theme");
   if (savedTheme !== null) document.documentElement.dataset.theme = savedTheme;
   function toggleTheme(e) {

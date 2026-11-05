@@ -3,18 +3,32 @@
   ═══════════════════════════════════════════════════════════════════════
   index.html — page shell, styles, and DOM scaffolding for the portfolio.
 
-  The site renders entirely from content.md (the manifest) and the files
-  it points at in content/. To change copy, edit those Markdown files —
-  not this one. To change colours, fonts, spacing, or layout, see the
-  :root { … } block and the section comments inside <style> below.
+  "Neo-Tokyo Hyprland" redesign — an anime-cyberpunk Linux-rice aesthetic
+  layered on top of the exact same data/routing engine as before. The
+  site still renders entirely from content.md and content/*.md — nothing
+  about how you edit content changed. To change copy, edit those
+  Markdown files. To change colours, fonts, spacing, chrome, or the 3D
+  backdrop, see the :root block and scene.js.
+
+  Every element ID and class app.js/md.js query (#home-nav, #clock,
+  .exp-item, .cert-item, .pub-item, …) is unchanged from the original
+  design, just relocated and completely restyled — so the JS layer
+  needed no rewrite, only this file's markup/CSS and scene.js (new).
 
   Files loaded by this page (all in this folder):
-    md.js     — minimal Markdown renderer
-    app.js    — content loader, router, page renderers
-    content.md — manifest (site header + which content files to load)
+    scene.js            — the 3D backdrop (sakura, torii, skyline). Independent
+                           of app.js; touches only #bg-canvas.
+    vendor/three.module.min.js — Three.js, vendored (MIT), r169. Keeps
+                           script-src 'self' — no third-party script origin.
+    md.js, app.js       — unchanged from the original design (content
+                           loader, router, page renderers).
+    content.md          — manifest (site header + which content files to load)
 
   Run locally with `python3 -m http.server 8000` (the page fetches
   content.md over HTTP — double-clicking won't work without a server).
+
+  Archived original: see git tag v1-professional / branch
+  archive/v1-professional for the pre-redesign version.
   ═══════════════════════════════════════════════════════════════════════
 -->
 <html lang="en">
@@ -32,8 +46,8 @@
 <meta name="description" content="Portfolio, blog, and notes of Sarang Vehale — a cybersecurity and quantum computing researcher building OSINT platforms, quantum benchmarking frameworks, and the occasional mechanical keyboard.">
 <meta name="author" content="Sarang Vehale">
 <meta name="keywords" content="Sarang Vehale, cybersecurity, quantum computing, OSINT, exact diagonalization, CERTIFY-ED, NFSU, IIT Madras, I4C, post-quantum cryptography, lattice cryptography, homelab, Rust, Python">
-<meta name="theme-color" content="#f2eedf">
-<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#11101c">
+<meta name="color-scheme" content="dark light">
 <link rel="canonical" href="https://sarangvehale.github.io/portfolio/">
 
 <!-- Open Graph (Facebook, LinkedIn, Slack, Discord, etc.) -->
@@ -189,12 +203,14 @@
 <link rel="sitemap" type="application/xml" href="sitemap.xml">
 
 <!-- Favicon (inline SVG; no separate file needed) -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%23f2eedf%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2220%22%20font-style%3D%22italic%22%20fill%3D%22%23221c10%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%2311101c%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20text-anchor%3D%22middle%22%20font-family%3D%22sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22700%22%20fill%3D%22%23ff6ea8%22%3E%E9%9B%85%3C%2Ftext%3E%3C%2Fsvg%3E">
 <!--
   Content-Security-Policy
   Strict by design: only this origin + Google Fonts. No inline JS, no
-  third-party scripts. `style-src` allows the inline <style> below; the
-  rendered Markdown body never produces style attributes (see md.js).
+  third-party scripts. Three.js is vendored locally (vendor/three.module.min.js)
+  specifically so the 3D backdrop doesn't need a new script-src origin.
+  `style-src` allows the inline <style> below; the rendered Markdown
+  body never produces style attributes (see md.js).
 -->
 <meta http-equiv="Content-Security-Policy" content="
   default-src 'self';
@@ -210,1009 +226,542 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500;1,6..72,600;1,6..72,700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans+JP:wght@400;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
 
 <style>
   :root {
-    /* ─── Warm-paper palette (default) ─────────────────────────────────
-       Tuned to Munken Print Cream measurements (L*≈93.5, a*≈1.5, b*≈6.8
-       in CIE Lab). That's the paper Penguin Classics ship on, and it's
-       the most carefully-studied long-read substrate in commercial
-       publishing.
-
-       Why these specific values:
-         • Pure-white screens (L*100) over-stimulate cones, cause halation,
-           and ramp up melatonin suppression at night. Real book paper
-           sits around L*93–94 — high luminance but not maximum.
-         • A slight positive b* (warm yellow shift) reduces blue-light
-           output without making the page feel jaundiced. b*7 is the band
-           used in trade paperback printing.
-         • Body-text contrast 12.7 : 1 sits in the Beier & Larson (2013)
-           sweet spot of 10–13 for sustained reading. Higher = letter-edge
-           halation. Lower = effortful.
-
-       Hex values cross-checked against sRGB ↔ CIE-Lab conversions
-       assuming a D65 white point and standard gamma. Perceptually
-       matched against pages from Penguin Classics English Library
-       editions.
-       ──────────────────────────────────────────────────────────────── */
-    --bg:        #f2eedf;   /* Munken Print Cream  L*93.5  a*1.5  b*6.8 */
-    --surface:   #f8f4e8;   /* +3 L* lift for code blocks / cards */
-    --ink:       #221c10;   /* Warm near-black  contrast 12.7 : 1 vs --bg */
-    --ink-soft:  #4a4332;   /* 6.9 : 1  body-secondary */
-    --ink-faint: #8a8270;   /* 3.5 : 1  mono labels */
-    --rule:      #d2c8ae;
-    --accent:    #8a3a0e;   /* Warm bronze — internal links/hover */
-    --accent-soft: #8a3a0e;
-    --link-ext:  #1d4ed8;   /* Classic web blue — outbound http(s) only */
-    --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+    /* ─── Neon Mocha (default) ───────────────────────────────────────
+       Catppuccin Mocha as the structural base (it's one of the most
+       widely used rice palettes for a reason: every surface tier reads
+       clearly against the next), pushed with saturated anime-neon
+       accents on top — magenta/mauve/cyan, the Cyberpunk Edgerunners /
+       Hyprland-blur-screenshot register. */
+    --bg:        #11101c;
+    --bg-deep:   #0a0914;
+    --surface:   rgba(30, 28, 46, 0.62);
+    --surface-2: rgba(42, 38, 64, 0.55);
+    --surface-solid: #1e1c2e;
+    --ink:       #ece8fb;
+    --ink-soft:  #b7b0d9;
+    --ink-faint: #8178a8;
+    --rule:      rgba(203, 166, 247, 0.22);
+    --rule-strong: rgba(203, 166, 247, 0.4);
+    --accent:    #ff6ea8;   /* neon pink — primary */
+    --accent-2:  #cba6f7;   /* mauve */
+    --accent-3:  #89dceb;   /* cyan */
+    --accent-4:  #fab387;   /* peach, used sparingly */
+    --link-ext:  #8fb8ff;
+    --glow: 0 0 1px rgba(255,110,168,.9), 0 0 14px rgba(255,110,168,.35), 0 0 34px rgba(203,166,247,.18);
+    --glow-cyan: 0 0 1px rgba(137,220,235,.9), 0 0 14px rgba(137,220,235,.35);
+    --win-shadow: 0 24px 70px rgba(0,0,0,.55), 0 2px 0 rgba(255,255,255,.04) inset;
+    --serif: 'Rajdhani', 'Noto Sans JP', var(--mono), sans-serif;
     --mono:  'JetBrains Mono', ui-monospace, Menlo, monospace;
+    --jp: 'Noto Sans JP', var(--serif);
+    --radius: 14px;
+    --blur: 22px;
   }
 
-  /* ─── White paper palette (clinical) ─────────────────────────────────
-     Pure white background, soft black ink to reduce halation. */
-  html[data-theme="white"] {
-    --bg:        #ffffff;
-    --surface:   #f5f5f5;
-    --ink:       #181818;
-    --ink-soft:  #555555;
-    --ink-faint: #8a8a8a;
-    --rule:      #e2e2e2;
-    --accent:    #8a3a0e;
-    --accent-soft: #8a3a0e;
-    --link-ext:  #1d4ed8;
-  }
-
-  /* ─── Night palette (warm-dark, paper-equivalent) ─────────────────── */
+  /* ─── Void (data-theme="dark") ────────────────────────────────────
+     Near-OLED-black, less background texture, heavier glow — the
+     "lights off, monitor's the only light in the room" variant. */
   html[data-theme="dark"] {
-    --bg:        #15130d;
-    --surface:   #1d1b13;
-    --ink:       #e9e1c8;
-    --ink-soft:  #b1a88f;
-    --ink-faint: #756e5b;
-    --rule:      #322d21;
-    --accent:    #cf8554;
-    --accent-soft: #cf8554;
-    --link-ext:  #7aa8f0;
+    --bg:        #060509;
+    --bg-deep:   #020203;
+    --surface:   rgba(14, 12, 22, 0.68);
+    --surface-2: rgba(20, 17, 32, 0.6);
+    --surface-solid: #0e0c16;
+    --ink:       #f1eefc;
+    --ink-soft:  #a79fcf;
+    --ink-faint: #6c628f;
+    --rule:      rgba(255, 110, 168, 0.18);
+    --rule-strong: rgba(255, 110, 168, 0.4);
+    --accent:    #ff4f9a;
+    --accent-2:  #b78cf7;
+    --accent-3:  #5fe3f0;
+    --accent-4:  #ff9f6b;
+    --link-ext:  #7fb0ff;
+    --glow: 0 0 2px rgba(255,79,154,1), 0 0 20px rgba(255,79,154,.5), 0 0 46px rgba(183,140,247,.25);
+    --glow-cyan: 0 0 2px rgba(95,227,240,1), 0 0 20px rgba(95,227,240,.45);
+    --win-shadow: 0 30px 90px rgba(0,0,0,.75), 0 2px 0 rgba(255,255,255,.03) inset;
+  }
+
+  /* ─── Latte (data-theme="white") ──────────────────────────────────
+     Catppuccin Latte: the genuine *light* rice palette. Still neon,
+     just on paper instead of on glass at 2am. */
+  html[data-theme="white"] {
+    --bg:        #eff1f5;
+    --bg-deep:   #e6e9ef;
+    --surface:   rgba(255, 255, 255, 0.62);
+    --surface-2: rgba(230, 233, 239, 0.65);
+    --surface-solid: #ffffff;
+    --ink:       #2a2340;
+    --ink-soft:  #5c5280;
+    --ink-faint: #8c84ad;
+    --rule:      rgba(136, 57, 239, 0.18);
+    --rule-strong: rgba(136, 57, 239, 0.32);
+    --accent:    #d6336c;
+    --accent-2:  #8839ef;
+    --accent-3:  #04a5e5;
+    --accent-4:  #fe640b;
+    --link-ext:  #1e66f5;
+    --glow: 0 0 1px rgba(214,51,108,.7), 0 0 10px rgba(214,51,108,.18);
+    --glow-cyan: 0 0 1px rgba(4,165,229,.7), 0 0 10px rgba(4,165,229,.18);
+    --win-shadow: 0 20px 48px rgba(76,61,138,.16), 0 1px 0 rgba(255,255,255,.6) inset;
   }
 
   * { box-sizing: border-box; }
   html, body { margin: 0; }
   [hidden] { display: none !important; }
+  html { background: var(--bg); }
   body {
-    background: var(--bg);
+    background:
+      radial-gradient(ellipse 120% 70% at 50% -10%, rgba(255,110,168,.14), transparent 60%),
+      radial-gradient(ellipse 90% 60% at 85% 110%, rgba(137,220,235,.1), transparent 55%),
+      var(--bg);
     color: var(--ink);
     font-family: var(--serif);
-    font-size: 19px;
+    font-size: 18px;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    font-feature-settings: "kern", "liga";
-  }
-  ::selection { background: var(--accent-soft); color: var(--bg); }
-
-  /* Default <a>: internal links (relative, hash, mailto) inherit ink color
-     with a subtle underline. On hover they pick up the bronze accent. */
-  a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-decoration-thickness: 1px; text-underline-offset: 3px; transition: color .12s, text-decoration-color .12s, text-shadow .12s; }
-  a:hover { color: var(--accent); text-decoration-color: var(--accent); }
-  a:visited { color: var(--ink-soft); }
-  a:visited:hover { color: var(--accent); }
-
-  /* External http(s) links: classic web blue, always visible as links.
-     Markdown renderer adds target="_blank" so we target that for safety;
-     also catch explicit http(s) hrefs in static markup. */
-  a[href^="http://"], a[href^="https://"] {
-    color: var(--link-ext);
-    text-decoration-color: var(--link-ext);
-  }
-  a[href^="http://"]:visited, a[href^="https://"]:visited {
-    color: var(--link-ext);
-  }
-  a[href^="http://"]:hover, a[href^="https://"]:hover {
-    color: var(--link-ext);
-    text-decoration-color: var(--link-ext);
-    text-shadow: 0 0 0.5px var(--link-ext);
-  }
-
-  /* Reserve --accent (saturated red) for critical points: dots, numbers,
-     registration marks — the Sapper / Nothing red-on-joints convention. */
-
-  /* ── HOMEPAGE ─────────────────────────────────────────────────────── */
-  /* Single-screen layout: everything fits in 100vh without scroll. Sizes
-     scale down as the viewport shrinks. */
-  .home {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 2rem;
-    gap: 0;
-    position: relative;
   }
-  /* Make the homepage nav use flex-wrap so items break cleanly on every
-     viewport width instead of relying on inline wrap heuristics. */
-  .home nav {
-    display: flex;
+  ::selection { background: var(--accent); color: var(--bg-deep); }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--rule-strong); border-radius: 8px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent-2); }
+
+  a { color: var(--accent-3); text-decoration: none; border-bottom: 1px solid transparent; transition: color .15s, border-color .15s, text-shadow .15s; }
+  a:hover { color: var(--accent); border-bottom-color: currentColor; text-shadow: var(--glow); }
+  a:visited { color: var(--accent-2); }
+  a[href^="http://"], a[href^="https://"] { color: var(--link-ext); }
+  a[href^="http://"]:hover, a[href^="https://"]:hover { color: var(--accent); }
+
+  /* ─── 3D backdrop canvas ──────────────────────────────────────────
+     Fixed, full-viewport, behind every piece of chrome. scene.js owns
+     this element exclusively; if WebGL/JS fails it just stays hidden
+     and the CSS gradient on body carries the mood on its own. */
+  #bg-canvas {
+    position: fixed; inset: 0;
+    width: 100vw; height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .85;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     WAYBAR — persistent top bar, visible on every route. Built from
+     elements app.js already populates (#home-nav, #clock, #tz-abbr,
+     the now/footer data-binds) — just relocated up here so they read
+     as a status bar instead of homepage-only chrome.
+     ═══════════════════════════════════════════════════════════════ */
+  .waybar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem;
+    padding: 0.55rem 1.1rem;
+    background: var(--surface);
+    backdrop-filter: blur(var(--blur)) saturate(1.3);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(1.3);
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 12px;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    column-gap: 0.5em;
-    row-gap: 0.5em;
-    font-size: 1.05rem;
-    margin: 0 0 2.5rem;
-    max-width: 42rem;
-    line-height: 1.4;
   }
-  .home nav a { white-space: nowrap; }
-  /* First-letter accent on homepage nav — boosts scannability without
-     stealing horizontal space. Applies automatically to any new section
-     added to #home-nav (the rule targets the pseudo-element, not a
-     specific letter). The bronze stays through hover and visited states
-     because ::first-letter beats both on specificity. */
-  .home nav a::first-letter {
-    color: var(--accent);
-    font-weight: 600;
-  }
-  .home nav .slash { color: var(--ink-faint); }
-  .home .name {
-    font-size: clamp(2.4rem, 6vw, 4rem);
-    line-height: 1;
-    margin: 0 0 1rem;
-    font-style: italic;
+  .waybar-group { display: flex; align-items: center; gap: 0.9rem; min-width: 0; }
+  .waybar-left { flex: 1 1 auto; min-width: 0; overflow: hidden; }
+  .waybar-center { flex: 1 1 auto; justify-content: center; min-width: 0; }
+  .waybar-right { flex: 0 0 auto; }
+  .waybar-logo {
+    font-family: var(--jp);
     font-weight: 700;
-    letter-spacing: -0.02em;
-    font-variation-settings: "opsz" 72;
+    font-size: 15px;
+    color: var(--accent);
+    text-shadow: var(--glow);
+    flex-shrink: 0;
+  }
+  .workspaces { display: flex; align-items: center; gap: 0.15rem; overflow-x: auto; scrollbar-width: none; }
+  .workspaces::-webkit-scrollbar { display: none; }
+  .workspaces a {
+    color: var(--ink-soft);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 3px 9px;
+    white-space: nowrap;
+    text-transform: lowercase;
+    letter-spacing: .02em;
+  }
+  .workspaces a:hover {
+    color: var(--ink);
+    background: var(--surface-2);
+    border-color: var(--rule);
+    text-shadow: none;
+  }
+  .workspaces .slash { display: none; } /* was "//" separator in the old flat nav; pills don't need it */
+  .waybar-now {
+    margin: 0;
+    color: var(--ink-soft);
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 46ch;
+  }
+  .waybar-now b {
+    font-style: normal;
+    text-transform: uppercase;
+    color: var(--accent-3);
+    margin-right: .5em;
+    letter-spacing: .08em;
+  }
+  .sysstat { display: flex; align-items: center; gap: .4rem; color: var(--ink-faint); }
+  .sysstat-label { font-family: var(--jp); font-size: 11px; }
+  .sysstat-bar { width: 42px; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; border: 1px solid var(--rule); }
+  .sysstat-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-3), var(--accent-2)); animation: sysstatPulse 5s ease-in-out infinite; }
+  @keyframes sysstatPulse { 0%,100% { width: 38%; } 50% { width: 71%; } }
+  .waybar-btn {
+    font-family: var(--mono);
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 3px 8px;
+    background: var(--surface-2);
+    cursor: pointer;
+    text-transform: lowercase;
+  }
+  .waybar-btn:hover { color: var(--accent); border-color: var(--accent); box-shadow: var(--glow); text-shadow: none; }
+  button.waybar-btn { font-size: 12px; }
+  .waybar-clock { color: var(--ink-soft); white-space: nowrap; }
+  .waybar-clock .clock { color: var(--ink); font-weight: 600; }
+
+  /* ═══════════════════════════════════════════════════════════════
+     HOME — the name/tagline/hero block, now styled as the centre
+     "monitor" of the rice rather than a plain centred page.
+     ═══════════════════════════════════════════════════════════════ */
+  .home {
+    position: relative; z-index: 1;
+    min-height: calc(100vh - 54px);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 2.5rem 2rem;
+  }
+  .home .name {
+    font-family: var(--serif);
+    font-size: clamp(2.6rem, 7vw, 4.6rem);
+    line-height: 1;
+    margin: 0 0 .5rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    color: var(--ink);
+    text-shadow: var(--glow);
   }
   .home .tagline {
-    font-size: 1rem;
-    color: var(--ink-soft);
-    font-style: italic;
-    margin: 0 0 1.4rem;
-    max-width: 48rem;
-    line-height: 1.5;
-    text-wrap: pretty;
-  }
-  .home .hero {
-    /* Compact square: leaves room for nav + footer in one screen. */
-    width: clamp(200px, min(38vh, 50vw), 360px);
-    aspect-ratio: 1 / 1;
-    position: relative;
-    margin: 0 0 1.4rem;
-    overflow: hidden;
-    background: var(--surface);
-    border: 1px solid var(--rule);
-  }
-  .home .hero img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 1.2s ease;
-  }
-  .home .hero img.active { opacity: 1; }
-  .home .hero-label {
-    position: absolute;
-    bottom: 10px;
-    right: 12px;
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    color: rgba(255, 252, 244, 0.88);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 0 12px rgba(0, 0, 0, 0.25);
-    pointer-events: none;
-    z-index: 2;
-    mix-blend-mode: normal;
-  }
-  .home .hero-empty {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--ink-faint);
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    background-image:
-      repeating-linear-gradient(135deg, transparent 0 11px, var(--rule) 11px 12px);
-  }
-  .home .time {
-    font-style: italic;
-    color: var(--ink-soft);
-    margin: 0 0 2rem;
-    font-size: 0.95rem;
-  }
-  .home .time a { color: var(--ink-soft); }
-  .home .time .clock {
-    font-family: var(--mono);
-    font-style: normal;
-    color: var(--ink);
-    font-size: 0.85rem;
-    margin: 0 .25em;
-  }
-  .home .now {
-    color: var(--ink-soft);
-    font-style: italic;
-    max-width: 36rem;
-    font-size: 0.9rem;
-    text-wrap: pretty;
-    margin: 0 0 0.6rem;
-  }
-  .home .now b {
-    font-style: normal;
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    font-weight: 500;
-    margin-right: .5em;
-  }
-  .home .footer {
-    margin-top: 1.2rem;
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--ink-faint);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  /* ── SUB-PAGES ────────────────────────────────────────────────────── */
-  .page {
-    max-width: 38rem;
-    margin: 0 auto;
-    padding: 5rem 2rem 6rem;
-  }
-  .page .crumb {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    color: var(--ink-faint);
-    margin-bottom: 3rem;
-    text-transform: lowercase;
-  }
-  .page .crumb a { text-decoration: none; border-bottom: 1px dotted var(--rule); color: var(--ink-soft); }
-  .page .crumb a:hover { color: var(--accent); border-bottom-color: var(--accent); }
-  .page .crumb .sep { color: var(--ink-faint); margin: 0 .5em; }
-  .page .crumb span { color: var(--ink); }
-  .page .crumb a span { color: inherit; border: 0; }
-
-  /* Subdir nav under the page content — bare HTML feel: monospace, brackets,
-     hash count = depth from root. */
-  .page-subdirs {
-    margin: 3rem 0 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 1.2rem;
-    font-family: var(--mono);
-    font-size: 13px;
-    letter-spacing: 0.02em;
-  }
-  .page-subdirs .subdir {
-    color: var(--ink-soft);
-    text-decoration: none;
-    border-bottom: 1px dotted transparent;
-  }
-  .page-subdirs .subdir:hover {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-  }
-
-  .page h1 {
-    font-size: clamp(1.8rem, 4vw, 2.4rem);
-    font-weight: 500;
-    margin: 0 0 0.5rem;
-    font-style: italic;
-    letter-spacing: -0.01em;
-    font-variation-settings: "opsz" 48;
-  }
-  .page .page-lead {
-    color: var(--ink-soft);
+    font-family: var(--jp);
     font-size: 1.05rem;
-    margin: 0 0 3rem;
-    text-wrap: pretty;
-  }
-
-  /* ── EXPERIENCE LIST ──────────────────────────────────────────────── */
-  .exp-group {
-    padding: 2rem 0;
-    border-top: 1px solid var(--rule);
-  }
-  .list-section .exp-group:last-child { border-bottom: 1px solid var(--rule); }
-  .exp-group-head { margin-bottom: 1rem; }
-  .exp-org-name {
-    font-size: 1.3rem;
-    font-weight: 500;
-    line-height: 1.25;
-    text-wrap: balance;
-  }
-  .exp-group-meta {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    color: var(--ink-faint);
-    margin-top: 0.3rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 0.6rem;
-    align-items: center;
-  }
-  .exp-group-meta .sep { color: var(--rule); }
-  .exp-role-item {
-    padding: 1.1rem 0 1.1rem 1.2rem;
-    border-left: 1px solid var(--rule);
-    margin: 0.8rem 0 0 0.25rem;
-    position: relative;
-  }
-  .exp-group.multi .exp-role-item::before {
-    content: "";
-    position: absolute;
-    left: -4px;
-    top: 1.5rem;
-    width: 7px;
-    height: 7px;
-    background: var(--bg);
-    border: 1px solid var(--rule);
-    border-radius: 50%;
-  }
-  .exp-group:not(.multi) .exp-role-item {
-    padding-left: 0;
-    margin-left: 0;
-    border-left: 0;
-  }
-  .exp-group:not(.multi) .exp-role-item::before { display: none; }
-  .exp-role {
-    font-size: 1.05rem;
-    font-weight: 500;
-    margin: 0 0 0.3rem;
-    line-height: 1.3;
-    font-style: italic;
-  }
-  .exp-meta {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--ink-faint);
-    letter-spacing: 0.04em;
-    margin-bottom: 0.7rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem 0.6rem;
-    align-items: center;
-  }
-  .exp-meta .sep { color: var(--rule); }
-  .exp-meta a.cert {
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px dotted var(--accent);
-  }
-  .exp-meta a.cert:hover { background: var(--accent); color: var(--bg); }
-  .exp-summary {
     color: var(--ink-soft);
-    font-size: 1rem;
-    margin: 0 0 0.5rem;
-    text-wrap: pretty;
-  }
-  .exp-body {
-    color: var(--ink-soft);
-    font-size: 0.95rem;
-    line-height: 1.5;
-  }
-  .exp-body ul { padding-left: 1.2rem; margin: 0.4rem 0; }
-  .exp-body li { margin-bottom: 0.3rem; }
-  .exp-body strong { color: var(--ink); font-weight: 600; }
-
-  /* ── FAQ ──────────────────────────────────────────────────────────── */
-  .faq { display: flex; flex-direction: column; }
-  .faq-item {
-    padding: 2.5rem 0;
-    border-top: 1px dashed var(--rule);
-  }
-  .faq-item:first-child { padding-top: 0; border-top: 0; }
-  .faq-item:last-child { padding-bottom: 0; }
-  .faq-q {
-    font-size: 1.3rem;
-    font-weight: 500;
-    line-height: 1.3;
-    margin: 0 0 0.8rem;
-    font-style: italic;
-    font-variation-settings: "opsz" 36;
-    text-wrap: balance;
-  }
-  .faq-a { color: var(--ink-soft); line-height: 1.6; }
-  .faq-a > *:first-child { margin-top: 0; }
-  .faq-a > *:last-child  { margin-bottom: 0; }
-  .faq-a strong { color: var(--ink); }
-
-  /* ── DIARY (notes inline) ─────────────────────────────────────────── */
-  .diary { display: flex; flex-direction: column; }
-  .diary-entry {
-    padding: 2.5rem 0;
-    border-top: 1px dashed var(--rule);
-  }
-  .diary-entry:first-child { border-top: 0; padding-top: 0; }
-  .diary-entry:last-child { padding-bottom: 0; }
-  .diary-head { margin-bottom: 0.8rem; }
-  .diary-date {
-    display: block;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--ink-faint);
-  }
-  .diary-title {
-    font-size: 1.3rem;
-    font-weight: 500;
-    line-height: 1.25;
-    margin: 0.3rem 0 0;
-    font-style: italic;
-    font-variation-settings: "opsz" 36;
-    text-wrap: balance;
-  }
-  .diary-body {
-    color: var(--ink-soft);
+    margin: 0 0 1.6rem;
+    max-width: 44rem;
     line-height: 1.6;
   }
-  .diary-body p:first-child { margin-top: 0; }
-  .diary-body strong { color: var(--ink); }
-  .note-tags {
-    margin-top: 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-  .note-tags .tag {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.06em;
-    color: var(--ink-faint);
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    padding: 2px 8px;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: color .12s, border-color .12s;
-  }
-  .note-tags .tag::before { content: "#"; opacity: 0.5; margin-right: 1px; }
-  .note-tags .tag:hover { color: var(--accent); border-color: var(--accent); }
-
-  .tag-filter-banner {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--ink-faint);
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px dashed var(--rule);
-  }
-  .tag-filter-banner span { color: var(--accent); }
-  .tag-filter-banner button {
-    background: none; border: 0;
-    color: var(--ink-soft);
-    text-decoration: underline;
-    cursor: pointer;
-    font: inherit;
-  }
-  .tag-filter-banner button:hover { color: var(--accent); }
-
-  /* ── CERT LIST ────────────────────────────────────────────────────── */
-  .cert-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1rem;
-    padding: 0.9rem 0;
-    border-top: 1px solid var(--rule);
-  }
-  .list-section .cert-item:last-child { border-bottom: 1px solid var(--rule); }
-  .cert-main { min-width: 0; }
-  .cert-title { font-size: 1rem; font-weight: 500; }
-  .cert-issuer {
-    color: var(--ink-soft);
-    font-style: italic;
-    font-size: 0.95rem;
-  }
-  .cert-side {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--ink-faint);
-    white-space: nowrap;
-    letter-spacing: 0.04em;
-  }
-  .cert-side a {
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px dotted var(--accent);
-    margin-left: 0.8rem;
-  }
-  .cert-side a:hover { background: var(--accent); color: var(--bg); }
-
-  /* ── PUBLICATIONS LIST ────────────────────────────────────────────── */
-  .pub-item {
-    padding: 1.1rem 0;
-    border-top: 1px solid var(--rule);
-  }
-  .list-section .pub-item:last-child { border-bottom: 1px solid var(--rule); }
-  .pub-title {
-    font-size: 1.05rem;
-    font-weight: 500;
-    line-height: 1.3;
-    margin-bottom: 0.25rem;
-    text-wrap: pretty;
-  }
-  .pub-meta {
-    color: var(--ink-soft);
-    font-style: italic;
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
-    text-wrap: pretty;
-  }
-  .pub-side {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.4rem 0.6rem;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    color: var(--ink-faint);
-  }
-  .pub-side .sep { color: var(--rule); }
-  .pub-status { text-transform: uppercase; }
-  .pub-status-published { color: var(--accent); }
-  .pub-side a {
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px dotted var(--accent);
-  }
-  .pub-side a:hover { background: var(--accent); color: var(--bg); }
-
-  /* ── INDEX LIST (projects, posts, notes) ──────────────────────────── */
-  .list-item {
-    cursor: pointer;
-    transition: background .12s;
-    margin: 0 -1rem;
-    padding: 1.2rem 1rem;
-    border-top: 1px solid var(--rule);
-  }
-  .list-section > .list-item:first-child { border-top: 1px solid var(--rule); }
-  .list-section > .list-item:last-child { border-bottom: 1px solid var(--rule); }
-  .list-item:hover { background: var(--surface); }
-  .list-item:hover .list-title { color: var(--accent); }
-  .list-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1rem;
-    margin-bottom: 0.3rem;
-  }
-  .list-title {
-    font-size: 1.1rem;
-    font-weight: 500;
-    line-height: 1.3;
-    text-wrap: balance;
-    transition: color .12s;
-  }
-  .list-date {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--ink-faint);
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .list-tags {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--ink-faint);
-    letter-spacing: 0.04em;
-    margin-top: 0.4rem;
-  }
-  .list-tags .tag::before { content: "#"; opacity: 0.5; }
-  .list-tags .tag + .tag { margin-left: 0.6rem; }
-  .list-arrow {
-    color: var(--ink-faint);
-    transition: transform .12s, color .12s;
-    font-family: var(--mono);
-    flex-shrink: 0;
-  }
-  .list-item:hover .list-arrow { color: var(--accent); transform: translateX(2px); }
-  .list-summary {
-    color: var(--ink-soft);
-    font-size: 1rem;
-    margin: 0 0 0.5rem;
-    text-wrap: pretty;
-  }
-
-  /* ── READER ───────────────────────────────────────────────────────── */
-  .reader-meta {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    color: var(--ink-faint);
-    margin-bottom: 1.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    text-transform: lowercase;
-  }
-  .reader-meta .sep { color: var(--rule); }
-  .reader-summary {
-    font-size: 1.15rem;
-    color: var(--ink-soft);
-    font-style: italic;
-    text-wrap: pretty;
-    margin: 0 0 2.5rem;
-  }
-
-  /* ── PROSE (markdown) ─────────────────────────────────────────────── */
-  .prose h2 {
-    font-size: 1.4rem;
-    font-weight: 500;
-    margin: 2.5rem 0 0.8rem;
-    letter-spacing: -0.005em;
-    font-style: italic;
-    font-variation-settings: "opsz" 36;
-  }
-  .prose h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 1.8rem 0 0.5rem;
-  }
-  .prose p { margin: 0 0 1.2rem; text-wrap: pretty; }
-  .prose ul, .prose ol { padding-left: 1.4rem; margin: 0 0 1.2rem; }
-  .prose li { margin-bottom: 0.4rem; }
-  .prose li::marker { color: var(--ink-faint); }
-  .prose blockquote {
-    margin: 1.5rem 0;
-    padding: 0.2rem 0 0.2rem 1.2rem;
-    border-left: 2px solid var(--accent);
-    color: var(--ink-soft);
-    font-style: italic;
-  }
-  .prose code {
-    font-family: var(--mono);
-    font-size: 0.85em;
-    background: var(--surface);
-    padding: 1px 5px;
-    border-radius: 2px;
-    border: 1px solid var(--rule);
-  }
-  .prose pre {
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: 2px;
-    padding: 1rem 1.2rem;
-    overflow-x: auto;
-    margin: 1.5rem 0;
-  }
-  .prose pre code { background: none; border: 0; padding: 0; font-size: 0.85rem; color: var(--ink-soft); }
-  .prose hr { border: 0; border-top: 1px dashed var(--rule); margin: 2.5rem 0; }
-  .prose img { max-width: 100%; margin: 1.5rem 0; }
-  .prose strong { font-weight: 600; }
-
-  /* ── UNIVERSAL CONTENT-STACK RULE ─────────────────────────────────────
-     Every rich-text container has unpredictable trailing margins — the
-     last element might be a paragraph (1.2rem), a list (1.2rem), or a
-     blockquote (1.5rem). That makes the visible gap to whatever sits
-     below it inconsistent.
-     This block resets first-child top-margin and last-child bottom-margin
-     to zero on every rich-text container, so the *container's padding*
-     is always what determines the visual gap. Apply this universally so
-     any new content type inherits the fix automatically.
-     ──────────────────────────────────────────────────────────────────── */
-  .prose > *:first-child,
-  .faq-a > *:first-child,
-  .diary-body > *:first-child,
-  .exp-body > *:first-child {
-    margin-top: 0;
-  }
-  .prose > *:last-child,
-  .faq-a > *:last-child,
-  .diary-body > *:last-child,
-  .exp-body > *:last-child {
-    margin-bottom: 0;
-  }
-
-  /* Wikilinks ([[target]]) and resolved .md links share styling with
-     normal anchors; missing ones get a dimmed, dashed underline. */
-  .wikilink-missing {
-    color: var(--ink-faint) !important;
-    border-bottom: 1px dashed var(--ink-faint) !important;
-    text-decoration: none !important;
-    cursor: help;
-  }
-
-  /* ── CONTACT ──────────────────────────────────────────────────────── */
-  .contact-grid {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 1rem 2rem;
-    font-size: 1.05rem;
-  }
-  .contact-grid dt {
-    font-family: var(--mono);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ink-faint);
-    padding-top: 6px;
-  }
-  .contact-grid dd { margin: 0; }
-
-  /* ── SKILLS ───────────────────────────────────────────────────────── */
-  .skills .prose h3 {
-    font-family: var(--mono);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-    margin: 2rem 0 0.3rem;
-    font-weight: 600;
-  }
-  .skills .prose p { color: var(--ink); font-size: 1.05rem; line-height: 1.6; }
-
-  /* ── PAGE FOOTER ──────────────────────────────────────────────────── */
-  .page-foot {
-    margin-top: 5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--rule);
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--ink-faint);
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    flex-wrap: wrap;
-  }
-  .page-foot a { color: var(--ink-faint); text-decoration: none; border-bottom: 1px dotted var(--rule); }
-  .page-foot a:hover { color: var(--accent); border-bottom-color: var(--accent); }
-
-  .cmdk-trigger {
-    font: inherit;
-    letter-spacing: inherit;
-    text-transform: inherit;
-    color: var(--ink-faint);
-    background: none;
-    border: 0;
-    border-bottom: 1px dotted var(--rule);
-    cursor: pointer;
-    padding: 0 2px;
-  }
-  .cmdk-trigger:hover { color: var(--accent); border-bottom-color: var(--accent); }
-
-  /* ── Cmd+K modal ──────────────────────────────────────────────────── */
-  .cmdk {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 12vh;
-  }
-  .cmdk-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(20, 18, 14, 0.42);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-  }
-  .cmdk-modal {
+  .home .hero {
+    width: clamp(190px, 32vh, 320px);
+    aspect-ratio: 1/1;
     position: relative;
-    width: clamp(320px, 92vw, 600px);
-    max-height: 70vh;
-    background: var(--bg);
+    margin: 0 0 1.6rem;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+    box-shadow: var(--win-shadow), var(--glow);
+  }
+  .home .hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s ease; filter: saturate(1.15) contrast(1.05); }
+  .home .hero img.active { opacity: 1; }
+  .home .hero-label {
+    position: absolute; bottom: 10px; right: 12px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .14em;
+    color: var(--ink); background: rgba(10,8,18,.55); padding: 2px 7px; border-radius: 5px;
+    border: 1px solid var(--rule); pointer-events: none;
+  }
+  .home .hero-empty {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    color: var(--ink-faint); font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+    background: repeating-linear-gradient(135deg, transparent 0 11px, var(--rule) 11px 12px);
+  }
+  .home .footer {
+    margin-top: .8rem;
+    font-family: var(--mono); font-size: 10px; color: var(--ink-faint);
+    letter-spacing: .08em; text-transform: uppercase;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     SUB-PAGE "WINDOW" — the .crumb bar doubles as a titlebar (three
+     dots + path, Hyprland-floating-window style); .page itself is the
+     glass window body.
+     ═══════════════════════════════════════════════════════════════ */
+  .page {
+    position: relative; z-index: 1;
+    max-width: 42rem;
+    margin: 2.2rem auto 4rem;
+    padding: 0 0 2.5rem;
+    background: var(--surface);
+    backdrop-filter: blur(var(--blur)) saturate(1.25);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(1.25);
     border: 1px solid var(--rule);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
-    display: flex;
-    flex-direction: column;
+    border-radius: var(--radius);
+    box-shadow: var(--win-shadow);
     overflow: hidden;
   }
-  .cmdk-input {
-    width: 100%;
-    background: var(--bg);
-    color: var(--ink);
-    border: 0;
+  .page .crumb {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .8rem 1.3rem;
+    background: var(--surface-2);
     border-bottom: 1px solid var(--rule);
-    padding: 1rem 1.2rem;
-    font-family: var(--serif);
-    font-size: 1.15rem;
-    outline: none;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .04em;
+    color: var(--ink-faint); text-transform: lowercase;
   }
-  .cmdk-input::placeholder { color: var(--ink-faint); font-style: italic; }
-  .cmdk-results {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    overflow-y: auto;
-    flex: 1;
+  .page .crumb::before {
+    content: ""; display: block; flex-shrink: 0;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent-4);
+    box-shadow: 16px 0 0 var(--accent-2), 32px 0 0 var(--accent-3);
+    margin-right: 18px;
   }
-  .cmdk-result {
-    padding: 0.7rem 1.2rem;
-    border-bottom: 1px solid var(--rule);
-    cursor: pointer;
-    transition: background .1s;
-  }
-  .cmdk-result:last-child { border-bottom: 0; }
-  .cmdk-result:hover, .cmdk-result.active { background: var(--surface); }
-  .cmdk-row {
-    display: flex;
-    align-items: baseline;
-    gap: 0.8rem;
-  }
-  .cmdk-kind {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    color: var(--ink-faint);
-    min-width: 64px;
-  }
-  .cmdk-title {
-    flex: 1;
-    font-size: 1rem;
-    color: var(--ink);
-    line-height: 1.3;
-  }
-  .cmdk-date {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--ink-faint);
-  }
-  .cmdk-sub {
-    font-size: 0.85rem;
-    color: var(--ink-soft);
-    margin-top: 0.2rem;
-    padding-left: 72px;
-    text-wrap: pretty;
-  }
-  .cmdk-empty {
-    padding: 1rem 1.2rem;
-    color: var(--ink-faint);
-    font-style: italic;
-    text-align: center;
-  }
-  .cmdk-hint {
-    padding: 0.5rem 1.2rem;
-    border-top: 1px solid var(--rule);
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.08em;
-    color: var(--ink-faint);
-    background: var(--surface);
-  }
+  .page .crumb a { color: var(--ink-soft); border: 0; }
+  .page .crumb a:hover { color: var(--accent); }
+  .page .crumb .sep { color: var(--rule-strong); }
+  .page .crumb span { color: var(--ink); }
+  .page .crumb a span { color: inherit; }
+  .page > header, .page > #page-body, .page > .page-subdirs, .page > .page-foot { padding-left: 1.6rem; padding-right: 1.6rem; }
+  .page > header { padding-top: 2.2rem; }
 
-  /* ── Page fade-in on route change ─────────────────────────────────── */
-  @keyframes pageFade {
-    from { opacity: 0; transform: translateY(4px); }
-    to   { opacity: 1; transform: none; }
+  .page-subdirs {
+    margin: 3rem 0 0;
+    display: flex; flex-wrap: wrap; gap: .4rem 1.2rem;
+    font-family: var(--mono); font-size: 13px;
   }
-  #page-home:not([hidden]), #page-sub:not([hidden]) {
-    animation: pageFade .25s ease;
+  .page-subdirs .subdir { color: var(--ink-soft); border: 1px solid var(--rule); border-radius: 6px; padding: 2px 8px; }
+  .page-subdirs .subdir:hover { color: var(--accent); border-color: var(--accent); box-shadow: var(--glow); }
+
+  .page h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.9rem, 4.4vw, 2.6rem);
+    font-weight: 700;
+    margin: 0 0 .5rem;
+    letter-spacing: -.01em;
+    color: var(--ink);
+    text-shadow: var(--glow);
   }
+  .page .page-lead { color: var(--ink-soft); font-size: 1.05rem; margin: 0 0 2.2rem; }
+
+  /* ── EXPERIENCE LIST ──────────────────────────────────────────── */
+  .exp-group { padding: 1.6rem 0; border-top: 1px solid var(--rule); }
+  .list-section .exp-group:last-child { border-bottom: 1px solid var(--rule); }
+  .exp-group-head { margin-bottom: 1rem; }
+  .exp-org-name { font-family: var(--serif); font-size: 1.3rem; font-weight: 700; color: var(--ink); }
+  .exp-group-meta { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); margin-top: .3rem; display: flex; flex-wrap: wrap; gap: .4rem .6rem; }
+  .exp-group-meta .sep { color: var(--rule-strong); }
+  .exp-role-item { padding: .9rem 0 .9rem 1.2rem; border-left: 2px solid var(--rule); margin: .7rem 0 0 .25rem; position: relative; }
+  .exp-group.multi .exp-role-item::before {
+    content: ""; position: absolute; left: -6px; top: 1.4rem; width: 9px; height: 9px;
+    background: var(--accent); border-radius: 50%; box-shadow: var(--glow);
+  }
+  .exp-group:not(.multi) .exp-role-item { padding-left: 0; margin-left: 0; border-left: 0; }
+  .exp-group:not(.multi) .exp-role-item::before { display: none; }
+  .exp-role { font-family: var(--serif); font-size: 1.08rem; font-weight: 600; margin: 0 0 .3rem; color: var(--accent-2); }
+  .exp-meta { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); margin-bottom: .6rem; display: flex; flex-wrap: wrap; gap: .3rem .6rem; }
+  .exp-meta .sep { color: var(--rule-strong); }
+  .exp-meta a.cert { color: var(--accent-3); border: 1px solid var(--rule); border-radius: 5px; padding: 1px 6px; }
+  .exp-meta a.cert:hover { box-shadow: var(--glow-cyan); }
+  .exp-summary { color: var(--ink-soft); font-size: 1rem; margin: 0 0 .5rem; }
+  .exp-body { color: var(--ink-soft); font-size: .95rem; line-height: 1.55; }
+  .exp-body ul { padding-left: 1.2rem; margin: .4rem 0; }
+  .exp-body li { margin-bottom: .3rem; }
+  .exp-body strong { color: var(--accent-2); font-weight: 700; }
+
+  /* ── FAQ ──────────────────────────────────────────────────────── */
+  .faq { display: flex; flex-direction: column; }
+  .faq-item { padding: 2rem 0; border-top: 1px dashed var(--rule); }
+  .faq-item:first-child { padding-top: 0; border-top: 0; }
+  .faq-q { font-family: var(--serif); font-size: 1.3rem; font-weight: 700; margin: 0 0 .7rem; color: var(--accent-2); }
+  .faq-a { color: var(--ink-soft); line-height: 1.6; }
+  .faq-a > *:first-child { margin-top: 0; }
+  .faq-a > *:last-child { margin-bottom: 0; }
+  .faq-a strong { color: var(--ink); }
+
+  /* ── NOTES (inline) ───────────────────────────────────────────── */
+  .diary { display: flex; flex-direction: column; }
+  .diary-entry { padding: 2rem 0; border-top: 1px dashed var(--rule); }
+  .diary-entry:first-child { border-top: 0; padding-top: 0; }
+  .diary-date { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--accent-3); }
+  .diary-title { font-family: var(--serif); font-size: 1.3rem; font-weight: 700; margin: .3rem 0 0; color: var(--ink); }
+  .diary-body { color: var(--ink-soft); line-height: 1.6; }
+  .diary-body p:first-child { margin-top: 0; }
+  .diary-body strong { color: var(--accent-2); }
+  .note-tags { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: .4rem; }
+  .note-tags .tag { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); background: var(--surface-2); border: 1px solid var(--rule); padding: 2px 8px; border-radius: 10px; cursor: pointer; }
+  .note-tags .tag::before { content: "#"; opacity: .6; }
+  .note-tags .tag:hover { color: var(--accent); border-color: var(--accent); }
+  .tag-filter-banner { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--rule); }
+  .tag-filter-banner span { color: var(--accent); }
+  .tag-filter-banner button { background: none; border: 0; color: var(--accent-3); text-decoration: underline; cursor: pointer; font: inherit; }
+
+  /* ── CERT LIST ────────────────────────────────────────────────── */
+  .cert-item { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .85rem 0; border-top: 1px solid var(--rule); }
+  .list-section .cert-item:last-child { border-bottom: 1px solid var(--rule); }
+  .cert-title { font-family: var(--serif); font-size: 1.02rem; font-weight: 600; color: var(--ink); }
+  .cert-issuer { color: var(--ink-faint); font-size: .92rem; }
+  .cert-side { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); white-space: nowrap; }
+  .cert-side a { color: var(--accent-3); border: 1px solid var(--rule); border-radius: 5px; padding: 1px 6px; margin-left: .6rem; }
+  .cert-side a:hover { box-shadow: var(--glow-cyan); }
+
+  /* ── PUBLICATIONS LIST ────────────────────────────────────────── */
+  .pub-item { padding: 1rem 0; border-top: 1px solid var(--rule); }
+  .list-section .pub-item:last-child { border-bottom: 1px solid var(--rule); }
+  .pub-title { font-family: var(--serif); font-size: 1.05rem; font-weight: 600; color: var(--ink); margin-bottom: .25rem; }
+  .pub-meta { color: var(--ink-faint); font-size: .92rem; font-style: italic; margin-bottom: .5rem; }
+  .pub-side { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem .6rem; font-family: var(--mono); font-size: 11px; color: var(--ink-faint); }
+  .pub-side .sep { color: var(--rule-strong); }
+  .pub-status { text-transform: uppercase; letter-spacing: .04em; }
+  .pub-status-published { color: var(--accent-3); text-shadow: var(--glow-cyan); }
+  .pub-side a { color: var(--accent-3); border: 1px solid var(--rule); border-radius: 5px; padding: 1px 6px; }
+  .pub-side a:hover { box-shadow: var(--glow-cyan); }
+
+  /* ── INDEX LIST (projects, posts, notes) ─────────────────────── */
+  .list-item { cursor: pointer; transition: background .15s, transform .15s; margin: 0 -1rem; padding: 1.1rem 1rem; border-top: 1px solid var(--rule); border-radius: 8px; }
+  .list-section > .list-item:first-child { border-top: 1px solid var(--rule); }
+  .list-section > .list-item:last-child { border-bottom: 1px solid var(--rule); }
+  .list-item:hover { background: var(--surface-2); transform: translateX(2px); }
+  .list-item:hover .list-title { color: var(--accent); text-shadow: var(--glow); }
+  .list-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: .3rem; }
+  .list-title { font-family: var(--serif); font-size: 1.12rem; font-weight: 600; color: var(--ink); transition: color .15s; }
+  .list-date { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); white-space: nowrap; flex-shrink: 0; }
+  .list-tags { font-family: var(--mono); font-size: 10px; color: var(--accent-2); margin-top: .4rem; }
+  .list-tags .tag::before { content: "#"; opacity: .6; }
+  .list-tags .tag + .tag { margin-left: .6rem; }
+  .list-arrow { color: var(--ink-faint); transition: transform .15s, color .15s; font-family: var(--mono); flex-shrink: 0; }
+  .list-item:hover .list-arrow { color: var(--accent); transform: translateX(3px); }
+  .list-summary { color: var(--ink-soft); font-size: 1rem; margin: 0 0 .5rem; }
+
+  /* ── READER ───────────────────────────────────────────────────── */
+  .reader-meta { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: .6rem; text-transform: lowercase; }
+  .reader-meta .sep { color: var(--rule-strong); }
+  .reader-summary { font-size: 1.1rem; color: var(--ink-soft); font-style: italic; margin: 0 0 2.2rem; }
+
+  /* ── PROSE (markdown) ────────────────────────────────────────── */
+  .prose h2 { font-family: var(--serif); font-size: 1.4rem; font-weight: 700; margin: 2.2rem 0 .8rem; color: var(--accent-2); }
+  .prose h3 { font-family: var(--serif); font-size: 1.1rem; font-weight: 700; margin: 1.6rem 0 .5rem; color: var(--ink); }
+  .prose p { margin: 0 0 1.2rem; }
+  .prose ul, .prose ol { padding-left: 1.4rem; margin: 0 0 1.2rem; }
+  .prose li { margin-bottom: .4rem; }
+  .prose li::marker { color: var(--accent-3); }
+  .prose blockquote { margin: 1.5rem 0; padding: .2rem 0 .2rem 1.2rem; border-left: 2px solid var(--accent); color: var(--ink-soft); font-style: italic; }
+  .prose code { font-family: var(--mono); font-size: .85em; background: var(--surface-2); color: var(--accent-3); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--rule); }
+  .prose pre { background: var(--surface-2); border: 1px solid var(--rule); border-radius: 8px; padding: 1rem 1.2rem; overflow-x: auto; margin: 1.5rem 0; }
+  .prose pre code { background: none; border: 0; padding: 0; color: var(--ink-soft); }
+  .prose hr { border: 0; border-top: 1px dashed var(--rule); margin: 2.5rem 0; }
+  .prose img { max-width: 100%; margin: 1.5rem 0; border-radius: 8px; }
+  .prose strong { color: var(--accent-2); font-weight: 700; }
+
+  .prose > *:first-child, .faq-a > *:first-child, .diary-body > *:first-child, .exp-body > *:first-child { margin-top: 0; }
+  .prose > *:last-child, .faq-a > *:last-child, .diary-body > *:last-child, .exp-body > *:last-child { margin-bottom: 0; }
+
+  .wikilink-missing { color: var(--ink-faint) !important; border-bottom: 1px dashed var(--ink-faint) !important; cursor: help; }
+
+  /* ── CONTACT ──────────────────────────────────────────────────── */
+  .contact-grid { display: grid; grid-template-columns: 90px 1fr; gap: 1rem 2rem; font-size: 1.02rem; }
+  .contact-grid dt { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--accent-3); padding-top: 6px; }
+  .contact-grid dd { margin: 0; }
+
+  /* ── SKILLS ───────────────────────────────────────────────────── */
+  .skills .prose h3 { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); margin: 2rem 0 .4rem; text-shadow: var(--glow); }
+  .skills .prose p { color: var(--ink); font-size: 1.05rem; line-height: 1.6; }
+
+  /* ── PAGE FOOTER ──────────────────────────────────────────────── */
+  .page-foot { margin-top: 3rem; padding-top: 1.3rem; border-top: 1px solid var(--rule); font-family: var(--mono); font-size: 10px; color: var(--ink-faint); display: flex; justify-content: space-between; gap: 1rem; letter-spacing: .06em; text-transform: uppercase; flex-wrap: wrap; }
+  .page-foot a { color: var(--ink-faint); border: 0; }
+  .page-foot a:hover { color: var(--accent); }
+
+  .cmdk-trigger { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--ink-faint); background: none; border: 0; cursor: pointer; padding: 0; }
+  .cmdk-trigger:hover { color: var(--accent); }
+
+  /* ═══════════════════════════════════════════════════════════════
+     Cmd+K → restyled as a rofi-style launcher: centred, heavy blur,
+     categorised rows, neon-accent active state.
+     ═══════════════════════════════════════════════════════════════ */
+  .cmdk { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: flex-start; justify-content: center; padding-top: 14vh; }
+  .cmdk-backdrop { position: absolute; inset: 0; background: rgba(5,4,10,.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .cmdk-modal {
+    position: relative; width: clamp(320px, 92vw, 620px); max-height: 68vh;
+    background: var(--surface-solid);
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+    box-shadow: var(--win-shadow), var(--glow);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .cmdk-input {
+    width: 100%; background: transparent; color: var(--ink); border: 0;
+    border-bottom: 1px solid var(--rule);
+    padding: 1.1rem 1.3rem; font-family: var(--mono); font-size: 1.05rem; outline: none;
+  }
+  .cmdk-input::placeholder { color: var(--ink-faint); }
+  .cmdk-results { list-style: none; padding: 0; margin: 0; overflow-y: auto; flex: 1; }
+  .cmdk-result { padding: .7rem 1.2rem; border-bottom: 1px solid var(--rule); cursor: pointer; transition: background .1s; }
+  .cmdk-result:last-child { border-bottom: 0; }
+  .cmdk-result:hover, .cmdk-result.active { background: var(--surface-2); box-shadow: inset 3px 0 0 var(--accent); }
+  .cmdk-row { display: flex; align-items: baseline; gap: .8rem; }
+  .cmdk-kind { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; color: var(--accent-3); min-width: 64px; text-transform: uppercase; }
+  .cmdk-title { flex: 1; font-family: var(--serif); font-weight: 600; font-size: 1rem; color: var(--ink); line-height: 1.3; }
+  .cmdk-date { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); }
+  .cmdk-sub { font-size: .85rem; color: var(--ink-soft); margin-top: .2rem; padding-left: 72px; }
+  .cmdk-empty { padding: 1rem 1.2rem; color: var(--ink-faint); font-style: italic; text-align: center; }
+  .cmdk-hint { padding: .5rem 1.2rem; border-top: 1px solid var(--rule); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; color: var(--ink-faint); background: var(--surface-2); }
+
+  /* ── Page fade-in on route change ────────────────────────────── */
+  @keyframes pageFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  #page-home:not([hidden]), #page-sub:not([hidden]) { animation: pageFade .3s ease; }
 
   .empty { color: var(--ink-faint); font-style: italic; padding: 2rem 0; }
 
-  /* ─── RESPONSIVE BREAKPOINTS ─────────────────────────────────────────
-     Three tiers, mobile-first:
-       ≤ 480px  — small phones (iPhone SE, narrow Androids)
-       ≤ 640px  — large phones, small tablets in portrait
-       ≤ 900px  — landscape phones, portrait tablets
-     Anything larger uses the default desktop layout above.
-     ────────────────────────────────────────────────────────────────── */
-
-  /* Tablet & landscape phone */
+  /* ─── RESPONSIVE BREAKPOINTS ──────────────────────────────────── */
   @media (max-width: 900px) {
-    .page { padding: 4rem 1.5rem 5rem; }
-    .home { padding: 3rem 1.5rem; }
+    .page { margin: 1.2rem 1rem 3rem; }
+    .waybar-now { display: none; }
   }
-
-  /* Phone (portrait) */
   @media (max-width: 640px) {
-    body { font-size: 18px; }
-    .page { padding: 3rem 1.25rem 4rem; max-width: none; }
-    .home { padding: 1.5rem 1.25rem; min-height: 100vh; justify-content: center; }
-    .home .name { font-size: 2.4rem; margin-bottom: 0.6rem; }
-    .home .tagline { font-size: 0.95rem; margin: 0 0 1rem; }
-    .home .hero { width: min(70vw, 38vh); margin: 0 0 1rem; }
-    .home .time { font-size: 0.82rem; margin: 0 0 0.9rem; }
-    .home .time .clock { font-size: 0.78rem; }
-    .home nav { font-size: 0.9rem; line-height: 1.5; margin: 0 0 0.9rem; }
-    .home nav .slash { margin: 0 .25em; }
-    .home .now { font-size: 0.85rem; margin: 0 0 0.5rem; }
-    .home .footer { margin-top: 0.9rem; font-size: 9px; }
-
-    /* Sub-pages */
-    .page .crumb { margin-bottom: 2rem; font-size: 10px; }
-    .page h1 { font-size: 1.7rem !important; }
-    .page .page-lead { font-size: 0.98rem; }
-
-    /* Experience: ease the indent so nested items don't squeeze */
-    .exp-org-name { font-size: 1.15rem; }
-    .exp-role-item { padding-left: 0.9rem; }
-    .exp-group.multi .exp-role-item::before { left: -3px; width: 5px; height: 5px; }
-    .exp-role { font-size: 1rem; }
-
-    /* Certificates: stack title and the date/link side */
-    .cert-item { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
-    .cert-side { margin-top: 0.2rem; }
+    body { font-size: 17px; }
+    .waybar { padding: .45rem .7rem; font-size: 11px; }
+    .waybar-logo { display: none; }
+    .sysstat { display: none; }
+    .page { margin: .8rem .6rem 2.5rem; }
+    .page > header, .page > #page-body, .page > .page-subdirs, .page > .page-foot { padding-left: 1.1rem; padding-right: 1.1rem; }
+    .home .name { font-size: 2.3rem; }
+    .home .tagline { font-size: .95rem; }
+    .home .hero { width: min(70vw, 36vh); }
+    .page h1 { font-size: 1.6rem !important; }
+    .page .page-lead { font-size: .98rem; }
+    .exp-org-name { font-size: 1.1rem; }
+    .cert-item { flex-direction: column; align-items: flex-start; gap: .3rem; }
     .cert-side a { margin-left: 0; }
-
-    /* Publications: tighten spacing on narrow screens */
-    .pub-item { padding: 0.9rem 0; }
-    .pub-side { line-height: 1.6; }
-
-    /* Notes / FAQ — tighter vertical rhythm */
-    .diary-entry, .faq-item { padding: 2rem 0; }
-    .diary-title, .faq-q { font-size: 1.15rem; }
-
-    /* Lists (projects, posts) — single-column, hide hover arrow */
-    .list-item { margin: 0; padding: 1rem 0; }
-    .list-row { gap: 0.5rem; }
+    .list-item { margin: 0; padding: 1rem 0; border-radius: 0; }
+    .list-item:hover { transform: none; }
     .list-arrow { display: none; }
-
-    /* Page footer — stack vertically, full-width tap targets */
-    .page-foot {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.75rem;
-    }
-    .page-foot button, .page-foot a { padding: 4px 0; }
-
-    /* Subdir nav — tighter wrap */
-    .page-subdirs { font-size: 12px; gap: 0.3rem 0.9rem; margin-top: 2.5rem; }
-
-    /* Cmd+K modal — full-width, tighter top */
-    .cmdk { padding-top: 6vh; padding-left: 12px; padding-right: 12px; }
+    .page-foot { flex-direction: column; align-items: flex-start; gap: .6rem; }
+    .cmdk { padding-top: 6vh; padding-left: 10px; padding-right: 10px; }
     .cmdk-modal { width: 100%; max-height: 80vh; }
-    .cmdk-input { font-size: 1rem; padding: 0.85rem 1rem; }
-    .cmdk-kind { min-width: 52px; font-size: 8.5px; }
-    .cmdk-sub { padding-left: 60px; font-size: 0.8rem; }
-
-    /* Reader prose: lower margins */
-    .prose h2 { margin: 2rem 0 0.6rem; font-size: 1.25rem; }
-    .prose h3 { margin: 1.5rem 0 0.4rem; }
-    .reader-title { font-size: 1.7rem !important; }
-    .reader-summary { font-size: 1.05rem; }
   }
-
-  /* Small phones (≤ 480px) — last polish for very narrow screens */
   @media (max-width: 480px) {
-    .page { padding: 2.5rem 1rem 3rem; }
-    .home { padding: 1.2rem 1rem; }
-    .home .name { font-size: 2rem; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
-    .home .hero { width: min(75vw, 32vh); margin: 0 0 0.8rem; }
-    .home .tagline { font-size: 0.9rem; margin-bottom: 0.8rem; }
-    .home nav { font-size: 0.85rem; margin-bottom: 0.7rem; }
-    .home .time { margin-bottom: 0.7rem; font-size: 0.78rem; }
-
-    /* Stack the meta on note headers cleanly */
-    .diary-meta-row { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
-
-    /* Experience meta: wrap with comfortable line-height */
-    .exp-meta { line-height: 1.7; }
-    .exp-group-meta { line-height: 1.7; }
-
-    /* Contact dl: collapse to single column */
-    .contact-grid { grid-template-columns: 1fr; gap: 0.2rem 0; }
-    .contact-grid dt { padding-top: 0.8rem; padding-bottom: 0.1rem; }
+    .home .name { font-size: 2rem; }
+    .contact-grid { grid-template-columns: 1fr; gap: .2rem 0; }
+    .contact-grid dt { padding-top: .8rem; }
     .contact-grid dt:first-child { padding-top: 0; }
-
-    /* Cmd+K — full width edge to edge */
-    .cmdk { padding-left: 8px; padding-right: 8px; padding-top: 4vh; }
   }
 
-  /* Prefers-reduced-motion — respect the OS setting */
+  /* Prefers-reduced-motion — respect the OS setting; scene.js also
+     checks this and disables the 3D canvas entirely when set. */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.001s !important;
-      transition-duration: 0.001s !important;
-    }
+    *, *::before, *::after { animation-duration: .001s !important; transition-duration: .001s !important; }
     .home .hero img { transition: opacity 0s !important; }
   }
 </style>
@@ -1220,10 +769,34 @@
 
 <body>
 
-<div id="boot-loader" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-faint);font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;">Loading…</div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+<div id="boot-loader" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-faint);font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;z-index:100;">Loading…</div>
+
+<!-- WAYBAR — persistent across every route. #home-nav, #clock, #tz-abbr,
+     the now/theme/search bindings are populated by the unchanged app.js;
+     only their position in the DOM (and all their styling) changed. -->
+<header class="waybar">
+  <div class="waybar-group waybar-left">
+    <span class="waybar-logo" aria-hidden="true">雅</span>
+    <nav class="workspaces" id="home-nav"></nav>
+  </div>
+  <div class="waybar-group waybar-center">
+    <p class="waybar-now" data-bind="now" hidden><b>now</b><span data-bind="now-text"></span></p>
+  </div>
+  <div class="waybar-group waybar-right">
+    <div class="sysstat" aria-hidden="true"><span class="sysstat-label">詩想</span><span class="sysstat-bar"><i></i></span></div>
+    <button type="button" class="cmdk-trigger waybar-btn" aria-label="Search">rofi -show</button>
+    <a href="#" id="theme-toggle" class="waybar-btn">[latte]</a>
+    <span class="waybar-clock"><i data-bind="city"></i> <span class="clock" id="clock">--:--</span> <span id="tz-abbr"></span></span>
+  </div>
+</header>
 
 <div id="app" style="display:none;">
-  <!-- HOME -->
+  <!-- HOME — the workspace nav, clock, "now" line, search, and theme
+       toggle all live in the persistent waybar above (same elements,
+       same IDs app.js already populates — just relocated once, not
+       duplicated here, so there's exactly one of each in the DOM). -->
   <section class="home" id="page-home" data-screen-label="Home" hidden>
     <h1 class="name" data-bind="name"></h1>
     <p class="tagline" data-bind="tagline"></p>
@@ -1233,13 +806,8 @@
       <span class="hero-label">[inspirations]</span>
       <div class="hero-empty" id="hero-empty" hidden>drop photos in /photos · add them in content.md</div>
     </div>
-    <p class="time">
-      <i>local time in <span data-bind="city"></span> — <span class="clock" id="clock">--:--</span> <span id="tz-abbr"></span></i>
-    </p>
-    <nav id="home-nav"></nav>
-    <p class="now" data-bind="now" hidden><b>now</b><span data-bind="now-text"></span></p>
     <div class="footer">
-      © <span id="year"></span> · <span data-bind="footer-name"></span> · <button type="button" class="cmdk-trigger" aria-label="Search">⌘k · search</button> · <a href="#" id="theme-toggle">[dark]</a>
+      © <span id="year"></span> · <span data-bind="footer-name"></span>
     </div>
   </section>
 
@@ -1257,21 +825,22 @@
     <div class="page-foot">
       <span>© <span id="year2"></span> · <span data-bind="footer-name-2"></span></span>
       <span><button type="button" class="cmdk-trigger" aria-label="Search">⌘K · search</button></span>
-      <span><a href="#" id="theme-toggle-2">[toggle dark]</a></span>
+      <span><a href="#" id="theme-toggle-2">[toggle latte]</a></span>
     </div>
   </main>
 </div>
 
-<!-- Cmd+K global search modal -->
+<!-- Cmd+K global search modal, restyled as a rofi launcher -->
 <div class="cmdk" id="cmdk" hidden>
   <div class="cmdk-backdrop"></div>
   <div class="cmdk-modal" role="dialog" aria-label="Search">
-    <input class="cmdk-input" id="cmdk-input" type="text" placeholder="search anything…" autocomplete="off" spellcheck="false">
+    <input class="cmdk-input" id="cmdk-input" type="text" placeholder="rofi -show drun …" autocomplete="off" spellcheck="false">
     <ul class="cmdk-results" id="cmdk-results"></ul>
     <div class="cmdk-hint">↑↓ navigate · ↵ open · esc close</div>
   </div>
 </div>
 
+<script type="module" src="scene.js"></script>
 <script src="md.js"></script>
 <script src="app.js"></script>
 
