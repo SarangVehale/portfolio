@@ -127,6 +127,22 @@ xx = np.linspace(0, 1, w)[None, :]
 fade = np.clip((1.0 - yy) / 0.3, 0, 1) * np.clip(xx / 0.08, 0, 1) * np.clip((1 - xx) / 0.08, 0, 1)
 save_mask(halftone(lum, a, cell=7, scatter=24, dust=0.16, fade=fade), "ashura.png")
 
+# ---- Shiva Mahadeva (Cleveland, CC0): three faces, like the Ashura ----
+rgb, a = load_cut("work/mahadeva_isnet-general-use.png", 900)
+lum = tone(rgb, clip=2.4, gamma=0.95)
+h, w = lum.shape
+yy = np.linspace(0, 1, h)[:, None]
+fade = np.clip((0.97 - yy) / 0.2, 0, 1)
+save_mask(halftone(lum, a, cell=7, scatter=24, dust=0.18, fade=fade), "mahadeva.png")
+
+# ---- Saraswati (Ravi Varma): the writing page ----
+rgb, a = load_cut("work/saraswati_isnet-general-use.png", 900)
+lum = tone(rgb, clip=2.2, gamma=0.9)
+h, w = lum.shape
+yy = np.linspace(0, 1, h)[:, None]
+fade = np.clip((0.95 - yy) / 0.25, 0, 1)
+save_mask(halftone(lum, a, cell=6, scatter=24, dust=0.18, fade=fade), "saraswati.png")
+
 # ---- Great Wave (Hokusai, CC0 scan). The wave only, cut from the paper ----
 src = cv2.cvtColor(cv2.imread(str(SRC / "wave.jpg")), cv2.COLOR_BGR2RGB)
 s = 900 / src.shape[1]
@@ -165,13 +181,6 @@ def plate(name, src, focus=(0.5, 0.5), zoom=1.0, border=0.0):
 
 
 A = SRC.parent / "mythos-assets"
-plate("amaterasu", A / "amaterasu_raw.png", (0.5, 0.45), zoom=1.12)
-plate("garuda", SRC / "vishnu.jpg", (0.6, 0.42), border=0.07)
-plate("skeleton", SRC / "skeleton.jpg", (0.52, 0.45), zoom=1.1)
-plate("saraswati", A / "saraswati_raw.jpg", (0.5, 0.26))
-plate("benzaiten", SRC / "benzaiten_dragon.jpg", (0.55, 0.3), border=0.04)
-plate("hanuman", SRC / "hanuman.jpg", (0.5, 0.2))
-plate("wave", SRC / "wave.jpg", (0.5, 0.5))
 
 
 # ---- Certificates ----
@@ -185,5 +194,13 @@ def cert(name, src):
 
 
 C = SRC.parent / "certs_raw" / "hi"
-for n in ["cdac25", "cdac24", "i4c", "stanford25", "bhoomi"]:
+for n in ["cdac25", "cdac24", "i4c", "stanford25", "bhoomi", "yigf"]:
     cert(n, C / f"{n}.png")
+
+
+# ---- Precursor plates for the experience gallery (sources in footer credits) ----
+P = SRC / "prec"
+for name, src, focus in [("seki", "seki.jpg", (0.5, 0.42)), ("mahabhashya", "mahabhashya.jpg", (0.5, 0.27)),
+                         ("arthashastra", "artha.jpg", (0.5, 0.5)), ("lilavati", "lilavati.jpg", (0.5, 0.17)),
+                         ("solvay", "solvay.jpg", (0.5, 0.55)), ("kriegsspiel", "kriegs.jpg", (0.5, 0.5))]:
+    plate(name, P / src, focus)

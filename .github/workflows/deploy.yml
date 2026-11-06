@@ -37,7 +37,7 @@ jobs:
           set -eu
           mkdir -p dist
           cp index.html sitemap.xml robots.txt resume.pdf llms.txt .nojekyll dist/
-          cp -r images certs assets writing uses dist/
+          cp -r images certs assets blog uses dist/
           # photos/ holds the original JPEGs (with metadata); ship only the page
           mkdir -p dist/photos && cp photos/index.html dist/photos/
           mkdir -p dist/content/blog

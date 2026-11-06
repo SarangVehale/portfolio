@@ -11,7 +11,7 @@ This is a single static HTML page, with no build step and no backend. Every sect
 
 ## Pages
 
-- [Writing](https://sarangvehale.github.io/portfolio/writing/): essays and notes, one HTML page each.
+- [Blog](https://sarangvehale.github.io/portfolio/blog/): essays and notes, one HTML page each.
 - [Uses](https://sarangvehale.github.io/portfolio/uses/): desk, computers, everyday carry, watches.
 - [Photos](https://sarangvehale.github.io/portfolio/photos/): photographs.
 

@@ -18,8 +18,8 @@ for fam,q,base in [
         st=re.search(r'font-style:\s*(\w+)',b).group(1); w=re.search(r'font-weight:\s*([\d ]+)',b).group(1).strip()
         k=f'{base}-{st}-{w.replace(" ","_")}-{sub}.woff2'
         if k not in seen: get(u,k); seen.add(k)
-JP='へより人便偵光具写問固工房技携数文日智書格械機真知章縁色覚記証道鍵闇音'
-DV='ंएकखगघचजञटडणतदधनपबभमयरलवशषस़ािीुृेॉोौ् '
+JP='へより人便偵光具写問固工房技携数文智書格械機真知章縁色覚記証道鍵闇音'
+DV='ंएकखगघचजञटडणतदधनपबमयरलवशषस़ािीुृेॉोौ् '
 MATH='|⟨⟩ψρΣ∑χ⊗⊕πθφ−≤≥∈∩∪→⁻¹⁰²³₂₁√αβ'
 for fam,w,txt,name in [('Noto+Sans+JP','500',JP,'jp'),('Noto+Sans+Devanagari','500',DV,'dev'),('Noto+Sans+Math','400',MATH,'math')]:
     q=f'family={fam}'+(f':wght@{w}' if name!='math' else '')+'&text='+urllib.parse.quote(txt)

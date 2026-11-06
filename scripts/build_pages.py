@@ -7,7 +7,7 @@ only when photos change.
 What it does:
   - writes the shared header and footer into index.html (between the
     <!-- header:start/end --> and <!-- footer:start/end --> markers)
-  - writing/: one page per post in content/blog/*.md and content/blog/notes/*.md
+  - blog/: one page per post in content/blog/*.md and content/blog/notes/*.md
   - uses/:    from content/blog/gear.md
   - photos/:  from photos/photos.txt, resized to images/photos/ with metadata stripped
   - sitemap.xml
@@ -27,9 +27,9 @@ SCHOLAR = "https://scholar.google.com/citations?user=x-3dXnMAAAAJ&amp;hl=en"
 E = html.escape
 
 PAGES = [  # (folder, label, glyph, glyph class)
-    ("writing", "Writing", "लेख", "dev"),
+    ("blog", "Blog", "लेख", "dev"),
     ("uses", "Uses", "道具", "jp"),
-    ("photos", "Photos", "दृश्य", "dev"),
+    ("photos", "Photos", "चित्र", "dev"),
 ]
 SECTIONS = [("record", "Record"), ("research", "Research"), ("workshop", "Workshop"),
             ("publications", "Publications"), ("training", "Training"),
@@ -70,16 +70,19 @@ def header(r, current=None):
 </nav>'''
 
 
-CREDITS = ('Art, all public domain or CC0, via Wikimedia Commons: '
+CREDITS = ('Art, public domain or CC0 unless noted, via Wikimedia Commons: '
            '<a href="https://commons.wikimedia.org/wiki/File:MET_DT240.jpg" target="_blank" rel="noopener">Shiva Nataraja</a> (Metropolitan Museum of Art), '
            '<a href="https://commons.wikimedia.org/wiki/File:8th_century_Standing_Shiva_Mahadeva,_Kashmir,_India,_Clevelandart_1989.369.jpg" target="_blank" rel="noopener">Shiva Mahadeva</a> (Cleveland Museum of Art), '
-           '<a href="https://commons.wikimedia.org/wiki/File:Popular_print,_album_(BM_2003,1022,0.29).jpg" target="_blank" rel="noopener">Shiva in meditation</a> (British Museum), '
            '<a href="https://commons.wikimedia.org/wiki/File:Kofukuji_Ashura_2.jpg" target="_blank" rel="noopener">Ashura of Kofuku-ji</a>, '
            '<a href="https://commons.wikimedia.org/wiki/File:Saraswati_by_Raja_Ravi_Varma.jpg" target="_blank" rel="noopener">Saraswati</a> (Raja Ravi Varma, 1894), '
-           '<a href="https://commons.wikimedia.org/wiki/File:Origin_of_Iwato_Kagura_Dance_Amaterasu_by_Toyokuni_III_(Kunisada)_1856.png" target="_blank" rel="noopener">Amaterasu</a> (Kunisada, 1856), '
-           '<a href="https://commons.wikimedia.org/wiki/File:Vishnu_on_his_Vehicle_Garuda.JPG" target="_blank" rel="noopener">Vishnu on Garuda</a>, '
-           '<a href="https://commons.wikimedia.org/wiki/File:Hanuman_fetches_the_herb-bearing_mountain,_in_a_print_from_the_Ravi_Varma_Press,_1910%27s.jpg" target="_blank" rel="noopener">Hanuman</a> (Ravi Varma Press), '
-           'and, from the Metropolitan Museum of Art, Benzaiten on a White Dragon and Hokusai\'s Great Wave.')
+           'Hokusai\'s Great Wave (Metropolitan Museum of Art). Experience plates: '
+           '<a href="https://commons.wikimedia.org/wiki/File:Seki.jpeg" target="_blank" rel="noopener">Seki Takakazu</a>, '
+           '<a href="https://commons.wikimedia.org/wiki/File:2nd_century_BCE_and_11th_century_CE,_Double_book_manuscript,_Patanjali_Mahabhasya_and_Kaiyata_Mah%C4%81bh%C4%81%E1%B9%A3yaprad%C4%ABpa,_Sanskrit_Hindu_text_India,_now_at_University_of_Pennsylvania_01.jpg" target="_blank" rel="noopener">Mahābhāṣya manuscript</a> (University of Pennsylvania), '
+           '<a href="https://commons.wikimedia.org/wiki/File:Rediscovered_circa_16th_century_Arthashastra_manuscript_in_Grantha_script_from_the_Oriental_Research_Institute_(ORI)_which_was_found_in_1905_05.jpg" target="_blank" rel="noopener">Arthaśāstra manuscript</a> (ORI Mysore), '
+           '<a href="https://commons.wikimedia.org/wiki/File:Lilavati_of_Bhaskaracharya_II,_Sanskrit_language,_Newar_script.jpg" target="_blank" rel="noopener">Līlāvatī manuscript</a>, '
+           '<a href="https://commons.wikimedia.org/wiki/File:Solvay_conference_1927.jpg" target="_blank" rel="noopener">Solvay Conference 1927</a>, and '
+           '<a href="https://commons.wikimedia.org/wiki/File:Kriegsspiel_1824.jpg" target="_blank" rel="noopener">Kriegsspiel 1824 reconstruction</a> by Matthew Kirschenbaum, '
+           '<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.')
 
 
 def footer(r):
@@ -295,7 +298,7 @@ def fmt_date(d):
 def post_card(p, r, lead=False):
     g, gc = p["glyph"]
     tags = "".join(f"<span>{E(t)}</span>" for t in p["tags"][:3])
-    return f'''<a class="wcard{' wcard--lead' if lead else ''} wcard--{p['kind']} reveal" href="{r}writing/{p['slug']}/">
+    return f'''<a class="wcard{' wcard--lead' if lead else ''} wcard--{p['kind']} reveal" href="{r}blog/{p['slug']}/">
   <span class="wcard-g {gc}" aria-hidden="true">{g}</span>
   <span class="wcard-top"><span class="tag">{'Essay' if p['kind'] == 'essay' else 'Note'} // {fmt_date(p['date'])}</span><span class="tag">{max(1, round(p['words'] / 220))} min</span></span>
   <span class="wcard-t">{E(p['title'])}</span>
@@ -310,11 +313,11 @@ def build_writing(posts):
     essays = [p for p in rest if p["kind"] == "essay"]
     notes = [p for p in rest if p["kind"] == "note"]
     body = f'''<header class="phero">
-  <div class="phero-art"><div class="bone-art art-saraswati" role="img" aria-label="Halftone of Raja Ravi Varma's Saraswati with her veena."></div></div>
+  <div class="phero-art"><span class="imgtag imgtag--bl">Saraswati</span><div class="bone-art art-saraswati" role="img" aria-label="Halftone of Raja Ravi Varma's Saraswati with her veena."></div></div>
   <div class="mark mark--br mark--dev dev" aria-hidden="true">लेख</div>
   <div class="wrap phero-in">
-    {sheet_head('|01⟩', 'Writing', 'लेख', '文')}
-    <h1 class="phero-h reveal">Writing<span class="phero-sub"><span class="dev">लेख</span><span class="jp">文章</span></span></h1>
+    {sheet_head('|01⟩', 'Blog', 'लेख', '文')}
+    <h1 class="phero-h reveal">Blog<span class="phero-sub"><span class="dev">लेख</span><span class="jp">文章</span></span></h1>
     <p class="phero-lede reveal">Longer pieces and short notes: systems, homelabs, and what building things teaches. Newest first.</p>
     <div class="phero-stats reveal">
       <div class="spec"><span class="spec__k">Essays</span><span class="spec__lead"></span><span class="spec__v tnum">{sum(p['kind'] == 'essay' for p in posts)}</span></div>
@@ -331,11 +334,11 @@ def build_writing(posts):
     {f'<p class="label notes-h">Notes <span class="dev">टिप्पणी</span> <span class="jp">覚書</span></p><div class="wgrid wgrid--notes">' + ''.join(post_card(p, r) for p in notes) + '</div>' if notes else ''}
   </div>
 </section>'''
-    out = ROOT / "writing"
+    out = ROOT / "blog"
     out.mkdir(exist_ok=True)
-    (out / "index.html").write_text(page(r, "writing", "Writing · Sarang Vehale",
+    (out / "index.html").write_text(page(r, "blog", "Blog · Sarang Vehale",
                                          "Essays and notes by Sarang Vehale on systems, homelabs and building things.",
-                                         body, "writing/"), encoding="utf8")
+                                         body, "blog/"), encoding="utf8")
     for k, p in enumerate(posts):
         rr = "../../"
         g, gc = p["glyph"]
@@ -346,7 +349,7 @@ def build_writing(posts):
     <div class="mark mark--tr {gc}" aria-hidden="true">{g}</div>
     <div class="wrap">
       {sheet_head('|' + ('文' if p['kind'] == 'essay' else '記') + '⟩', 'Essay' if p['kind'] == 'essay' else 'Note', 'लेख', '文')}
-      <a class="post-back tag" href="{rr}writing/">← All writing</a>
+      <a class="post-back tag" href="{rr}blog/">← All posts</a>
       <h1 class="post-h">{E(p['title'])}</h1>
       {f'<p class="post-sum">{E(p["summary"])}</p>' if p['summary'] else ''}
       <div class="post-meta">
@@ -365,8 +368,8 @@ def build_writing(posts):
 </article>'''
         d = out / p["slug"]
         d.mkdir(exist_ok=True)
-        (d / "index.html").write_text(page(rr, "writing", f"{p['title']} · Sarang Vehale",
-                                           p["summary"] or p["title"], body, f"writing/{p['slug']}/"), encoding="utf8")
+        (d / "index.html").write_text(page(rr, "blog", f"{p['title']} · Sarang Vehale",
+                                           p["summary"] or p["title"], body, f"blog/{p['slug']}/"), encoding="utf8")
     # remove pages for posts that no longer exist
     keep = {p["slug"] for p in posts}
     for d in out.iterdir():
@@ -410,7 +413,7 @@ def build_uses():
 </section>''')
     r = "../"
     body = f'''<header class="phero phero--uses">
-  <div class="phero-art phero-art--geo"><svg class="geo" data-geo="keyboard" role="img" aria-label="A split keyboard layout, drawn in code."></svg></div>
+  <div class="phero-art phero-art--geo"><span class="imgtag imgtag--bl">Split keyboard</span><svg class="geo" data-geo="keyboard" role="img" aria-label="A split keyboard layout, drawn in code."></svg></div>
   <div class="wrap phero-in">
     {sheet_head('|02⟩', 'Uses', 'साधन', '道具')}
     <h1 class="phero-h reveal">Uses<span class="phero-sub"><span class="dev">साधन</span><span class="jp">道具</span></span></h1>
@@ -440,11 +443,11 @@ def build_photos():
         if not ln or ln.startswith("#"):
             continue
         parts = [x.strip() for x in ln.split("|")]
-        entries.append((parts[0], parts[1] if len(parts) > 1 else "", parts[2] if len(parts) > 2 else "center"))
+        entries.append((parts[0], parts[1] if len(parts) > 1 else "", parts[2] if len(parts) > 2 else ""))
     dst = ROOT / "images/photos"
     dst.mkdir(parents=True, exist_ok=True)
     figs = []
-    for n, (fname, cap, pos) in enumerate(entries):
+    for n, (fname, cap, tag) in enumerate(entries):
         stem = Path(fname).stem
         big, small = dst / f"{stem}.webp", dst / f"{stem}-t.webp"
         srcf = ROOT / "photos" / fname
@@ -464,15 +467,15 @@ def build_photos():
         figs.append(f'''<figure class="ph reveal">
   <button type="button" class="ph-btn" data-full="../images/photos/{stem}.webp" data-cap="{E(cap)}" aria-label="Open photo: {E(cap)}">
     <img src="../images/photos/{stem}-t.webp" alt="{E(cap)}" width="{w}" height="{h}" loading="lazy">
+    <span class="imgtag imgtag--bl">{E(tag or cap)}</span>
   </button>
-  <figcaption><span class="tag">{n + 1:02d}</span>{E(cap)}</figcaption>
 </figure>''')
     r = "../"
     body = f'''<header class="phero phero--photos">
-  <div class="phero-art"><div class="bone-art art-wave" role="img" aria-label="Halftone of Hokusai's Great Wave."></div></div>
+  <div class="phero-art"><span class="imgtag imgtag--bl">Great Wave</span><div class="bone-art art-wave" role="img" aria-label="Halftone of Hokusai's Great Wave."></div></div>
   <div class="wrap phero-in">
-    {sheet_head('|03⟩', 'Photos', 'दृश्य', '写真')}
-    <h1 class="phero-h reveal">Photos<span class="phero-sub"><span class="dev">दृश्य</span><span class="jp">写真</span></span></h1>
+    {sheet_head('|03⟩', 'Photos', 'चित्र', '写真')}
+    <h1 class="phero-h reveal">Photos<span class="phero-sub"><span class="dev">चित्र</span><span class="jp">写真</span></span></h1>
     <p class="phero-lede reveal">Things I stopped to look at. Grey until you look at them too; open any one at full size.</p>
     <div class="phero-stats reveal"><div class="spec"><span class="spec__k">Photographs</span><span class="spec__lead"></span><span class="spec__v tnum">{len(entries)}</span></div></div>
   </div>
@@ -512,7 +515,7 @@ def patch_index():
 
 
 def sitemap(posts):
-    urls = ["", "writing/", "uses/", "photos/"] + [f"writing/{p['slug']}/" for p in posts]
+    urls = ["", "blog/", "uses/", "photos/"] + [f"blog/{p['slug']}/" for p in posts]
     body = "\n".join(f"  <url><loc>{SITE}{u}</loc></url>" for u in urls)
     (ROOT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<!-- generated by scripts/build_pages.py -->\n'

@@ -466,7 +466,7 @@ document.documentElement.classList.add("js");
     const sheet = $(".frame-sheet", frame);
     const sheetImg = $("img", sheet);
     const openK = $(".frame-open__k", frame);
-    const originEl = $(".frame-origin");
+    const labelEl = $(".frame-label", frame);
     const tag = $(".frame-copy .tag");
     const note = $(".frame-note");
     const count = $(".frame-count");
@@ -498,7 +498,7 @@ document.documentElement.classList.add("js");
         sheet.classList.add("is-text");
         openK.textContent = "Open record";
       }
-      if (originEl) originEl.textContent = "Plate from " + d.origin;
+      if (labelEl) labelEl.textContent = d.label;
       tag.textContent = String(cur + 1).padStart(2, "0") + " // " + d.tag;
       note.textContent = d.note;
       count.textContent = cur + 1 + " / " + thumbs.length;
@@ -516,6 +516,9 @@ document.documentElement.classList.add("js");
       const art = document.createElement("img");
       art.className = "lb-art"; art.src = d.art; art.alt = "";
       lbPanel.appendChild(art);
+      const lt = document.createElement("span");
+      lt.className = "imgtag imgtag--bl"; lt.textContent = d.label;
+      lbPanel.appendChild(lt);
       if (d.cert) {
         const c = document.createElement("img");
         c.className = "lb-cert";
